@@ -1,17 +1,20 @@
 # HANDOFF.md: Gestrum
 
 ## Current Status
-- **Current Version:** `v00000-002`
+- **Current Version:** `v00000-003`
 - **Live Deployment:** `https://keeganrmc.github.io/gestrum/`
 - **GitHub Repository:** `https://github.com/keeganrmc/gestrum`
 - **Architecture:** Single-file HTML5 PWA (`index.html`) + Service Worker (`sw.js`) + Manifest (`manifest.webmanifest`).
 
 ## What Works
-- 3x2 Beat-Grid with 6 floating sound circles.
+- 3x2 Beat-Grid with 6 stationary sound circles (uniform size, 48px radius, no pulsing distraction).
+- Full Camera On/Off Toggle: cleanly stops camera media tracks, shuts down MediaPipe processing, and clears hand orbs.
+- Two-Handed Collision Debounce: unified multi-hand batch hit-testing eliminates double-triggering / machine-gun stutter when playing with two hands.
+- Per-sound loop subdivision speeds (`1/4`, `1/8`, `1/16`, `1/2`, `1/1`).
 - Strict gesture semantics: 1 tap = 1 sound; 3s dwell = loop on measure; tap looping pad = stop loop.
 - Pause All Loops button in header and via `Spacebar`.
 - 16-Step Measure Timeline Bar with dynamic beat lighting and BPM slider (60–180 BPM).
-- 12 Synthesized Presets accessible via pad sound configuration dialog.
+- 15 Synthesized Presets accessible via pad sound configuration dialog (including sub bass drop, laser, zap, bells, snaps, etc.).
 - Custom audio sample upload & direct drag-and-drop onto any circle, persisted in IndexedDB.
 - Luminous Hand Orbs tracking hands in real-time with MediaPipe Hands (with instant mouse/touch fallback).
 - Velocity power scaling: strike speed scales audio gain, filter brightness, and shockwave ring radius.
@@ -29,5 +32,7 @@
 ## Rules Learned
 1. No raw camera feed: users prefer stylized luminous orbs over seeing their own camera stream.
 2. The core action is *tapping the air*, not clapping.
-3. 1 tap MUST strictly trigger the sound once; re-triggers require leaving and re-entering the hit-box.
-4. Always provide an instant master pause/kill switch for looping audio.
+3. Circles must be stationary and uniform in size for clean hit targeting.
+4. Camera toggle must completely shut down camera tracks and clear hand tracking orbs.
+5. Multi-hand hit testing must be batched together to prevent alternate-frame collision resets.
+6. Always provide per-pad loop subdivision speed control and an instant master pause/kill switch.

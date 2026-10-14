@@ -342,7 +342,7 @@
     color: var(--fg);
     border: 1px solid var(--panel-border);
     border-radius: 12px;
-    max-width: 520px;
+    max-width: 540px;
     width: 90%;
     padding: 24px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.8);
@@ -363,32 +363,18 @@
     color: #cbd5e1;
     margin: 8px 0;
   }
-  dialog input[type="text"] {
-    width: 100%;
-    background: #0d0f12;
-    border: 1px solid var(--panel-border);
-    border-radius: 6px;
-    color: #fff;
-    padding: 8px 12px;
-    font-size: 13px;
-    margin-bottom: 14px;
-    outline: none;
-  }
-  dialog input[type="text"]:focus {
-    border-color: var(--cyan);
-  }
 
   .preset-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
-    margin: 12px 0;
+    margin: 10px 0 16px 0;
   }
   .preset-btn {
     background: #171f2b;
     border: 1px solid #2b394e;
     color: #cbd5e1;
-    padding: 8px;
+    padding: 9px 6px;
     border-radius: 6px;
     font-size: 11px;
     text-align: center;
@@ -405,6 +391,31 @@
     color: #000;
     font-weight: 700;
     border-color: var(--cyan);
+  }
+
+  .speed-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .speed-btn {
+    flex: 1;
+    padding: 6px 0;
+    text-align: center;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    background: #151c27;
+    border: 1px solid #283548;
+    color: #cbd5e1;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .speed-btn.active {
+    background: var(--gold);
+    color: #000;
+    font-weight: 700;
+    border-color: var(--gold);
   }
 
   .help-list {
@@ -466,9 +477,9 @@
   </div>
 
   <div class="nav-controls">
-    <button id="btn-camera" class="btn-accent" title="Turn on webcam hand tracking">
+    <button id="btn-camera" class="btn-accent" title="Turn on/off webcam hand tracking">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      Camera
+      <span id="camera-btn-text">Camera</span>
     </button>
     <button id="btn-pause-all" class="btn-danger" title="Pause or stop all active loops immediately (Spacebar)">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
@@ -502,13 +513,13 @@
     <!-- 16 Subdivisions dynamically rendered -->
   </div>
   <div class="tempo-controls">
-    <span>BPM: <strong id="bpm-val">120</strong></span>
+    <span>MASTER BPM: <strong id="bpm-val">120</strong></span>
     <input type="range" id="bpm-slider" min="60" max="180" value="120">
   </div>
 </div>
 
 <div id="stage-container">
-  <div class="drop-indicator">Drop audio file (WAV/MP3) to assign sound</div>
+  <div class="drop-indicator">Drop audio file (WAV/MP3) directly onto a pad</div>
   <div class="grid-overlay"></div>
   <canvas id="stage-canvas"></canvas>
   <video id="webcam-video" playsinline></video>
@@ -521,7 +532,7 @@
     <span id="status-text">Hover or click pads to play</span>
   </div>
   <div>
-    <span>1 Tap = Strike Once | Hold 3s = Loop on Measure</span>
+    <span>1 Tap = Strike Once | Hold 3s = Loop on Measure | Spacebar = Pause All</span>
     <button id="chip" title="Check for updates"></button>
   </div>
 </footer>
@@ -529,9 +540,18 @@
 <!-- Pad Sound Configuration Dialog -->
 <dialog id="pad-config-dialog">
   <h2 id="config-pad-title">Configure Sound Pad</h2>
-  <p style="font-size: 13px; color: var(--muted); margin-bottom: 12px;">Choose a synthesized preset or upload a custom audio sample.</p>
+  <p style="font-size: 13px; color: var(--muted); margin-bottom: 12px;">Choose a preset, set individual loop speed, or upload custom audio.</p>
   
-  <div style="font-size: 11px; font-weight: 600; color: var(--cyan); text-transform: uppercase; margin-top: 10px;">Synthesized Presets</div>
+  <div style="font-size: 11px; font-weight: 600; color: var(--cyan); text-transform: uppercase; margin-top: 10px;">Loop Speed / Subdivision</div>
+  <div class="speed-selector" id="speed-buttons">
+    <button class="speed-btn" data-rate="1">1/4 (Beat)</button>
+    <button class="speed-btn" data-rate="2">1/8 (2x)</button>
+    <button class="speed-btn" data-rate="4">1/16 (Trap Roll)</button>
+    <button class="speed-btn" data-rate="0.5">1/2 (Half)</button>
+    <button class="speed-btn" data-rate="0.25">1/1 (Bar)</button>
+  </div>
+
+  <div style="font-size: 11px; font-weight: 600; color: var(--cyan); text-transform: uppercase; margin-top: 14px;">Synthesized Presets</div>
   <div class="preset-grid" id="preset-buttons">
     <button class="preset-btn" data-type="kick">808 Sub Kick</button>
     <button class="preset-btn" data-type="snare">Trap Snare</button>
@@ -542,14 +562,16 @@
     <button class="preset-btn" data-type="tom">808 Pitch Tom</button>
     <button class="preset-btn" data-type="clap">808 Clap</button>
     <button class="preset-btn" data-type="cowbell">808 Cowbell</button>
-    <button class="preset-btn" data-type="acoustic-snare">Acoustic Snare</button>
     <button class="preset-btn" data-type="laser">Sci-Fi Laser</button>
+    <button class="preset-btn" data-type="plasma">Plasma Pulse</button>
+    <button class="preset-btn" data-type="subdrop">808 Sub Boom</button>
     <button class="preset-btn" data-type="crystal">Crystal Bell</button>
+    <button class="preset-btn" data-type="acoustic-kick">Acoustic Kick</button>
+    <button class="preset-btn" data-type="acoustic-snare">Acoustic Snare</button>
   </div>
 
-  <div style="font-size: 11px; font-weight: 600; color: var(--cyan); text-transform: uppercase; margin-top: 16px;">Custom Audio File</div>
-  <p style="font-size: 12px; margin: 4px 0 8px 0;">Upload any WAV, MP3, or OGG file from your machine:</p>
-  <input type="file" id="custom-audio-upload" accept="audio/*" style="font-size: 12px; margin-bottom: 14px;">
+  <div style="font-size: 11px; font-weight: 600; color: var(--cyan); text-transform: uppercase; margin-top: 12px;">Custom Audio File</div>
+  <input type="file" id="custom-audio-upload" accept="audio/*" style="font-size: 12px; margin-top: 6px; margin-bottom: 14px;">
 
   <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px;">
     <button id="btn-preview-sound" style="background: rgba(0,240,255,0.1); border-color: var(--cyan); color: var(--cyan);">▶ Test Sound</button>
@@ -560,7 +582,7 @@
 <!-- Help Dialog -->
 <dialog id="help-dialog">
   <h2>Help & Controls</h2>
-  <input type="text" id="help-search" placeholder="Search controls (e.g. pause, loop, measure, camera)...">
+  <input type="text" id="help-search" placeholder="Search controls (e.g. pause, loop, measure, camera, speed)...">
   <div class="help-list" id="help-items"></div>
   <div style="text-align: right; margin-top: 14px;">
     <button onclick="document.getElementById('help-dialog').close()">Close</button>
@@ -573,7 +595,7 @@
     <div class="logo-mark" style="width: 36px; height: 36px;"><span>G</span></div>
     <div>
       <h2 style="margin: 0;">Gestrum</h2>
-      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-002</span>
+      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-003</span>
     </div>
   </div>
   <p><strong>Raison d'Être:</strong> Gestrum exists because drumming in mid-air should make real sound, turning your laptop camera into a zero-latency stage instrument.</p>
@@ -593,15 +615,15 @@
 const APP = {
   name: "Gestrum",
   id: "gestrum",
-  version: "v00000-002",
+  version: "v00000-003",
   author: "Keegan McConnell",
   site: "https://keeganrmc.github.io/",
   repo: "https://github.com/keeganrmc/gestrum"
 };
-const FORMAT = { name: APP.id, version: 2 };
+const FORMAT = { name: APP.id, version: 3 };
 document.getElementById("chip").textContent = APP.version + " ↻";
 
-// ── WEB AUDIO SYNTHESIS & CUSTOM SAMPLES ENGINE ─────────────────────────────
+// ── EXPANDED WEB AUDIO SYNTHESIS ENGINE ─────────────────────────────────────
 let audioCtx = null;
 let mediaRecorder = null;
 let recordedChunks = [];
@@ -623,7 +645,6 @@ function playSound(pad, velocity = 0.8) {
   const now = ctx.currentTime;
   const v = Math.max(0.15, Math.min(velocity, 1.0));
 
-  // Check if pad has custom uploaded sample
   if (customSampleBuffers.has(pad.id)) {
     const source = ctx.createBufferSource();
     source.buffer = customSampleBuffers.get(pad.id);
@@ -636,7 +657,6 @@ function playSound(pad, velocity = 0.8) {
     return;
   }
 
-  // Synthesized Presets
   const out = ctx.createGain();
   out.gain.setValueAtTime(v * 0.9, now);
   out.connect(ctx.destination);
@@ -658,7 +678,7 @@ function playSound(pad, velocity = 0.8) {
     osc.start(now);
     osc.stop(now + 0.68);
   } else if (type === "snare") {
-    // Trap Snare (Tone + Noise burst)
+    // Trap Snare
     const tone = ctx.createOscillator();
     const toneGain = ctx.createGain();
     tone.type = "triangle";
@@ -728,7 +748,7 @@ function playSound(pad, velocity = 0.8) {
     noise.start(now);
     noise.stop(now + 0.35);
   } else if (type === "perc") {
-    // Glitch Perc (FM chirping snap)
+    // Glitch Perc
     const carrier = ctx.createOscillator();
     const modulator = ctx.createOscillator();
     const modGain = ctx.createGain();
@@ -749,7 +769,7 @@ function playSound(pad, velocity = 0.8) {
     modulator.stop(now + 0.15);
     carrier.stop(now + 0.15);
   } else if (type === "rim") {
-    // 808 Rimshot / Snap
+    // 808 Rimshot
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "sine";
@@ -775,7 +795,7 @@ function playSound(pad, velocity = 0.8) {
     osc.start(now);
     osc.stop(now + 0.38);
   } else if (type === "clap") {
-    // 808 Clap (Multi-pulse noise)
+    // 808 Clap
     [0, 0.012, 0.024].forEach((delay, idx) => {
       const bufferSize = ctx.sampleRate * 0.04;
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
@@ -796,7 +816,7 @@ function playSound(pad, velocity = 0.8) {
       noise.stop(now + delay + 0.2);
     });
   } else if (type === "cowbell") {
-    // 808 Cowbell (Dual square wave)
+    // 808 Cowbell
     [587, 845].forEach(freq => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -814,11 +834,75 @@ function playSound(pad, velocity = 0.8) {
       osc.start(now);
       osc.stop(now + 0.28);
     });
+  } else if (type === "laser") {
+    // Sci-Fi Laser Zap
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(1600, now);
+    osc.frequency.exponentialRampToValueAtTime(60, now + 0.14);
+    gain.gain.setValueAtTime(0.75, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+    osc.connect(gain);
+    gain.connect(out);
+    osc.start(now);
+    osc.stop(now + 0.18);
+  } else if (type === "plasma") {
+    // Plasma Pulse
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(420, now);
+    osc.frequency.exponentialRampToValueAtTime(110, now + 0.2);
+    gain.gain.setValueAtTime(0.85, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+    osc.connect(gain);
+    gain.connect(out);
+    osc.start(now);
+    osc.stop(now + 0.25);
+  } else if (type === "subdrop") {
+    // 808 Sub Boom Drop
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(120, now);
+    osc.frequency.exponentialRampToValueAtTime(28, now + 0.5);
+    gain.gain.setValueAtTime(1.0, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+    osc.connect(gain);
+    gain.connect(out);
+    osc.start(now);
+    osc.stop(now + 0.95);
+  } else if (type === "crystal") {
+    // Crystal Bell
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(1046.5, now);
+    gain.gain.setValueAtTime(0.65, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+    osc.connect(gain);
+    gain.connect(out);
+    osc.start(now);
+    osc.stop(now + 0.85);
+  } else if (type === "acoustic-kick") {
+    // Acoustic Natural Kick
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(110, now);
+    osc.frequency.exponentialRampToValueAtTime(45, now + 0.09);
+    gain.gain.setValueAtTime(0.9, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+    osc.connect(gain);
+    gain.connect(out);
+    osc.start(now);
+    osc.stop(now + 0.32);
   } else if (type === "acoustic-snare") {
     // Acoustic Wood Snare
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
-    osc.type = "sine";
+    osc.type = "triangle";
     osc.frequency.setValueAtTime(240, now);
     osc.frequency.exponentialRampToValueAtTime(140, now + 0.08);
     gain.gain.setValueAtTime(0.8, now);
@@ -827,48 +911,23 @@ function playSound(pad, velocity = 0.8) {
     gain.connect(out);
     osc.start(now);
     osc.stop(now + 0.18);
-  } else if (type === "laser") {
-    // Sci-Fi Laser
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = "sawtooth";
-    osc.frequency.setValueAtTime(1400, now);
-    osc.frequency.exponentialRampToValueAtTime(80, now + 0.15);
-    gain.gain.setValueAtTime(0.7, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
-    osc.connect(gain);
-    gain.connect(out);
-    osc.start(now);
-    osc.stop(now + 0.18);
-  } else if (type === "crystal") {
-    // Crystal Bell
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(1046.5, now);
-    gain.gain.setValueAtTime(0.6, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
-    osc.connect(gain);
-    gain.connect(out);
-    osc.start(now);
-    osc.stop(now + 0.85);
   }
 }
 
-// ── DOCUMENT STATE & DEFAULT 3X2 GRID ────────────────────────────────────────
+// ── DOCUMENT STATE & STATIONARY 3X2 GRID ────────────────────────────────────
 function defaultDoc() {
   return {
     bpm: 120,
     editMode: false,
     pads: [
-      // Top Row (3)
-      { id: 1, label: "808 HI-HAT", type: "hihat", nx: 0.24, ny: 0.32, radius: 46, looped: false, loopSteps: [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0] },
-      { id: 2, label: "GLITCH PERC", type: "perc",  nx: 0.50, ny: 0.30, radius: 46, looped: false, loopSteps: [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0] },
-      { id: 3, label: "RIMSHOT",    type: "rim",   nx: 0.76, ny: 0.32, radius: 46, looped: false, loopSteps: [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0] },
-      // Bottom Row (3)
-      { id: 4, label: "808 KICK",   type: "kick",  nx: 0.24, ny: 0.68, radius: 52, looped: false, loopSteps: [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0] },
-      { id: 5, label: "TRAP SNARE", type: "snare", nx: 0.50, ny: 0.70, radius: 50, looped: false, loopSteps: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
-      { id: 6, label: "808 TOM",    type: "tom",   nx: 0.76, ny: 0.68, radius: 48, looped: false, loopSteps: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0] },
+      // Top Row (3) — All identical radius 48, stationary
+      { id: 1, label: "808 HI-HAT", type: "hihat", nx: 0.24, ny: 0.32, radius: 48, looped: false, rate: 2 },
+      { id: 2, label: "GLITCH PERC", type: "perc",  nx: 0.50, ny: 0.30, radius: 48, looped: false, rate: 1 },
+      { id: 3, label: "RIMSHOT",    type: "rim",   nx: 0.76, ny: 0.32, radius: 48, looped: false, rate: 1 },
+      // Bottom Row (3) — All identical radius 48, stationary
+      { id: 4, label: "808 KICK",   type: "kick",  nx: 0.24, ny: 0.68, radius: 48, looped: false, rate: 1 },
+      { id: 5, label: "TRAP SNARE", type: "snare", nx: 0.50, ny: 0.70, radius: 48, looped: false, rate: 0.5 },
+      { id: 6, label: "808 TOM",    type: "tom",   nx: 0.76, ny: 0.68, radius: 48, looped: false, rate: 0.25 },
     ]
   };
 }
@@ -916,7 +975,7 @@ window.addEventListener("keydown", e => {
 // ── INDEXEDDB PERSISTENCE ───────────────────────────────────────────────────
 function idb() {
   return new Promise((res, rej) => {
-    const r = indexedDB.open(APP.id, 2);
+    const r = indexedDB.open(APP.id, 3);
     r.onupgradeneeded = () => r.result.createObjectStore("kv");
     r.onsuccess = () => res(r.result);
     r.onerror = () => rej(r.error);
@@ -951,6 +1010,11 @@ async function restore() {
   const saved = await idbGet("doc");
   if (saved && saved.data && saved.data.pads) {
     doc = saved.data;
+    // Ensure all pads are stationary radius 48
+    doc.pads.forEach(p => {
+      p.radius = 48;
+      if (!p.rate) p.rate = 1;
+    });
     if (doc.bpm) {
       document.getElementById("bpm-slider").value = doc.bpm;
       document.getElementById("bpm-val").textContent = doc.bpm;
@@ -968,7 +1032,7 @@ function toast(msg) {
   toastTimer = setTimeout(() => toastEl.classList.remove("show"), 1800);
 }
 
-// ── MEASURE BAR & QUANTIZATION TIMELINE (16-STEP GRID) ──────────────────────
+// ── MEASURE BAR & INDIVIDUAL BPM/SUBDIVISION SEQUENCER ───────────────────────
 const measureDisplay = document.getElementById("measure-display");
 for (let i = 0; i < 16; i++) {
   const step = document.createElement("div");
@@ -982,18 +1046,29 @@ let stepTimer = null;
 
 function startSequencer() {
   if (stepTimer) clearInterval(stepTimer);
-  const stepIntervalMs = (60000 / doc.bpm) / 4; // 16th note subdivision
+  const stepIntervalMs = (60000 / doc.bpm) / 4; // Base 16th note subdivision
   stepTimer = setInterval(() => {
-    // Visual timeline sweep
     document.getElementById(`step-${currentStep}`)?.classList.remove("active");
     currentStep = (currentStep + 1) % 16;
     document.getElementById(`step-${currentStep}`)?.classList.add("active");
 
-    // Play looped pads on measure
+    // Play looped pads based on their individual rate/subdivision
     doc.pads.forEach(pad => {
       if (pad.looped) {
-        const steps = pad.loopSteps || [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0];
-        if (steps[currentStep]) {
+        const rate = pad.rate || 1;
+        // rate 4 = 1/16 note (every step)
+        // rate 2 = 1/8 note (every 2 steps)
+        // rate 1 = 1/4 note (every 4 steps, beats 1, 2, 3, 4)
+        // rate 0.5 = 1/2 note (every 8 steps, beats 1, 3)
+        // rate 0.25 = 1/1 bar (every 16 steps, beat 1)
+        let trigger = false;
+        if (rate >= 4) trigger = true;
+        else if (rate >= 2) trigger = (currentStep % 2 === 0);
+        else if (rate >= 1) trigger = (currentStep % 4 === 0);
+        else if (rate >= 0.5) trigger = (currentStep % 8 === 0);
+        else trigger = (currentStep === 0);
+
+        if (trigger) {
           triggerPadVisualAndAudio(pad, 0.85);
         }
       }
@@ -1024,7 +1099,7 @@ function pauseAllLoops() {
 }
 document.getElementById("btn-pause-all").onclick = pauseAllLoops;
 
-// ── STAGE RENDERING & ENTITIES ──────────────────────────────────────────────
+// ── STAGE RENDERING (COMPLETELY STATIONARY CIRCLES) ─────────────────────────
 const canvas = document.getElementById("stage-canvas");
 const ctx = canvas.getContext("2d");
 let stageWidth = window.innerWidth;
@@ -1042,11 +1117,11 @@ resize();
 
 const shockwaves = [];
 const particles = [];
-let handOrbs = []; // [{ x, y }]
+let handOrbs = [];
 
-// Strict Tap & Dwell State Tracking
-const padInteractionState = new Map();
-// padId -> { isInside: boolean, hasStruck: boolean, enterTime: number }
+// Dedicated per-pad state tracking
+const padTracker = new Map();
+// padId -> { anyHandInside: boolean, enterTime: number, lastStrikeTime: number }
 
 function triggerPadVisualAndAudio(pad, velocity = 0.8) {
   playSound(pad, velocity);
@@ -1054,16 +1129,16 @@ function triggerPadVisualAndAudio(pad, velocity = 0.8) {
   shockwaves.push({
     x: pad.nx * stageWidth,
     y: pad.ny * stageHeight,
-    r: pad.radius,
-    maxR: pad.radius + 60 + velocity * 50,
+    r: 48,
+    maxR: 48 + 55 + velocity * 45,
     color: velocity > 0.65 ? "#ff007f" : "#00f0ff",
     alpha: 1.0,
     width: 3 + velocity * 4
   });
   // Add sparks
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 8; i++) {
     const angle = Math.random() * Math.PI * 2;
-    const speed = 2 + Math.random() * 5 * velocity;
+    const speed = 2 + Math.random() * 4 * velocity;
     particles.push({
       x: pad.nx * stageWidth,
       y: pad.ny * stageHeight,
@@ -1075,67 +1150,69 @@ function triggerPadVisualAndAudio(pad, velocity = 0.8) {
   }
 }
 
-// ── STRICT INTERACTION LOGIC (ONE TAP = ONE HIT | HOLD 3S = LOOP) ───────────
-function processInputPoint(x, y, isInteracting, velocity = 0.8) {
+// ── ROBUST MULTI-HAND TRACKING & COLLISION RESOLUTION ───────────────────────
+function updateAllInputPoints(points, isDown = false) {
   const now = performance.now();
 
   doc.pads.forEach(pad => {
     const px = pad.nx * stageWidth;
     const py = pad.ny * stageHeight;
-    const dist = Math.hypot(x - px, y - py);
-    const isInside = dist <= pad.radius;
 
-    let state = padInteractionState.get(pad.id);
-    if (!state) {
-      state = { isInside: false, hasStruck: false, enterTime: 0 };
-      padInteractionState.set(pad.id, state);
+    let tracker = padTracker.get(pad.id);
+    if (!tracker) {
+      tracker = { anyHandInside: false, enterTime: 0, lastStrikeTime: 0 };
+      padTracker.set(pad.id, tracker);
     }
 
-    if (isInside && isInteracting) {
-      if (!state.isInside) {
-        // Fresh entry into circle!
-        state.isInside = true;
-        state.enterTime = now;
+    // Check if ANY hand/pointer is inside this pad
+    let hasPointInside = false;
+    let maxVelocity = 0.8;
 
-        if (!state.hasStruck) {
-          // RULE 1: ONE TAP = PLAY SOUND ONCE
-          state.hasStruck = true;
+    for (const pt of points) {
+      const dist = Math.hypot(pt.x - px, pt.y - py);
+      if (dist <= 48) {
+        hasPointInside = true;
+        if (pt.velocity) maxVelocity = Math.max(maxVelocity, pt.velocity);
+      }
+    }
 
+    if (hasPointInside && (isDown || cameraActive)) {
+      if (!tracker.anyHandInside) {
+        // Hand just entered the circle!
+        tracker.anyHandInside = true;
+        tracker.enterTime = now;
+
+        // Debounce: must be at least 160ms since last strike on this pad
+        if (now - tracker.lastStrikeTime > 160) {
+          tracker.lastStrikeTime = now;
           if (pad.looped) {
-            // Tapping an already looped pad pauses/stops it!
+            // Tapping an already looped pad turns it off!
             pad.looped = false;
             toast(`${pad.label} Loop Stopped`);
             scheduleSave();
           } else {
-            triggerPadVisualAndAudio(pad, velocity);
+            triggerPadVisualAndAudio(pad, maxVelocity);
           }
         }
       } else {
-        // Hand/cursor is dwelling inside the circle
-        const dwellTime = now - state.enterTime;
-        // RULE 2: TAP AND HOLD 3 SECONDS = LOOP SOUND
+        // Hand is holding inside the circle
+        const dwellTime = now - tracker.enterTime;
         if (dwellTime >= 3000 && !pad.looped) {
           pad.looped = true;
-          // Capture current step or default rhythmic groove
-          pad.loopSteps = pad.loopSteps || [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0];
-          toast(`★ ${pad.label} Locked into Loop!`);
+          toast(`★ ${pad.label} Looping!`);
           scheduleSave();
-          // Visual celebration burst
           triggerPadVisualAndAudio(pad, 1.0);
         }
       }
     } else {
-      // Left the pad: reset struck status so next tap fires once again
-      if (state.isInside) {
-        state.isInside = false;
-        state.hasStruck = false;
-        state.enterTime = 0;
-      }
+      // No hands inside: reset state cleanly
+      tracker.anyHandInside = false;
+      tracker.enterTime = 0;
     }
   });
 }
 
-// ── RENDER LOOP ─────────────────────────────────────────────────────────────
+// ── RENDER LOOP (SOLID, STATIONARY CIRCLES) ─────────────────────────────────
 function render(timestamp) {
   ctx.clearRect(0, 0, stageWidth, stageHeight);
 
@@ -1181,36 +1258,35 @@ function render(timestamp) {
     ctx.restore();
   }
 
-  // 3. Draw Sound Pads (3x2 Grid)
+  // 3. Draw Stationary Sound Pads (3x2 Grid)
   doc.pads.forEach(pad => {
     const px = pad.nx * stageWidth;
     const py = pad.ny * stageHeight;
     const isLooped = pad.looped;
-    const state = padInteractionState.get(pad.id);
-    const dwellElapsed = (state && state.isInside && state.enterTime) ? (performance.now() - state.enterTime) : 0;
+    const r = 48; // Stationary, identical size across all 6 pads
+
+    const tracker = padTracker.get(pad.id);
+    const dwellElapsed = (tracker && tracker.anyHandInside && tracker.enterTime) ? (performance.now() - tracker.enterTime) : 0;
     const dwellRatio = Math.min(1.0, dwellElapsed / 3000);
 
     ctx.save();
 
-    const breath = Math.sin(timestamp * 0.003 + pad.id) * 3;
-    const r = pad.radius + breath;
-
     // Pad Background disc
     ctx.beginPath();
     ctx.arc(px, py, r, 0, Math.PI * 2);
-    ctx.fillStyle = isLooped ? "rgba(255, 215, 0, 0.15)" : "rgba(0, 240, 255, 0.06)";
+    ctx.fillStyle = isLooped ? "rgba(255, 215, 0, 0.16)" : "rgba(0, 240, 255, 0.07)";
     ctx.fill();
 
     // Pad Perimeter Ring
     ctx.beginPath();
     ctx.arc(px, py, r, 0, Math.PI * 2);
-    ctx.strokeStyle = isLooped ? "#ffd700" : "rgba(0, 240, 255, 0.75)";
-    ctx.lineWidth = isLooped ? 4 : 2;
+    ctx.strokeStyle = isLooped ? "#ffd700" : "rgba(0, 240, 255, 0.85)";
+    ctx.lineWidth = isLooped ? 4 : 2.5;
     if (doc.editMode) {
       ctx.setLineDash([6, 6]);
       ctx.strokeStyle = "rgba(0, 240, 255, 0.5)";
     }
-    ctx.shadowBlur = isLooped ? 20 : 10;
+    ctx.shadowBlur = isLooped ? 20 : 8;
     ctx.shadowColor = isLooped ? "#ffd700" : "#00f0ff";
     ctx.stroke();
 
@@ -1225,7 +1301,7 @@ function render(timestamp) {
       ctx.stroke();
     }
 
-    // Inner Core Orb
+    // Inner Core Indicator
     ctx.beginPath();
     ctx.arc(px, py, 10, 0, Math.PI * 2);
     ctx.fillStyle = isLooped ? "#ffd700" : "#00f0ff";
@@ -1244,11 +1320,12 @@ function render(timestamp) {
     if (isLooped) {
       ctx.font = "700 9px ui-monospace, monospace";
       ctx.fillStyle = "#ffd700";
-      ctx.fillText("● LOOPING ON MEASURE", px, py + r + 30);
+      const rateLabel = pad.rate === 4 ? "1/16" : pad.rate === 2 ? "1/8" : pad.rate === 1 ? "1/4" : pad.rate === 0.5 ? "1/2" : "1/1";
+      ctx.fillText(`● LOOP [${rateLabel}]`, px, py + r + 30);
     } else if (doc.editMode) {
       ctx.font = "500 9px ui-monospace, monospace";
       ctx.fillStyle = "rgba(0, 240, 255, 0.8)";
-      ctx.fillText("⚙ Click to Change Sound", px, py + r + 30);
+      ctx.fillText("⚙ Click to Edit", px, py + r + 30);
     }
 
     ctx.restore();
@@ -1257,13 +1334,13 @@ function render(timestamp) {
   // 4. Draw Luminous Hand Orbs
   handOrbs.forEach(orb => {
     ctx.save();
-    const grad = ctx.createRadialGradient(orb.x, orb.y, 4, orb.x, orb.y, 36);
+    const grad = ctx.createRadialGradient(orb.x, orb.y, 4, orb.x, orb.y, 34);
     grad.addColorStop(0, "rgba(255, 0, 127, 0.85)");
     grad.addColorStop(0.5, "rgba(0, 240, 255, 0.35)");
     grad.addColorStop(1, "rgba(0, 240, 255, 0)");
     ctx.fillStyle = grad;
     ctx.beginPath();
-    ctx.arc(orb.x, orb.y, 36, 0, Math.PI * 2);
+    ctx.arc(orb.x, orb.y, 34, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.beginPath();
@@ -1293,21 +1370,19 @@ canvas.addEventListener("pointerdown", e => {
   handOrbs = [{ x, y }];
 
   if (doc.editMode) {
-    // In edit mode: check if clicking pad to configure or drag
     let clickedPad = null;
     doc.pads.forEach(p => {
       const px = p.nx * stageWidth;
       const py = p.ny * stageHeight;
-      if (Math.hypot(x - px, y - py) <= p.radius) clickedPad = p;
+      if (Math.hypot(x - px, y - py) <= 48) clickedPad = p;
     });
 
     if (clickedPad) {
       draggingPad = clickedPad;
-      // Double check if quick tap to configure sound
       openPadConfig(clickedPad);
     }
   } else {
-    processInputPoint(x, y, true, 0.85);
+    updateAllInputPoints([{ x, y, velocity: 0.85 }], true);
   }
 });
 
@@ -1333,21 +1408,17 @@ canvas.addEventListener("pointermove", e => {
       }
     });
   } else {
-    processInputPoint(x, y, isPointerDown, velocity);
+    updateAllInputPoints([{ x, y, velocity }], isPointerDown);
   }
 });
 
 window.addEventListener("pointerup", () => {
   isPointerDown = false;
   draggingPad = null;
-  padInteractionState.forEach(state => {
-    state.isInside = false;
-    state.hasStruck = false;
-    state.enterTime = 0;
-  });
+  updateAllInputPoints([], false);
 });
 
-// ── DRAG & DROP CUSTOM SOUND FILES ONTO PADS ────────────────────────────────
+// ── DRAG & DROP CUSTOM SOUND FILES ──────────────────────────────────────────
 const stageContainer = document.getElementById("stage-container");
 
 window.addEventListener("dragover", e => {
@@ -1367,18 +1438,17 @@ window.addEventListener("drop", async e => {
   const dropX = e.clientX - rect.left;
   const dropY = e.clientY - rect.top;
 
-  // Find nearest pad
   let targetPad = null;
   doc.pads.forEach(p => {
     const px = p.nx * stageWidth;
     const py = p.ny * stageHeight;
-    if (Math.hypot(dropX - px, dropY - py) <= p.radius + 30) targetPad = p;
+    if (Math.hypot(dropX - px, dropY - py) <= 48 + 30) targetPad = p;
   });
 
   if (targetPad) {
     await assignCustomAudioFile(targetPad, file);
   } else {
-    toast("Drop the file directly onto one of the 6 circles");
+    toast("Drop directly onto one of the 6 circles");
   }
 });
 
@@ -1389,8 +1459,6 @@ async function assignCustomAudioFile(pad, file) {
     const arrayBuffer = await file.arrayBuffer();
     const audioBuffer = await ctx.decodeAudioData(arrayBuffer.slice(0));
     customSampleBuffers.set(pad.id, audioBuffer);
-
-    // Save ArrayBuffer into IndexedDB so it persists across reloads
     await idbSet(`sample-${pad.id}`, arrayBuffer);
 
     change(d => {
@@ -1407,21 +1475,43 @@ async function assignCustomAudioFile(pad, file) {
   }
 }
 
-// ── PAD CONFIGURATION DIALOG & PRESET SELECTOR ──────────────────────────────
+// ── PAD CONFIG DIALOG: PRESETS & PER-SOUND BPM/SUBDIVISION ──────────────────
 let activeConfigPad = null;
 const padConfigDialog = document.getElementById("pad-config-dialog");
 const configTitle = document.getElementById("config-pad-title");
 const presetButtons = document.getElementById("preset-buttons");
+const speedButtons = document.getElementById("speed-buttons");
 const customAudioUpload = document.getElementById("custom-audio-upload");
 
 function openPadConfig(pad) {
   activeConfigPad = pad;
   configTitle.textContent = `Configure Pad ${pad.id}: ${pad.label}`;
+  
   presetButtons.querySelectorAll(".preset-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.type === pad.type);
   });
+
+  const activeRate = pad.rate || 1;
+  speedButtons.querySelectorAll(".speed-btn").forEach(btn => {
+    btn.classList.toggle("active", parseFloat(btn.dataset.rate) === activeRate);
+  });
+
   padConfigDialog.showModal();
 }
+
+speedButtons.querySelectorAll(".speed-btn").forEach(btn => {
+  btn.onclick = () => {
+    if (!activeConfigPad) return;
+    const rate = parseFloat(btn.dataset.rate);
+    change(d => {
+      const p = d.pads.find(item => item.id === activeConfigPad.id);
+      if (p) p.rate = rate;
+    });
+    speedButtons.querySelectorAll(".speed-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    toast(`Loop rate set to ${btn.textContent}`);
+  };
+});
 
 presetButtons.querySelectorAll(".preset-btn").forEach(btn => {
   btn.onclick = () => {
@@ -1455,27 +1545,50 @@ document.getElementById("btn-preview-sound").onclick = () => {
   }
 };
 
-// ── WEBCAM & MEDIAPIPE AIR HAND TRACKING ────────────────────────────────────
+// ── WEBCAM TOGGLE & ROBUST MULTI-HAND TRACKING ──────────────────────────────
 const videoEl = document.getElementById("webcam-video");
+const btnCamera = document.getElementById("btn-camera");
+const cameraBtnText = document.getElementById("camera-btn-text");
 const statusDot = document.getElementById("status-dot");
 const statusText = document.getElementById("status-text");
 let cameraActive = false;
+let cameraStream = null;
 let cameraInstance = null;
 
+function stopCamera() {
+  if (cameraStream) {
+    cameraStream.getTracks().forEach(track => track.stop());
+    cameraStream = null;
+  }
+  videoEl.srcObject = null;
+  cameraActive = false;
+  handOrbs = [];
+  updateAllInputPoints([], false);
+  btnCamera.classList.remove("active");
+  cameraBtnText.textContent = "Camera";
+  statusDot.classList.remove("active", "vision-ok");
+  statusText.textContent = "Camera turned off — Mouse/touch ready";
+  toast("Webcam turned off");
+}
+
 async function initCamera() {
-  if (cameraActive) return;
+  if (cameraActive) {
+    stopCamera();
+    return;
+  }
   try {
     statusText.textContent = "Requesting webcam...";
-    const stream = await navigator.mediaDevices.getUserMedia({
+    cameraStream = await navigator.mediaDevices.getUserMedia({
       video: { width: 640, height: 480, facingMode: "user" }
     });
-    videoEl.srcObject = stream;
+    videoEl.srcObject = cameraStream;
     await videoEl.play();
 
-    statusDot.classList.add("active");
-    statusText.textContent = "Webcam active. Loading MediaPipe...";
     cameraActive = true;
-    document.getElementById("btn-camera").classList.add("active");
+    btnCamera.classList.add("active");
+    cameraBtnText.textContent = "Camera On";
+    statusDot.classList.add("active");
+    statusText.textContent = "Loading MediaPipe Hands...";
 
     if (window.Hands) {
       const hands = new window.Hands({
@@ -1484,49 +1597,67 @@ async function initCamera() {
       hands.setOptions({
         maxNumHands: 2,
         modelComplexity: 1,
-        minDetectionConfidence: 0.5,
-        minTrackingConfidence: 0.5
+        minDetectionConfidence: 0.55,
+        minTrackingConfidence: 0.55
       });
       hands.onResults(onHandResults);
 
       if (window.Camera) {
         cameraInstance = new window.Camera(videoEl, {
-          onFrame: async () => { await hands.send({ image: videoEl }); },
+          onFrame: async () => {
+            if (cameraActive) await hands.send({ image: videoEl });
+          },
           width: 640,
           height: 480
         });
         cameraInstance.start();
       }
       statusDot.classList.add("vision-ok");
-      statusText.textContent = "Air tracking ready — 1 Tap = Hit | Hold 3s = Loop";
+      statusText.textContent = "2-Hand tracking ready — Tap circles in air";
       toast("Camera hand tracking active!");
     } else {
-      statusText.textContent = "Camera active (Mouse/touch ready)";
+      statusText.textContent = "Camera on (Pointer fallback ready)";
     }
   } catch (err) {
-    statusText.textContent = "Webcam unavailable — Mouse/touch ready";
-    toast("Webcam permission denied or unavailable");
+    stopCamera();
+    statusText.textContent = "Camera unavailable — Mouse/touch ready";
+    toast("Webcam permission denied or busy");
   }
 }
+
+btnCamera.onclick = initCamera;
+
+let lastHandPoints = [];
 
 function onHandResults(results) {
+  if (!cameraActive) return;
   if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) {
     handOrbs = [];
+    updateAllInputPoints([], false);
     return;
   }
-  const newOrbs = [];
-  results.multiHandLandmarks.forEach(landmarks => {
+
+  const currentPoints = [];
+  results.multiHandLandmarks.forEach((landmarks, idx) => {
     // Landmark 8 is index fingertip
     const tip = landmarks[8];
-    const x = (1.0 - tip.x) * stageWidth; // Mirrored
+    const x = (1.0 - tip.x) * stageWidth;
     const y = tip.y * stageHeight;
-    newOrbs.push({ x, y });
-    processInputPoint(x, y, true, 0.9);
-  });
-  handOrbs = newOrbs;
-}
 
-document.getElementById("btn-camera").onclick = initCamera;
+    // Calculate downward velocity
+    const prev = lastHandPoints[idx];
+    const dy = prev ? (y - prev.y) : 0;
+    const velocity = Math.min(1.0, 0.4 + Math.max(0, dy) * 0.1);
+
+    currentPoints.push({ x, y, velocity });
+  });
+
+  lastHandPoints = currentPoints.map(p => ({ x: p.x, y: p.y }));
+  handOrbs = currentPoints.map(p => ({ x: p.x, y: p.y }));
+
+  // Process multi-hand interaction as one cohesive batch
+  updateAllInputPoints(currentPoints, true);
+}
 
 // ── MODE SWITCHING ──────────────────────────────────────────────────────────
 const btnMode = document.getElementById("btn-mode");
@@ -1537,7 +1668,7 @@ btnMode.onclick = () => {
   btnMode.innerHTML = doc.editMode 
     ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg> Done`
     : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Layout`;
-  toast(doc.editMode ? "Layout Mode: Drag pads or click to change sounds" : "Play Mode Active");
+  toast(doc.editMode ? "Layout Mode: Drag pads or click to change sound/speed" : "Play Mode Active");
 };
 
 // ── RECORDING & PROJECT EXPORT ──────────────────────────────────────────────
@@ -1596,13 +1727,11 @@ document.getElementById("file-open").onchange = async (e) => {
 // ── HELP SEARCH & CONTROL HIGHLIGHT ─────────────────────────────────────────
 const HELP_ITEMS = [
   { title: "One Tap to Play", keys: "1 Tap", control: "#stage-canvas", desc: "A single tap triggers the assigned percussion sound once. Harder strikes create louder hits and wider shockwaves." },
-  { title: "Tap & Hold 3s to Loop", keys: "Hold 3s", control: "#stage-canvas", desc: "Hold your hand or pointer inside a circle for 3 seconds to lock it into a synced loop on the measure." },
+  { title: "Tap & Hold 3s to Loop", keys: "Hold 3s", control: "#stage-canvas", desc: "Hold your hand inside a circle for 3 seconds to lock it into a synced loop on the measure." },
   { title: "Pause / Stop All Loops", keys: "Spacebar", control: "#btn-pause-all", desc: "Instantly pause or stop all active rhythmic loops with one click or by hitting the spacebar." },
-  { title: "Measure Timeline", keys: "BPM 120", control: "#measure-bar-container", desc: "A visual 16-step measure bar. Looped sounds trigger rhythmically on the beat subdivisions." },
-  { title: "Change Sounds / Presets", keys: "Layout", control: "#btn-mode", desc: "Click Layout and click any circle to pick a new preset (808, Acoustic, Sci-Fi) or upload custom audio." },
-  { title: "Drag & Drop Audio Files", keys: "WAV / MP3", control: "#stage-container", desc: "Drag any audio file from your computer and drop it directly onto any circle to assign that sound." },
-  { title: "Camera Hand Tracking", keys: "Camera", control: "#btn-camera", desc: "Enable webcam to track your hands as floating luminous energy orbs with zero video lag." },
-  { title: "Record Audio", keys: "Record", control: "#btn-rec", desc: "Record your live air-drumming performance directly to a downloadable .webm audio file." }
+  { title: "Turn Camera On / Off", keys: "Camera", control: "#btn-camera", desc: "Toggle the camera tracking on or off anytime with a single click." },
+  { title: "Per-Sound BPM / Speed", keys: "Layout ⚙", control: "#btn-mode", desc: "Click Layout and tap any circle to choose individual loop rates (1/4, 1/8, 1/16 roll, 1/2)." },
+  { title: "Presets & Custom Audio", keys: "WAV / MP3", control: "#stage-container", desc: "Pick from 15 synthesized presets or drop your own audio files directly onto any pad." }
 ];
 
 function ring(selector) {
@@ -1666,7 +1795,7 @@ async function checkForUpdate() {
 }
 chip.onclick = checkForUpdate;
 
-// Restore saved settings and custom sample buffers on startup
+// Restore saved settings on startup
 async function startup() {
   await restore();
   const ctx = getAudioContext();

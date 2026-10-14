@@ -1,5 +1,5 @@
 const APP_ID = "gestrum";
-const VERSION = "v00000-002";
+const VERSION = "v00000-003";
 const CACHE = APP_ID + "-" + VERSION;
 const FILES = [
   "./",
