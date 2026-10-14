@@ -1,0 +1,1204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Gestrum — Spatial Air-Percussion Instrument</title>
+<meta name="description" content="Touchless spatial air-percussion instrument. Tap the air to play, hold to loop, and sculpt your sound.">
+<meta property="og:title" content="Gestrum">
+<meta property="og:description" content="Touchless spatial air-percussion instrument. Tap the air to play, hold to loop, and sculpt your sound.">
+<meta property="og:image" content="icon.svg">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="theme-color" content="#0d0f12">
+
+<style>
+  :root {
+    --bg: #0d0f12;
+    --panel: #13171f;
+    --panel-border: #1f2735;
+    --fg: #f0f4f8;
+    --muted: #798b9f;
+    --cyan: #00f0ff;
+    --magenta: #ff007f;
+    --gold: #ffd700;
+    --ring: #00f0ff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, ui-sans-serif, sans-serif;
+  }
+
+  * { box-sizing: border-box; user-select: none; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--fg);
+  }
+
+  body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header Bar */
+  header {
+    height: 54px;
+    background: rgba(19, 23, 31, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--panel-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    z-index: 50;
+  }
+
+  .logo-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: default;
+  }
+  .logo-mark {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--cyan), var(--magenta));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
+  }
+  .logo-mark span {
+    font-weight: 900;
+    font-size: 14px;
+    color: #000;
+  }
+  .brand-title {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+  }
+  .brand-sub {
+    font-size: 11px;
+    font-family: ui-monospace, monospace;
+    color: var(--cyan);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  button, label.btn-file {
+    background: #1c2330;
+    color: #e2e8f0;
+    border: 1px solid #2b374a;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  button:hover, label.btn-file:hover {
+    background: #253042;
+    border-color: var(--cyan);
+    color: #fff;
+  }
+  button:active, label.btn-file:active {
+    transform: scale(0.97);
+  }
+
+  .btn-accent {
+    background: rgba(0, 240, 255, 0.12);
+    border-color: var(--cyan);
+    color: var(--cyan);
+  }
+  .btn-accent.active {
+    background: var(--cyan);
+    color: #000;
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.5);
+    font-weight: 700;
+  }
+
+  .btn-rec.recording {
+    background: var(--magenta);
+    border-color: #ff3388;
+    color: #fff;
+    animation: pulseRec 1s infinite alternate;
+  }
+  @keyframes pulseRec {
+    from { box-shadow: 0 0 4px var(--magenta); }
+    to { box-shadow: 0 0 20px var(--magenta); }
+  }
+
+  /* Main Stage */
+  #stage-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 50%, #151b26 0%, #0d0f12 70%);
+  }
+
+  canvas#stage-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    touch-action: none;
+  }
+
+  /* Hidden video used strictly in memory for computer vision */
+  #webcam-video {
+    display: none;
+  }
+
+  /* Perspective Grid for Edit Mode */
+  .grid-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background-image: 
+      linear-gradient(rgba(0, 240, 255, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 240, 255, 0.07) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .edit-mode .grid-overlay {
+    opacity: 1;
+  }
+
+  /* Toast Notification */
+  #toast {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(19, 23, 31, 0.95);
+    border: 1px solid var(--cyan);
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-family: ui-monospace, monospace;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    z-index: 100;
+  }
+  #toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Bottom Controls / Status */
+  footer {
+    height: 38px;
+    background: rgba(19, 23, 31, 0.9);
+    border-top: 1px solid var(--panel-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: ui-monospace, monospace;
+  }
+  .status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #555;
+  }
+  .status-dot.active {
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+  }
+  .status-dot.vision-ok {
+    background: #00ff88;
+    box-shadow: 0 0 8px #00ff88;
+  }
+
+  #chip {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font: 11px ui-monospace, monospace;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  #chip:hover {
+    color: var(--cyan);
+  }
+
+  /* Dialogs */
+  dialog {
+    background: var(--panel);
+    color: var(--fg);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    max-width: 520px;
+    width: 90%;
+    padding: 24px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+    backdrop-filter: blur(20px);
+  }
+  dialog::backdrop {
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+  }
+  dialog h2 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+    color: #fff;
+  }
+  dialog p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #cbd5e1;
+    margin: 8px 0;
+  }
+  dialog input[type="text"] {
+    width: 100%;
+    background: #0d0f12;
+    border: 1px solid var(--panel-border);
+    border-radius: 6px;
+    color: #fff;
+    padding: 8px 12px;
+    font-size: 13px;
+    margin-bottom: 14px;
+    outline: none;
+  }
+  dialog input[type="text"]:focus {
+    border-color: var(--cyan);
+  }
+
+  .help-list {
+    max-height: 280px;
+    overflow-y: auto;
+    margin: 12px 0;
+  }
+  .help-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .help-item:hover {
+    background: rgba(0, 240, 255, 0.08);
+    border-color: var(--cyan);
+  }
+  .help-title {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--cyan);
+    display: flex;
+    justify-content: space-between;
+  }
+  .help-keys {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .help-desc {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 4px;
+  }
+
+  .ring {
+    outline: 3px solid var(--ring) !important;
+    outline-offset: 4px !important;
+    transition: outline-color 1.2s;
+  }
+</style>
+
+<!-- Load MediaPipe Hands via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+  <div class="logo-group">
+    <div class="logo-mark"><span>G</span></div>
+    <div>
+      <div class="brand-title">Gestrum</div>
+      <div class="brand-sub">Spatial Air-Percussion</div>
+    </div>
+  </div>
+
+  <div class="nav-controls">
+    <button id="btn-camera" class="btn-accent" title="Turn on webcam hand tracking">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      Camera
+    </button>
+    <button id="btn-mode" title="Toggle between playing and repositioning pads">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Layout
+    </button>
+    <button id="btn-rec" class="btn-rec" title="Record live session audio">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+      Record
+    </button>
+    <button id="btn-undo" title="Undo last layout or kit change (Ctrl+Z)">↶</button>
+    <button id="btn-redo" title="Redo last change (Ctrl+Shift+Z)">↷</button>
+    <button id="btn-save-project" title="Save .gestrum project file">Save</button>
+    <label class="btn-file" title="Open .gestrum project file">
+      Open <input type="file" id="file-open" accept=".json,.gestrum" style="display:none">
+    </label>
+    <button id="btn-help" title="Searchable guide with control locator">Help</button>
+    <button id="btn-about" title="About Gestrum, author credits, and license">About</button>
+  </div>
+</header>
+
+<div id="stage-container">
+  <div class="grid-overlay"></div>
+  <canvas id="stage-canvas"></canvas>
+  <video id="webcam-video" playsinline></video>
+  <div id="toast">Ready</div>
+</div>
+
+<footer>
+  <div class="status-indicator">
+    <div id="status-dot" class="status-dot"></div>
+    <span id="status-text">Hover or click pads to play</span>
+  </div>
+  <div>
+    <span>BPM: 120 | 808 Trap Kit</span>
+    <button id="chip" title="Check for updates"></button>
+  </div>
+</footer>
+
+<!-- Help Dialog -->
+<dialog id="help-dialog">
+  <h2>Help & Controls</h2>
+  <input type="text" id="help-search" placeholder="Search controls (e.g. loop, camera, record)...">
+  <div class="help-list" id="help-items"></div>
+  <div style="text-align: right; margin-top: 14px;">
+    <button onclick="document.getElementById('help-dialog').close()">Close</button>
+  </div>
+</dialog>
+
+<!-- About Dialog -->
+<dialog id="about-dialog">
+  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+    <div class="logo-mark" style="width: 36px; height: 36px;"><span>G</span></div>
+    <div>
+      <h2 style="margin: 0;">Gestrum</h2>
+      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-001</span>
+    </div>
+  </div>
+  <p><strong>Raison d'Être:</strong> Gestrum exists because drumming in mid-air should make real sound, turning your laptop camera into a zero-latency stage instrument.</p>
+  <p><strong>Made by:</strong> <a href="https://keeganrmc.github.io/" target="_blank" style="color: var(--cyan); text-decoration: none;">Keegan McConnell</a></p>
+  <p><strong>Source:</strong> <a href="https://github.com/keeganrmc/gestrum" target="_blank" style="color: var(--cyan); text-decoration: none;">github.com/keeganrmc/gestrum</a></p>
+  <p><strong>License:</strong> © 2026 Keegan McConnell. Released under the MIT License.</p>
+  <p><strong>Privacy:</strong> Your camera stream and audio never leave this browser. Everything runs 100% locally on your machine with zero server communication.</p>
+  <div style="text-align: right; margin-top: 18px;">
+    <button onclick="document.getElementById('about-dialog').close()">Close</button>
+  </div>
+</dialog>
+
+<script>
+"use strict";
+
+// ── APP METADATA ─────────────────────────────────────────────────────────────
+const APP = {
+  name: "Gestrum",
+  id: "gestrum",
+  version: "v00000-001",
+  author: "Keegan McConnell",
+  site: "https://keeganrmc.github.io/",
+  repo: "https://github.com/keeganrmc/gestrum"
+};
+const FORMAT = { name: APP.id, version: 1 };
+document.getElementById("chip").textContent = APP.version + " ↻";
+
+// ── WEB AUDIO SYNTHESIS ENGINE (808 TRAP & HIP-HOP) ─────────────────────────
+let audioCtx = null;
+let mediaRecorder = null;
+let recordedChunks = [];
+let audioDestinationNode = null;
+
+function getAudioContext() {
+  if (!audioCtx) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    audioCtx = new AudioContextClass();
+    audioDestinationNode = audioCtx.createMediaStreamDestination();
+  }
+  if (audioCtx.state === "suspended") audioCtx.resume();
+  return audioCtx;
+}
+
+function play808Sound(type, velocity = 0.8) {
+  const ctx = getAudioContext();
+  const now = ctx.currentTime;
+  const v = Math.max(0.15, Math.min(velocity, 1.0));
+
+  // Master out for sound
+  const out = ctx.createGain();
+  out.gain.setValueAtTime(v * 0.9, now);
+  out.connect(ctx.destination);
+  if (audioDestinationNode) out.connect(audioDestinationNode);
+
+  if (type === "kick") {
+    // 808 Deep Sub Kick
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(140 + v * 40, now);
+    osc.frequency.exponentialRampToValueAtTime(38, now + 0.12);
+    gain.gain.setValueAtTime(1.0, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+    osc.connect(gain);
+    gain.connect(out);
+    osc.start(now);
+    osc.stop(now + 0.68);
+  } else if (type === "snare") {
+    // Trap Snare (Tone + Noise burst)
+    const tone = ctx.createOscillator();
+    const toneGain = ctx.createGain();
+    tone.type = "triangle";
+    tone.frequency.setValueAtTime(185, now);
+    tone.frequency.exponentialRampToValueAtTime(80, now + 0.08);
+    toneGain.gain.setValueAtTime(0.7, now);
+    toneGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+    tone.connect(toneGain);
+    toneGain.connect(out);
+    tone.start(now);
+    tone.stop(now + 0.2);
+
+    // Noise
+    const bufferSize = ctx.sampleRate * 0.25;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = ctx.createBiquadFilter();
+    filter.type = "bandpass";
+    filter.frequency.setValueAtTime(1500 + v * 800, now);
+    filter.Q.value = 2.0;
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.8, now);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+    noise.connect(filter);
+    filter.connect(noiseGain);
+    noiseGain.connect(out);
+    noise.start(now);
+    noise.stop(now + 0.25);
+  } else if (type === "hihat") {
+    // 808 Closed Hat (Sharp metallic burst)
+    const bufferSize = ctx.sampleRate * 0.08;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = ctx.createBiquadFilter();
+    filter.type = "highpass";
+    filter.frequency.setValueAtTime(7500, now);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.9, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(out);
+    noise.start(now);
+    noise.stop(now + 0.08);
+  } else if (type === "perc") {
+    // Glitch Percussion (FM chirping snap)
+    const carrier = ctx.createOscillator();
+    const modulator = ctx.createOscillator();
+    const modGain = ctx.createGain();
+    const gain = ctx.createGain();
+    carrier.frequency.setValueAtTime(540, now);
+    carrier.frequency.exponentialRampToValueAtTime(120, now + 0.1);
+    modulator.frequency.setValueAtTime(1200, now);
+    modGain.gain.setValueAtTime(800 * v, now);
+    modGain.gain.exponentialRampToValueAtTime(10, now + 0.08);
+    modulator.connect(modGain);
+    modGain.connect(carrier.frequency);
+    gain.gain.setValueAtTime(0.8, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+    carrier.connect(gain);
+    gain.connect(out);
+    modulator.start(now);
+    carrier.start(now);
+    modulator.stop(now + 0.15);
+    carrier.stop(now + 0.15);
+  } else if (type === "rim") {
+    // 808 Rimshot / Snap
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(880, now);
+    osc.frequency.exponentialRampToValueAtTime(320, now + 0.03);
+    gain.gain.setValueAtTime(0.9, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+    osc.connect(gain);
+    gain.connect(out);
+    osc.start(now);
+    osc.stop(now + 0.08);
+  } else if (type === "tom") {
+    // 808 Pitch Tom
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(180, now);
+    osc.frequency.exponentialRampToValueAtTime(75, now + 0.15);
+    gain.gain.setValueAtTime(0.85, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+    osc.connect(gain);
+    gain.connect(out);
+    osc.start(now);
+    osc.stop(now + 0.38);
+  }
+}
+
+// ── DOCUMENT STATE, UNDO, & AUTOSAVE ─────────────────────────────────────────
+function defaultDoc() {
+  return {
+    bpm: 120,
+    editMode: false,
+    pads: [
+      // Top Row (3)
+      { id: 1, label: "808 HI-HAT", type: "hihat", nx: 0.24, ny: 0.32, radius: 46, looped: false },
+      { id: 2, label: "GLITCH PERC", type: "perc",  nx: 0.50, ny: 0.30, radius: 46, looped: false },
+      { id: 3, label: "RIMSHOT",    type: "rim",   nx: 0.76, ny: 0.32, radius: 46, looped: false },
+      // Bottom Row (3)
+      { id: 4, label: "808 KICK",   type: "kick",  nx: 0.24, ny: 0.68, radius: 52, looped: false },
+      { id: 5, label: "TRAP SNARE", type: "snare", nx: 0.50, ny: 0.70, radius: 50, looped: false },
+      { id: 6, label: "808 TOM",    type: "tom",   nx: 0.76, ny: 0.68, radius: 48, looped: false },
+    ]
+  };
+}
+
+let doc = defaultDoc();
+const undoStack = [], redoStack = [];
+const UNDO_LIMIT = 50;
+
+function change(mutator) {
+  undoStack.push(JSON.stringify(doc));
+  if (undoStack.length > UNDO_LIMIT) undoStack.shift();
+  redoStack.length = 0;
+  mutator(doc);
+  scheduleSave();
+}
+function undo() {
+  if (!undoStack.length) return;
+  redoStack.push(JSON.stringify(doc));
+  doc = JSON.parse(undoStack.pop());
+  scheduleSave();
+  toast("Undo");
+}
+function redo() {
+  if (!redoStack.length) return;
+  undoStack.push(JSON.stringify(doc));
+  doc = JSON.parse(redoStack.pop());
+  scheduleSave();
+  toast("Redo");
+}
+
+window.addEventListener("keydown", e => {
+  if (e.target.matches("input, textarea")) return;
+  const mod = e.metaKey || e.ctrlKey;
+  if (mod && e.key.toLowerCase() === "z") {
+    e.preventDefault();
+    e.shiftKey ? redo() : undo();
+  }
+});
+
+// ── INDEXEDDB PERSISTENCE ───────────────────────────────────────────────────
+function idb() {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open(APP.id, 1);
+    r.onupgradeneeded = () => r.result.createObjectStore("kv");
+    r.onsuccess = () => res(r.result);
+    r.onerror = () => rej(r.error);
+  });
+}
+async function idbSet(key, value) {
+  try {
+    const db = await idb();
+    const tx = db.transaction("kv", "readwrite");
+    tx.objectStore("kv").put(value, key);
+  } catch (e) { /* storage error handled */ }
+}
+async function idbGet(key) {
+  try {
+    const db = await idb();
+    return new Promise((res) => {
+      const r = db.transaction("kv").objectStore("kv").get(key);
+      r.onsuccess = () => res(r.result);
+      r.onerror = () => res(null);
+    });
+  } catch (e) { return null; }
+}
+
+let saveTimer = 0;
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    await idbSet("doc", { format: FORMAT.name, version: FORMAT.version, data: doc });
+  }, 400);
+}
+async function restore() {
+  const saved = await idbGet("doc");
+  if (saved && saved.data && saved.data.pads) {
+    doc = saved.data;
+  }
+}
+
+// ── UI TOAST ─────────────────────────────────────────────────────────────────
+const toastEl = document.getElementById("toast");
+let toastTimer = 0;
+function toast(msg) {
+  toastEl.textContent = msg;
+  toastEl.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove("show"), 1800);
+}
+
+// ── STAGE RENDERING & PARTICLES ─────────────────────────────────────────────
+const canvas = document.getElementById("stage-canvas");
+const ctx = canvas.getContext("2d");
+let stageWidth = window.innerWidth;
+let stageHeight = window.innerHeight - 92;
+
+function resize() {
+  stageWidth = canvas.parentElement.clientWidth;
+  stageHeight = canvas.parentElement.clientHeight;
+  canvas.width = stageWidth * (window.devicePixelRatio || 1);
+  canvas.height = stageHeight * (window.devicePixelRatio || 1);
+  ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
+}
+window.addEventListener("resize", resize);
+resize();
+
+// Visual Entities: Shockwaves, Particles, Dwell progress
+const shockwaves = [];
+const particles = [];
+let handOrbs = []; // [{ x, y, vx, vy, isStriking }]
+const dwellMap = new Map(); // padId -> dwellStartTime (ms)
+
+function triggerPad(pad, velocity = 0.8) {
+  play808Sound(pad.type, velocity);
+  // Add Shockwave Ring (Option A style)
+  shockwaves.push({
+    x: pad.nx * stageWidth,
+    y: pad.ny * stageHeight,
+    r: pad.radius,
+    maxR: pad.radius + 60 + velocity * 50,
+    color: velocity > 0.65 ? "#ff007f" : "#00f0ff",
+    alpha: 1.0,
+    width: 3 + velocity * 4
+  });
+  // Add sparks
+  for (let i = 0; i < 12; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 2 + Math.random() * 5 * velocity;
+    particles.push({
+      x: pad.nx * stageWidth,
+      y: pad.ny * stageHeight,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      life: 1.0,
+      color: velocity > 0.65 ? "#ff007f" : "#00f0ff"
+    });
+  }
+}
+
+// ── TEMPO LOOP ENGINE (120 BPM) ─────────────────────────────────────────────
+let beatStep = 0;
+setInterval(() => {
+  beatStep = (beatStep + 1) % 16;
+  doc.pads.forEach(p => {
+    if (p.looped) {
+      // Loop interval based on instrument type
+      if (p.type === "kick" && (beatStep % 4 === 0)) triggerPad(p, 0.9);
+      if (p.type === "snare" && (beatStep % 8 === 4)) triggerPad(p, 0.85);
+      if (p.type === "hihat" && (beatStep % 2 === 0)) triggerPad(p, 0.65);
+      if (p.type === "rim" && (beatStep % 8 === 2)) triggerPad(p, 0.7);
+      if (p.type === "perc" && (beatStep % 8 === 6)) triggerPad(p, 0.75);
+      if (p.type === "tom" && (beatStep === 14)) triggerPad(p, 0.8);
+    }
+  });
+}, (60000 / 120) / 4);
+
+// ── RENDER LOOP ─────────────────────────────────────────────────────────────
+function render(timestamp) {
+  ctx.clearRect(0, 0, stageWidth, stageHeight);
+
+  // 1. Draw Shockwave Rings
+  for (let i = shockwaves.length - 1; i >= 0; i--) {
+    const sw = shockwaves[i];
+    sw.r += 3.5;
+    sw.alpha -= 0.035;
+    if (sw.alpha <= 0) {
+      shockwaves.splice(i, 1);
+      continue;
+    }
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(sw.x, sw.y, sw.r, 0, Math.PI * 2);
+    ctx.strokeStyle = sw.color;
+    ctx.lineWidth = sw.width;
+    ctx.globalAlpha = sw.alpha;
+    ctx.shadowBlur = 14;
+    ctx.shadowColor = sw.color;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // 2. Draw Sparks / Motion Particles
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life -= 0.04;
+    if (p.life <= 0) {
+      particles.splice(i, 1);
+      continue;
+    }
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.globalAlpha = p.life;
+    ctx.shadowBlur = 8;
+    ctx.shadowColor = p.color;
+    ctx.fill();
+    ctx.restore();
+  }
+
+  // 3. Draw Sound Pads (3x2 Grid)
+  doc.pads.forEach(pad => {
+    const px = pad.nx * stageWidth;
+    const py = pad.ny * stageHeight;
+    const isLooped = pad.looped;
+    const dwellStart = dwellMap.get(pad.id);
+    const dwellElapsed = dwellStart ? (timestamp - dwellStart) : 0;
+    const dwellRatio = Math.min(1.0, dwellElapsed / 3000);
+
+    ctx.save();
+
+    // Subtle ambient breathing glow
+    const breath = Math.sin(timestamp * 0.003 + pad.id) * 3;
+    const r = pad.radius + breath;
+
+    // Pad Background disc
+    ctx.beginPath();
+    ctx.arc(px, py, r, 0, Math.PI * 2);
+    ctx.fillStyle = isLooped ? "rgba(255, 215, 0, 0.12)" : "rgba(0, 240, 255, 0.06)";
+    ctx.fill();
+
+    // Pad Perimeter Ring
+    ctx.beginPath();
+    ctx.arc(px, py, r, 0, Math.PI * 2);
+    ctx.strokeStyle = isLooped ? "#ffd700" : "rgba(0, 240, 255, 0.75)";
+    ctx.lineWidth = isLooped ? 4 : 2;
+    if (doc.editMode) {
+      ctx.setLineDash([6, 6]);
+      ctx.strokeStyle = "rgba(0, 240, 255, 0.5)";
+    }
+    ctx.shadowBlur = isLooped ? 20 : 10;
+    ctx.shadowColor = isLooped ? "#ffd700" : "#00f0ff";
+    ctx.stroke();
+
+    // Clockwise 3-Second Dwell Looping Progress Gauge
+    if (dwellRatio > 0 && !isLooped) {
+      ctx.beginPath();
+      ctx.arc(px, py, r + 6, -Math.PI / 2, -Math.PI / 2 + dwellRatio * Math.PI * 2);
+      ctx.strokeStyle = "#ffd700";
+      ctx.lineWidth = 4;
+      ctx.shadowBlur = 16;
+      ctx.shadowColor = "#ffd700";
+      ctx.stroke();
+    }
+
+    // Inner Core Orb
+    ctx.beginPath();
+    ctx.arc(px, py, 10, 0, Math.PI * 2);
+    ctx.fillStyle = isLooped ? "#ffd700" : "#00f0ff";
+    ctx.shadowBlur = 12;
+    ctx.shadowColor = isLooped ? "#ffd700" : "#00f0ff";
+    ctx.fill();
+
+    // Labels
+    ctx.font = "600 11px ui-monospace, monospace";
+    ctx.fillStyle = "#ffffff";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.shadowBlur = 0;
+    ctx.fillText(pad.label, px, py + r + 18);
+
+    if (isLooped) {
+      ctx.font = "700 9px ui-monospace, monospace";
+      ctx.fillStyle = "#ffd700";
+      ctx.fillText("● LOOPING", px, py + r + 30);
+    }
+
+    ctx.restore();
+  });
+
+  // 4. Draw Luminous Hand Orbs
+  handOrbs.forEach(orb => {
+    ctx.save();
+    // Ambient energy halo
+    const grad = ctx.createRadialGradient(orb.x, orb.y, 4, orb.x, orb.y, 36);
+    grad.addColorStop(0, "rgba(255, 0, 127, 0.85)");
+    grad.addColorStop(0.5, "rgba(0, 240, 255, 0.35)");
+    grad.addColorStop(1, "rgba(0, 240, 255, 0)");
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(orb.x, orb.y, 36, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Hot central core
+    ctx.beginPath();
+    ctx.arc(orb.x, orb.y, 10, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffffff";
+    ctx.shadowBlur = 14;
+    ctx.shadowColor = "#00f0ff";
+    ctx.fill();
+    ctx.restore();
+  });
+
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+// ── INTERACTION: MOUSE / TOUCH / POINTER FALLBACK ───────────────────────────
+let draggingPad = null;
+let lastPointerTime = 0;
+let lastPointerY = 0;
+
+function handlePointerHit(x, y, isDown = false) {
+  const now = performance.now();
+  const dt = Math.max(1, now - lastPointerTime);
+  const dy = Math.abs(y - lastPointerY);
+  const velocity = Math.min(1.0, 0.4 + (dy / dt) * 1.5);
+  lastPointerTime = now;
+  lastPointerY = y;
+
+  // Update virtual hand orb position
+  handOrbs = [{ x, y }];
+
+  let hitAny = false;
+  doc.pads.forEach(pad => {
+    const px = pad.nx * stageWidth;
+    const py = pad.ny * stageHeight;
+    const dist = Math.hypot(x - px, y - py);
+
+    if (dist <= pad.radius) {
+      hitAny = true;
+      if (isDown) {
+        if (!dwellMap.has(pad.id)) {
+          dwellMap.set(pad.id, now);
+          triggerPad(pad, velocity);
+        }
+      }
+
+      // Check 3-second hold
+      if (dwellMap.has(pad.id)) {
+        const dwellTime = now - dwellMap.get(pad.id);
+        if (dwellTime >= 3000) {
+          pad.looped = !pad.looped;
+          dwellMap.delete(pad.id);
+          toast(pad.looped ? `${pad.label} Looping!` : `${pad.label} Loop Stopped`);
+          scheduleSave();
+        }
+      }
+    } else {
+      if (dwellMap.has(pad.id) && !isDown) {
+        dwellMap.delete(pad.id);
+      }
+    }
+  });
+
+  if (!hitAny && !isDown) {
+    dwellMap.clear();
+  }
+}
+
+canvas.addEventListener("pointerdown", e => {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  if (doc.editMode) {
+    // Check if dragging pad in layout mode
+    doc.pads.forEach(p => {
+      const px = p.nx * stageWidth;
+      const py = p.ny * stageHeight;
+      if (Math.hypot(x - px, y - py) <= p.radius) draggingPad = p;
+    });
+  } else {
+    handlePointerHit(x, y, true);
+  }
+});
+
+canvas.addEventListener("pointermove", e => {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  if (doc.editMode && draggingPad) {
+    change(d => {
+      const p = d.pads.find(item => item.id === draggingPad.id);
+      if (p) {
+        p.nx = Math.max(0.08, Math.min(0.92, x / stageWidth));
+        p.ny = Math.max(0.12, Math.min(0.88, y / stageHeight));
+      }
+    });
+  } else {
+    handlePointerHit(x, y, e.buttons > 0);
+  }
+});
+
+window.addEventListener("pointerup", () => {
+  draggingPad = null;
+  dwellMap.clear();
+});
+
+// ── WEBCAM & MEDIAPIPE HAND TRACKING ────────────────────────────────────────
+const videoEl = document.getElementById("webcam-video");
+const statusDot = document.getElementById("status-dot");
+const statusText = document.getElementById("status-text");
+let cameraActive = false;
+let cameraInstance = null;
+
+async function initCamera() {
+  if (cameraActive) return;
+  try {
+    statusText.textContent = "Requesting webcam...";
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { width: 640, height: 480, facingMode: "user" }
+    });
+    videoEl.srcObject = stream;
+    await videoEl.play();
+
+    statusDot.classList.add("active");
+    statusText.textContent = "Webcam active. Initializing hands...";
+    cameraActive = true;
+    document.getElementById("btn-camera").classList.add("active");
+
+    // Initialize MediaPipe Hands
+    if (window.Hands) {
+      const hands = new window.Hands({
+        locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
+      });
+      hands.setOptions({
+        maxNumHands: 2,
+        modelComplexity: 1,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+      });
+      hands.onResults(onHandResults);
+
+      if (window.Camera) {
+        cameraInstance = new window.Camera(videoEl, {
+          onFrame: async () => { await hands.send({ image: videoEl }); },
+          width: 640,
+          height: 480
+        });
+        cameraInstance.start();
+      }
+      statusDot.classList.add("vision-ok");
+      statusText.textContent = "Air tracking ready — Wave hands to play";
+      toast("Camera hand tracking enabled!");
+    } else {
+      statusText.textContent = "Camera on (Pointer fallback ready)";
+    }
+  } catch (err) {
+    statusText.textContent = "Webcam unavailable — Mouse/touch ready";
+    toast("Webcam permission denied or unavailable");
+  }
+}
+
+function onHandResults(results) {
+  if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) {
+    return;
+  }
+  const newOrbs = [];
+  results.multiHandLandmarks.forEach(landmarks => {
+    // Landmark 8 is index fingertip
+    const tip = landmarks[8];
+    // Mirrored X for natural air drumming reflection
+    const x = (1.0 - tip.x) * stageWidth;
+    const y = tip.y * stageHeight;
+    newOrbs.push({ x, y });
+    handlePointerHit(x, y, true);
+  });
+  handOrbs = newOrbs;
+}
+
+document.getElementById("btn-camera").onclick = initCamera;
+
+// ── UI BUTTON CONTROLS & MODES ───────────────────────────────────────────────
+const btnMode = document.getElementById("btn-mode");
+btnMode.onclick = () => {
+  change(d => d.editMode = !d.editMode);
+  document.getElementById("stage-container").classList.toggle("edit-mode", doc.editMode);
+  btnMode.classList.toggle("active", doc.editMode);
+  btnMode.innerHTML = doc.editMode 
+    ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg> Done`
+    : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Layout`;
+  toast(doc.editMode ? "Layout Mode: Drag pads anywhere" : "Play Mode Active");
+};
+
+// Audio Session Recording
+const btnRec = document.getElementById("btn-rec");
+btnRec.onclick = () => {
+  const ctx = getAudioContext();
+  if (!mediaRecorder || mediaRecorder.state === "inactive") {
+    recordedChunks = [];
+    mediaRecorder = new MediaRecorder(audioDestinationNode.stream);
+    mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(recordedChunks, { type: "audio/webm" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `gestrum-jam-${Date.now()}.webm`;
+      a.click();
+      toast("Audio recording downloaded!");
+    };
+    mediaRecorder.start();
+    btnRec.classList.add("recording");
+    btnRec.textContent = "Stop Rec";
+    toast("Recording audio session...");
+  } else {
+    mediaRecorder.stop();
+    btnRec.classList.remove("recording");
+    btnRec.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg> Record`;
+  }
+};
+
+document.getElementById("btn-undo").onclick = undo;
+document.getElementById("btn-redo").onclick = redo;
+
+// Project Save / Open
+document.getElementById("btn-save-project").onclick = () => {
+  const blob = new Blob([JSON.stringify({ format: FORMAT.name, version: FORMAT.version, appVersion: APP.version, data: doc }, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `gestrum-${Date.now()}.gestrum`;
+  a.click();
+  toast("Project file exported");
+};
+
+document.getElementById("file-open").onchange = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  try {
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    if (parsed.format !== FORMAT.name && !parsed.pads) throw new Error("Invalid Gestrum project");
+    change(d => Object.assign(d, parsed.data || parsed));
+    toast("Project loaded!");
+  } catch (err) {
+    toast("Could not open project file");
+  }
+};
+
+// ── HELP SEARCH & CONTROL GLOW ──────────────────────────────────────────────
+const HELP_ITEMS = [
+  { title: "Tap to Play", keys: "Air / Click", control: "#stage-canvas", desc: "Tap your finger down or click any circle to fire an 808 percussion hit." },
+  { title: "3-Second Loop", keys: "Hold 3s", control: "#stage-canvas", desc: "Hold your hand inside a pad for 3 seconds to lock in an automated rhythmic loop." },
+  { title: "Layout / Reposition", keys: "Drag", control: "#btn-mode", desc: "Toggle Layout mode and drag any circle to adapt the 3x2 grid to your arm reach." },
+  { title: "Webcam Hand Tracking", keys: "Camera", control: "#btn-camera", desc: "Enable webcam to track your hands as floating luminous energy orbs." },
+  { title: "Record Audio", keys: "Record", control: "#btn-rec", desc: "Record your live air-drumming performance directly to a .webm audio file." },
+  { title: "Save / Open Project", keys: "Ctrl+S", control: "#btn-save-project", desc: "Export or import your custom drum layout and loop setup." }
+];
+
+function ring(selector) {
+  const el = document.querySelector(selector);
+  if (!el) return;
+  el.scrollIntoView({ block: "nearest" });
+  el.classList.add("ring");
+  setTimeout(() => el.classList.remove("ring"), 1600);
+}
+
+const helpList = document.getElementById("help-items");
+const helpSearch = document.getElementById("help-search");
+
+function populateHelp(filter = "") {
+  helpList.innerHTML = "";
+  const f = filter.toLowerCase();
+  HELP_ITEMS.filter(item => item.title.toLowerCase().includes(f) || item.desc.toLowerCase().includes(f)).forEach(item => {
+    const row = document.createElement("div");
+    row.className = "help-item";
+    row.innerHTML = `<div class="help-title"><span>${item.title}</span><span class="help-keys">${item.keys}</span></div><div class="help-desc">${item.desc}</div>`;
+    row.onclick = () => {
+      document.getElementById("help-dialog").close();
+      ring(item.control);
+    };
+    helpList.appendChild(row);
+  });
+}
+helpSearch.oninput = () => populateHelp(helpSearch.value);
+populateHelp();
+
+document.getElementById("btn-help").onclick = () => {
+  populateHelp();
+  document.getElementById("help-dialog").showModal();
+};
+document.getElementById("btn-about").onclick = () => {
+  document.getElementById("about-dialog").showModal();
+};
+
+// ── PWA SERVICE WORKER & VERSION CHIP ────────────────────────────────────────
+const chip = document.getElementById("chip");
+const SW_ON = "serviceWorker" in navigator && !["localhost", "127.0.0.1"].includes(location.hostname);
+
+if (SW_ON) {
+  const hadController = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.register("sw.js");
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (hadController) location.reload();
+  });
+}
+
+async function checkForUpdate() {
+  const reg = SW_ON && await navigator.serviceWorker.getRegistration();
+  if (!reg) { location.reload(); return; }
+  try { await reg.update(); } catch { toast("Offline: cannot check updates"); return; }
+  if (reg.waiting) {
+    toast("Updating to new version...");
+    reg.waiting.postMessage("SKIP_WAITING");
+  } else {
+    toast("Gestrum is up to date: " + APP.version);
+  }
+}
+chip.onclick = checkForUpdate;
+
+// Restore saved settings on startup
+restore();
+</script>
+</body>
+</html>
