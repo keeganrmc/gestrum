@@ -1,15 +1,15 @@
-# Alpha Specification Document: KinetiClap
+# Alpha Specification Document: Gestrum
 **Author:** Keegan McConnell  
 **Version:** Alpha Spec v0.1.0  
 **Target Format:** Single-File HTML5 Progressive Web App (PWA)  
-**Deployment Target:** GitHub Pages (`https://keeganrmc.github.io/kineticlap/`)  
+**Deployment Target:** GitHub Pages (`https://keeganrmc.github.io/gestrum/`)  
 **Architecture Guidelines:** Conforming to `Single_File_HTML_App_Template.TXT`
 
 ---
 
 ## 1. Executive Summary & Vision
 
-**KinetiClap** is a touchless, spatial browser-based musical instrument. By leveraging the user's webcam and real-time computer vision, KinetiClap translates physical hand gestures in mid-air into expressive percussion and looped soundscapes.
+**Gestrum** is a touchless, spatial browser-based musical instrument. By leveraging the user's webcam and real-time computer vision, Gestrum translates physical hand gestures in mid-air into expressive percussion and looped soundscapes.
 
 Users interact with six floating spatial sound circles ("sound pads") mapped to drum kit elements or melodic samples. Holding a gesture over a pad for three seconds locks it into an automated rhythmic loop. Sound pads can be physically dragged and repositioned across the spatial canvas, allowing performers to sculpt a custom physical drum kit layout tailored to their reach and camera framing.
 
@@ -21,10 +21,10 @@ The application operates **entirely client-side** with zero backend infrastructu
 
 * **Core Seed:** An intuitive, embodied air-percussion instrument that feels like playing a futuristic invisible drum set, turning any laptop or tablet webcam into an instant music station.
 * **Medium:** Motion, Sound (Percussion & Synthesis), Spatial UI, Visual Feedback.
-* **Why KinetiClap Exists:** Traditional virtual instruments demand mechanical key presses or touchscreen tapping, which feels rigid and unexpressive. Existing webcam music experiments are often academic, fragile, or hard to calibrate. KinetiClap exists because making music in the air should be playful, immediate, visual, and require zero setup or hardware beyond a standard web browser.
+* **Why Gestrum Exists:** Traditional virtual instruments demand mechanical key presses or touchscreen tapping, which feels rigid and unexpressive. Existing webcam music experiments are often academic, fragile, or hard to calibrate. Gestrum exists because making music in the air should be playful, immediate, visual, and require zero setup or hardware beyond a standard web browser.
 * **The ONE Thing It Must Do Better Than Anything Else:** **Immediate, low-latency spatial response** with clear visual feedback so the player immediately feels the tactile "snap" of hitting a drum in mid-air.
 * **Deliberate Non-Goals (Scope Boundaries):**
-  * *No complex multi-track DAW sequencing:* KinetiClap is an expressive performance instrument and looper, not Ableton Live.
+  * *No complex multi-track DAW sequencing:* Gestrum is an expressive performance instrument and looper, not Ableton Live.
   * *No remote cloud storage or account logins:* All custom kits, loop states, and settings persist locally in IndexedDB.
   * *No external server-side video processing:* Hand detection and audio synthesis run 100% locally on the device CPU/GPU.
 
@@ -58,8 +58,8 @@ flowchart TD
 
 ### 4.1 First 10 Seconds
 When the application opens, the user sees:
-1. An inviting mirrored camera canvas with a subtle dark cyber-minimalist grade.
-2. Six translucent glowing circles arranged in an ergonomic arc (simulating a standard drum kit: Kick, Snare, Closed Hat, Open Hat, Tom, Crash).
+1. A unified, dark cyber-minimalist stage (`#0d0f12`) with subtle reactive grid elements. **No raw webcam video feed is shown**; the webcam runs silently in background memory, and the player's hands are rendered as floating **Luminous Orbs** that track fingertip coordinates with fluid particle motion trails.
+2. Six translucent glowing sound circles arranged in a clean **two-row by three-column beat-grid (3x2)**.
 3. A ready-to-play default kit with active audio synthesis. If camera access is pending or unavailable, an intuitive pointer fallback lets the user click or touch pads immediately.
 
 ### 4.2 Core Interaction Loop
@@ -78,7 +78,7 @@ Per the template's guidelines, keyboard/mouse/touch controls must achieve parity
 
 ## 5. Technical Architecture
 
-KinetiClap complies strictly with the **Single-File HTML App** standard:
+Gestrum complies strictly with the **Single-File HTML App** standard:
 
 ```
 airdrummer/
@@ -131,12 +131,12 @@ airdrummer/
 
 ## 6. Prior Art & Competitive Landscape
 
-| Precedent / Project | Author / Type | Year | Notable Strength | KinetiClap Differentiation |
+| Precedent / Project | Author / Type | Year | Notable Strength | Gestrum Differentiation |
 | :--- | :--- | :--- | :--- | :--- |
-| **Sonari** | Research / Creative Coding | 2022 | Spatial sound-field mapping | KinetiClap is zero-setup, PWA-installable, and features distinct physical drum kit ergonomics. |
-| **Gesture.live** | Indie / Open-Access Web App | 2021 | Browser webcam body tracking | Requires heavy internet bandwidth; KinetiClap works completely offline and runs lightweight synthesis. |
-| **Gesture Synth** | Open Source | 2020 | Continuous synth pitch modulation | KinetiClap focuses on discrete percussion strikes and a 3-second hold-to-loop workflow. |
-| **Handmate** | Academic Research | 2023 | Detailed finger pose analysis | Handmate is research-focused; KinetiClap focuses on instant performance joy and tactile visual feedback. |
+| **Sonari** | Research / Creative Coding | 2022 | Spatial sound-field mapping | Gestrum is zero-setup, PWA-installable, and features distinct physical drum kit ergonomics. |
+| **Gesture.live** | Indie / Open-Access Web App | 2021 | Browser webcam body tracking | Requires heavy internet bandwidth; Gestrum works completely offline and runs lightweight synthesis. |
+| **Gesture Synth** | Open Source | 2020 | Continuous synth pitch modulation | Gestrum focuses on discrete percussion strikes and a 3-second hold-to-loop workflow. |
+| **Handmate** | Academic Research | 2023 | Detailed finger pose analysis | Handmate is research-focused; Gestrum focuses on instant performance joy and tactile visual feedback. |
 
 ---
 

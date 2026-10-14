@@ -1,18 +1,20 @@
-# KinetiClap
+# Gestrum
 
 > A touchless, in-browser air-percussion instrument. Tap the air to play, hold to loop, and sculpt your sound.
 
-**Live App:** [https://keeganrmc.github.io/kineticlap/](https://keeganrmc.github.io/kineticlap/)  
+**Live App:** [https://keeganrmc.github.io/gestrum/](https://keeganrmc.github.io/gestrum/)  
 **Author:** Keegan McConnell  
 **License:** MIT  
 
 ---
 
 ## What It Is
-**KinetiClap** is an embodied, camera-powered musical instrument running entirely in your browser. Using real-time computer vision, it tracks your fingertips in three-dimensional space:
+**Gestrum** (Gesture + Drum) is an embodied, camera-powered musical instrument running entirely in your browser. Using real-time computer vision, it translates physical hand gestures into floating luminous energy:
 - **Velocity-Sensitive Air Tapping:** Tap down into floating spatial sound pads. Gentle taps produce soft hits; hard strikes fire punchy, bright attacks with expansive neon shockwave rings.
+- **3x2 Beat-Grid Layout:** Six sound pads arranged in an intuitive two-row by three-column grid, featuring a hard-hitting 808 Trap & Hip-Hop base kit (Sub-Kick, Trap Snare, 808 Toms, Hi-Hats, Glitch Perc, and Rimshot).
+- **Luminous Hand Orbs:** No raw webcam selfie video is shown; instead, your hands are visualized as floating luminous orbs tracking your fingertips in 3D space with fluid motion trails.
 - **3-Second Dwell Looping:** Hold your fingertip inside any pad for 3 seconds to lock it into an automated rhythmic loop.
-- **Movable Sound Blocks:** Drag pads around your screen to adapt the layout to your arm span and seating position.
+- **Custom Sound Uploads & Movable Blocks:** Drag pads around your screen to customize your layout, or upload custom audio samples (WAV, MP3) directly onto any pad.
 - **Zero Backend, 100% Offline:** Built as a single-file Progressive Web App (PWA). All video processing and audio synthesis happen locally on your computer. Nothing is ever uploaded to a server.
 
 ---
@@ -27,6 +29,6 @@
 
 ## Technical Architecture
 - **Vision:** MediaPipe Hands 3D Landmark Tracking running client-side.
-- **Sound:** Native Web Audio API procedural synthesis (Kick, Snare, Hi-Hats, Toms, Claps) + custom sample support.
-- **Persistence:** Autosaved locally to IndexedDB with `.kineticlap` project file import/export.
+- **Sound:** Native Web Audio API procedural synthesis (808 Kit) + user sample upload support.
+- **Persistence:** Autosaved locally to IndexedDB with `.gestrum` project file import/export.
 - **Format:** Single-file HTML5 PWA conforming to `Single_File_HTML_App_Template.TXT`.

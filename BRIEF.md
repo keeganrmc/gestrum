@@ -1,5 +1,5 @@
-# BRIEF.md: KinetiClap
-*The project north star for KinetiClap, an in-browser spatial air-percussion instrument.*
+# BRIEF.md: Gestrum
+*The project north star for Gestrum, an in-browser spatial air-percussion instrument.*
 
 ---
 
@@ -22,7 +22,7 @@
 * **Q6. What will it deliberately NOT do?**  
   It will not attempt to be a multi-track DAW, will not require user accounts, will not send camera streams to the cloud, and will not demand MIDI hardware.
 * **Q7. About sentence:**  
-  *"KinetiClap exists because drumming in mid-air should make real sound, turning your laptop camera into a zero-latency stage instrument."*
+  *"Gestrum exists because drumming in mid-air should make real sound, turning your laptop camera into a zero-latency stage instrument."*
 
 ---
 
@@ -42,9 +42,9 @@
 * **Q12. Interaction Model:**  
   **Performative & Direct Spatial Manipulation:** You strike circles in mid-air to trigger sound, hold for 3 seconds to loop, and drag pads to customize their spatial layout.
 * **Q13. First 10 Seconds:**  
-  Opens directly onto a dark mirrored camera feed with six glowing sound circles in an ergonomic drum kit arc. Hovering or clicking any circle immediately plays an authentic synthesized drum sound.
+  Opens onto a clean, cohesive dark stage (`#0d0f12`) with six glowing sound circles arranged in a structured **two-row by three-column beat-grid (3x2)**. No raw webcam selfie video is shown; instead, your hands are visualized as floating **Luminous Orbs** that smoothly follow your fingertips in 3D space with subtle particle trails.
 * **Q14. Core Loop:**  
-  *Tap air with fingertip → speed of tap calculates velocity/power (harder tap = larger neon shockwave ring & punchier hit) → hold fingertip inside pad for 3 seconds as a clockwise circular gauge fills and locks the loop gold → drag pads to sculpt your kit.*
+  *Move luminous hand orbs in air → tap down into a circle → speed of tap triggers dynamic velocity/power (harder tap = larger neon shockwave & punchier hit) → hold orb inside pad for 3 seconds as a clockwise circular gauge fills and locks the loop gold → drag pads to customize layout.*
 * **Q15. What leaves the app?**  
   1. An `.airdrummer` JSON project file containing pad coordinates and custom kit assignments.  
   2. A recorded `.wav` or `.webm` audio file of the live performance.
@@ -60,7 +60,7 @@
 ---
 
 ## 2.6 IDENTITY
-* **Q19. Name:** **KinetiClap** (working URL: `keeganrmc.github.io/kineticlap/`).
+* **Q19. Name:** **Gestrum** (working URL: `keeganrmc.github.io/gestrum/`).
 * **Q20. Wordmark Register:** Clean, energetic sans-serif with monospace accents (futuristic instrument aesthetic).
 * **Q21. Colors:**
   * Background: `#0d0f12` (Void Black)
