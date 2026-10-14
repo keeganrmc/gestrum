@@ -46,7 +46,7 @@
   /* Header Bar */
   header {
     height: 54px;
-    background: rgba(19, 23, 31, 0.85);
+    background: rgba(19, 23, 31, 0.9);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--panel-border);
     display: flex;
@@ -132,6 +132,16 @@
     font-weight: 700;
   }
 
+  .btn-danger {
+    background: rgba(255, 0, 127, 0.15);
+    border-color: var(--magenta);
+    color: #ff66b2;
+  }
+  .btn-danger:hover {
+    background: var(--magenta);
+    color: #fff;
+  }
+
   .btn-rec.recording {
     background: var(--magenta);
     border-color: #ff3388;
@@ -141,6 +151,60 @@
   @keyframes pulseRec {
     from { box-shadow: 0 0 4px var(--magenta); }
     to { box-shadow: 0 0 20px var(--magenta); }
+  }
+
+  /* Measure Bar (Beat Quantization Timeline) */
+  #measure-bar-container {
+    height: 32px;
+    background: #10141d;
+    border-bottom: 1px solid #1c2433;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    position: relative;
+    z-index: 40;
+  }
+
+  .measure-display {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+    max-width: 480px;
+    margin: 0 16px;
+  }
+  .measure-step {
+    flex: 1;
+    height: 8px;
+    border-radius: 3px;
+    background: #1a2230;
+    transition: background 0.08s, box-shadow 0.08s;
+  }
+  .measure-step.beat {
+    height: 12px;
+    background: #28354a;
+  }
+  .measure-step.active {
+    background: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan);
+  }
+  .measure-step.beat.active {
+    background: var(--gold);
+    box-shadow: 0 0 14px var(--gold);
+  }
+
+  .tempo-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .tempo-controls input[type="range"] {
+    width: 80px;
+    accent-color: var(--cyan);
   }
 
   /* Main Stage */
@@ -161,7 +225,6 @@
     touch-action: none;
   }
 
-  /* Hidden video used strictly in memory for computer vision */
   #webcam-video {
     display: none;
   }
@@ -180,6 +243,27 @@
   }
   .edit-mode .grid-overlay {
     opacity: 1;
+  }
+
+  /* Drop Zone Overlay */
+  .drop-indicator {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 240, 255, 0.15);
+    border: 1px dashed var(--cyan);
+    color: var(--cyan);
+    padding: 6px 16px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-family: ui-monospace, monospace;
+    display: none;
+    pointer-events: none;
+    z-index: 60;
+  }
+  .dragging-file .drop-indicator {
+    display: block;
   }
 
   /* Toast Notification */
@@ -206,7 +290,7 @@
     transform: translateX(-50%) translateY(0);
   }
 
-  /* Bottom Controls / Status */
+  /* Footer Bar */
   footer {
     height: 38px;
     background: rgba(19, 23, 31, 0.9);
@@ -294,6 +378,35 @@
     border-color: var(--cyan);
   }
 
+  .preset-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 12px 0;
+  }
+  .preset-btn {
+    background: #171f2b;
+    border: 1px solid #2b394e;
+    color: #cbd5e1;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .preset-btn:hover {
+    border-color: var(--cyan);
+    color: #fff;
+    background: #1f2a3a;
+  }
+  .preset-btn.active {
+    background: var(--cyan);
+    color: #000;
+    font-weight: 700;
+    border-color: var(--cyan);
+  }
+
   .help-list {
     max-height: 280px;
     overflow-y: auto;
@@ -357,7 +470,11 @@
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
       Camera
     </button>
-    <button id="btn-mode" title="Toggle between playing and repositioning pads">
+    <button id="btn-pause-all" class="btn-danger" title="Pause or stop all active loops immediately (Spacebar)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      Pause All
+    </button>
+    <button id="btn-mode" title="Toggle between playing and editing/repositioning pads">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       Layout
     </button>
@@ -365,7 +482,7 @@
       <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
       Record
     </button>
-    <button id="btn-undo" title="Undo last layout or kit change (Ctrl+Z)">↶</button>
+    <button id="btn-undo" title="Undo last change (Ctrl+Z)">↶</button>
     <button id="btn-redo" title="Redo last change (Ctrl+Shift+Z)">↷</button>
     <button id="btn-save-project" title="Save .gestrum project file">Save</button>
     <label class="btn-file" title="Open .gestrum project file">
@@ -376,7 +493,22 @@
   </div>
 </header>
 
+<!-- Measure Bar / Sequencer Timeline -->
+<div id="measure-bar-container">
+  <div style="font-family: ui-monospace, monospace; font-size: 11px; color: var(--cyan); font-weight: 700;">
+    MEASURE 4/4
+  </div>
+  <div class="measure-display" id="measure-display">
+    <!-- 16 Subdivisions dynamically rendered -->
+  </div>
+  <div class="tempo-controls">
+    <span>BPM: <strong id="bpm-val">120</strong></span>
+    <input type="range" id="bpm-slider" min="60" max="180" value="120">
+  </div>
+</div>
+
 <div id="stage-container">
+  <div class="drop-indicator">Drop audio file (WAV/MP3) to assign sound</div>
   <div class="grid-overlay"></div>
   <canvas id="stage-canvas"></canvas>
   <video id="webcam-video" playsinline></video>
@@ -389,15 +521,46 @@
     <span id="status-text">Hover or click pads to play</span>
   </div>
   <div>
-    <span>BPM: 120 | 808 Trap Kit</span>
+    <span>1 Tap = Strike Once | Hold 3s = Loop on Measure</span>
     <button id="chip" title="Check for updates"></button>
   </div>
 </footer>
 
+<!-- Pad Sound Configuration Dialog -->
+<dialog id="pad-config-dialog">
+  <h2 id="config-pad-title">Configure Sound Pad</h2>
+  <p style="font-size: 13px; color: var(--muted); margin-bottom: 12px;">Choose a synthesized preset or upload a custom audio sample.</p>
+  
+  <div style="font-size: 11px; font-weight: 600; color: var(--cyan); text-transform: uppercase; margin-top: 10px;">Synthesized Presets</div>
+  <div class="preset-grid" id="preset-buttons">
+    <button class="preset-btn" data-type="kick">808 Sub Kick</button>
+    <button class="preset-btn" data-type="snare">Trap Snare</button>
+    <button class="preset-btn" data-type="hihat">808 Closed Hat</button>
+    <button class="preset-btn" data-type="openhat">808 Open Hat</button>
+    <button class="preset-btn" data-type="perc">Glitch Perc</button>
+    <button class="preset-btn" data-type="rim">808 Rimshot</button>
+    <button class="preset-btn" data-type="tom">808 Pitch Tom</button>
+    <button class="preset-btn" data-type="clap">808 Clap</button>
+    <button class="preset-btn" data-type="cowbell">808 Cowbell</button>
+    <button class="preset-btn" data-type="acoustic-snare">Acoustic Snare</button>
+    <button class="preset-btn" data-type="laser">Sci-Fi Laser</button>
+    <button class="preset-btn" data-type="crystal">Crystal Bell</button>
+  </div>
+
+  <div style="font-size: 11px; font-weight: 600; color: var(--cyan); text-transform: uppercase; margin-top: 16px;">Custom Audio File</div>
+  <p style="font-size: 12px; margin: 4px 0 8px 0;">Upload any WAV, MP3, or OGG file from your machine:</p>
+  <input type="file" id="custom-audio-upload" accept="audio/*" style="font-size: 12px; margin-bottom: 14px;">
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 18px;">
+    <button id="btn-preview-sound" style="background: rgba(0,240,255,0.1); border-color: var(--cyan); color: var(--cyan);">▶ Test Sound</button>
+    <button onclick="document.getElementById('pad-config-dialog').close()">Done</button>
+  </div>
+</dialog>
+
 <!-- Help Dialog -->
 <dialog id="help-dialog">
   <h2>Help & Controls</h2>
-  <input type="text" id="help-search" placeholder="Search controls (e.g. loop, camera, record)...">
+  <input type="text" id="help-search" placeholder="Search controls (e.g. pause, loop, measure, camera)...">
   <div class="help-list" id="help-items"></div>
   <div style="text-align: right; margin-top: 14px;">
     <button onclick="document.getElementById('help-dialog').close()">Close</button>
@@ -410,7 +573,7 @@
     <div class="logo-mark" style="width: 36px; height: 36px;"><span>G</span></div>
     <div>
       <h2 style="margin: 0;">Gestrum</h2>
-      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-001</span>
+      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-002</span>
     </div>
   </div>
   <p><strong>Raison d'Être:</strong> Gestrum exists because drumming in mid-air should make real sound, turning your laptop camera into a zero-latency stage instrument.</p>
@@ -430,19 +593,20 @@
 const APP = {
   name: "Gestrum",
   id: "gestrum",
-  version: "v00000-001",
+  version: "v00000-002",
   author: "Keegan McConnell",
   site: "https://keeganrmc.github.io/",
   repo: "https://github.com/keeganrmc/gestrum"
 };
-const FORMAT = { name: APP.id, version: 1 };
+const FORMAT = { name: APP.id, version: 2 };
 document.getElementById("chip").textContent = APP.version + " ↻";
 
-// ── WEB AUDIO SYNTHESIS ENGINE (808 TRAP & HIP-HOP) ─────────────────────────
+// ── WEB AUDIO SYNTHESIS & CUSTOM SAMPLES ENGINE ─────────────────────────────
 let audioCtx = null;
 let mediaRecorder = null;
 let recordedChunks = [];
 let audioDestinationNode = null;
+const customSampleBuffers = new Map(); // padId -> AudioBuffer
 
 function getAudioContext() {
   if (!audioCtx) {
@@ -454,16 +618,31 @@ function getAudioContext() {
   return audioCtx;
 }
 
-function play808Sound(type, velocity = 0.8) {
+function playSound(pad, velocity = 0.8) {
   const ctx = getAudioContext();
   const now = ctx.currentTime;
   const v = Math.max(0.15, Math.min(velocity, 1.0));
 
-  // Master out for sound
+  // Check if pad has custom uploaded sample
+  if (customSampleBuffers.has(pad.id)) {
+    const source = ctx.createBufferSource();
+    source.buffer = customSampleBuffers.get(pad.id);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(v, now);
+    source.connect(gain);
+    gain.connect(ctx.destination);
+    if (audioDestinationNode) gain.connect(audioDestinationNode);
+    source.start(now);
+    return;
+  }
+
+  // Synthesized Presets
   const out = ctx.createGain();
   out.gain.setValueAtTime(v * 0.9, now);
   out.connect(ctx.destination);
   if (audioDestinationNode) out.connect(audioDestinationNode);
+
+  const type = pad.type;
 
   if (type === "kick") {
     // 808 Deep Sub Kick
@@ -471,7 +650,7 @@ function play808Sound(type, velocity = 0.8) {
     const gain = ctx.createGain();
     osc.type = "sine";
     osc.frequency.setValueAtTime(140 + v * 40, now);
-    osc.frequency.exponentialRampToValueAtTime(38, now + 0.12);
+    osc.frequency.exponentialRampToValueAtTime(36, now + 0.12);
     gain.gain.setValueAtTime(1.0, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
     osc.connect(gain);
@@ -483,7 +662,7 @@ function play808Sound(type, velocity = 0.8) {
     const tone = ctx.createOscillator();
     const toneGain = ctx.createGain();
     tone.type = "triangle";
-    tone.frequency.setValueAtTime(185, now);
+    tone.frequency.setValueAtTime(190, now);
     tone.frequency.exponentialRampToValueAtTime(80, now + 0.08);
     toneGain.gain.setValueAtTime(0.7, now);
     toneGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
@@ -492,8 +671,7 @@ function play808Sound(type, velocity = 0.8) {
     tone.start(now);
     tone.stop(now + 0.2);
 
-    // Noise
-    const bufferSize = ctx.sampleRate * 0.25;
+    const bufferSize = ctx.sampleRate * 0.22;
     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const data = buffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
@@ -501,7 +679,7 @@ function play808Sound(type, velocity = 0.8) {
     noise.buffer = buffer;
     const filter = ctx.createBiquadFilter();
     filter.type = "bandpass";
-    filter.frequency.setValueAtTime(1500 + v * 800, now);
+    filter.frequency.setValueAtTime(1600 + v * 800, now);
     filter.Q.value = 2.0;
     const noiseGain = ctx.createGain();
     noiseGain.gain.setValueAtTime(0.8, now);
@@ -512,7 +690,7 @@ function play808Sound(type, velocity = 0.8) {
     noise.start(now);
     noise.stop(now + 0.25);
   } else if (type === "hihat") {
-    // 808 Closed Hat (Sharp metallic burst)
+    // 808 Closed Hat
     const bufferSize = ctx.sampleRate * 0.08;
     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const data = buffer.getChannelData(0);
@@ -530,8 +708,27 @@ function play808Sound(type, velocity = 0.8) {
     gain.connect(out);
     noise.start(now);
     noise.stop(now + 0.08);
+  } else if (type === "openhat") {
+    // 808 Open Hat
+    const bufferSize = ctx.sampleRate * 0.35;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = ctx.createBiquadFilter();
+    filter.type = "highpass";
+    filter.frequency.setValueAtTime(6500, now);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.85, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(out);
+    noise.start(now);
+    noise.stop(now + 0.35);
   } else if (type === "perc") {
-    // Glitch Percussion (FM chirping snap)
+    // Glitch Perc (FM chirping snap)
     const carrier = ctx.createOscillator();
     const modulator = ctx.createOscillator();
     const modGain = ctx.createGain();
@@ -577,23 +774,101 @@ function play808Sound(type, velocity = 0.8) {
     gain.connect(out);
     osc.start(now);
     osc.stop(now + 0.38);
+  } else if (type === "clap") {
+    // 808 Clap (Multi-pulse noise)
+    [0, 0.012, 0.024].forEach((delay, idx) => {
+      const bufferSize = ctx.sampleRate * 0.04;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(1200, now + delay);
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(idx === 2 ? 0.9 : 0.4, now + delay);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + delay + (idx === 2 ? 0.18 : 0.04));
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(out);
+      noise.start(now + delay);
+      noise.stop(now + delay + 0.2);
+    });
+  } else if (type === "cowbell") {
+    // 808 Cowbell (Dual square wave)
+    [587, 845].forEach(freq => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "square";
+      osc.frequency.setValueAtTime(freq, now);
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(800, now);
+      filter.Q.value = 3;
+      gain.gain.setValueAtTime(0.4, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(out);
+      osc.start(now);
+      osc.stop(now + 0.28);
+    });
+  } else if (type === "acoustic-snare") {
+    // Acoustic Wood Snare
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(240, now);
+    osc.frequency.exponentialRampToValueAtTime(140, now + 0.08);
+    gain.gain.setValueAtTime(0.8, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+    osc.connect(gain);
+    gain.connect(out);
+    osc.start(now);
+    osc.stop(now + 0.18);
+  } else if (type === "laser") {
+    // Sci-Fi Laser
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(1400, now);
+    osc.frequency.exponentialRampToValueAtTime(80, now + 0.15);
+    gain.gain.setValueAtTime(0.7, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+    osc.connect(gain);
+    gain.connect(out);
+    osc.start(now);
+    osc.stop(now + 0.18);
+  } else if (type === "crystal") {
+    // Crystal Bell
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(1046.5, now);
+    gain.gain.setValueAtTime(0.6, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+    osc.connect(gain);
+    gain.connect(out);
+    osc.start(now);
+    osc.stop(now + 0.85);
   }
 }
 
-// ── DOCUMENT STATE, UNDO, & AUTOSAVE ─────────────────────────────────────────
+// ── DOCUMENT STATE & DEFAULT 3X2 GRID ────────────────────────────────────────
 function defaultDoc() {
   return {
     bpm: 120,
     editMode: false,
     pads: [
       // Top Row (3)
-      { id: 1, label: "808 HI-HAT", type: "hihat", nx: 0.24, ny: 0.32, radius: 46, looped: false },
-      { id: 2, label: "GLITCH PERC", type: "perc",  nx: 0.50, ny: 0.30, radius: 46, looped: false },
-      { id: 3, label: "RIMSHOT",    type: "rim",   nx: 0.76, ny: 0.32, radius: 46, looped: false },
+      { id: 1, label: "808 HI-HAT", type: "hihat", nx: 0.24, ny: 0.32, radius: 46, looped: false, loopSteps: [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0] },
+      { id: 2, label: "GLITCH PERC", type: "perc",  nx: 0.50, ny: 0.30, radius: 46, looped: false, loopSteps: [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0] },
+      { id: 3, label: "RIMSHOT",    type: "rim",   nx: 0.76, ny: 0.32, radius: 46, looped: false, loopSteps: [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0] },
       // Bottom Row (3)
-      { id: 4, label: "808 KICK",   type: "kick",  nx: 0.24, ny: 0.68, radius: 52, looped: false },
-      { id: 5, label: "TRAP SNARE", type: "snare", nx: 0.50, ny: 0.70, radius: 50, looped: false },
-      { id: 6, label: "808 TOM",    type: "tom",   nx: 0.76, ny: 0.68, radius: 48, looped: false },
+      { id: 4, label: "808 KICK",   type: "kick",  nx: 0.24, ny: 0.68, radius: 52, looped: false, loopSteps: [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0] },
+      { id: 5, label: "TRAP SNARE", type: "snare", nx: 0.50, ny: 0.70, radius: 50, looped: false, loopSteps: [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0] },
+      { id: 6, label: "808 TOM",    type: "tom",   nx: 0.76, ny: 0.68, radius: 48, looped: false, loopSteps: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0] },
     ]
   };
 }
@@ -626,6 +901,11 @@ function redo() {
 
 window.addEventListener("keydown", e => {
   if (e.target.matches("input, textarea")) return;
+  if (e.code === "Space") {
+    e.preventDefault();
+    pauseAllLoops();
+    return;
+  }
   const mod = e.metaKey || e.ctrlKey;
   if (mod && e.key.toLowerCase() === "z") {
     e.preventDefault();
@@ -636,7 +916,7 @@ window.addEventListener("keydown", e => {
 // ── INDEXEDDB PERSISTENCE ───────────────────────────────────────────────────
 function idb() {
   return new Promise((res, rej) => {
-    const r = indexedDB.open(APP.id, 1);
+    const r = indexedDB.open(APP.id, 2);
     r.onupgradeneeded = () => r.result.createObjectStore("kv");
     r.onsuccess = () => res(r.result);
     r.onerror = () => rej(r.error);
@@ -647,7 +927,7 @@ async function idbSet(key, value) {
     const db = await idb();
     const tx = db.transaction("kv", "readwrite");
     tx.objectStore("kv").put(value, key);
-  } catch (e) { /* storage error handled */ }
+  } catch (e) { /* storage fallback */ }
 }
 async function idbGet(key) {
   try {
@@ -671,6 +951,10 @@ async function restore() {
   const saved = await idbGet("doc");
   if (saved && saved.data && saved.data.pads) {
     doc = saved.data;
+    if (doc.bpm) {
+      document.getElementById("bpm-slider").value = doc.bpm;
+      document.getElementById("bpm-val").textContent = doc.bpm;
+    }
   }
 }
 
@@ -684,11 +968,67 @@ function toast(msg) {
   toastTimer = setTimeout(() => toastEl.classList.remove("show"), 1800);
 }
 
-// ── STAGE RENDERING & PARTICLES ─────────────────────────────────────────────
+// ── MEASURE BAR & QUANTIZATION TIMELINE (16-STEP GRID) ──────────────────────
+const measureDisplay = document.getElementById("measure-display");
+for (let i = 0; i < 16; i++) {
+  const step = document.createElement("div");
+  step.className = `measure-step ${i % 4 === 0 ? "beat" : ""}`;
+  step.id = `step-${i}`;
+  measureDisplay.appendChild(step);
+}
+
+let currentStep = 0;
+let stepTimer = null;
+
+function startSequencer() {
+  if (stepTimer) clearInterval(stepTimer);
+  const stepIntervalMs = (60000 / doc.bpm) / 4; // 16th note subdivision
+  stepTimer = setInterval(() => {
+    // Visual timeline sweep
+    document.getElementById(`step-${currentStep}`)?.classList.remove("active");
+    currentStep = (currentStep + 1) % 16;
+    document.getElementById(`step-${currentStep}`)?.classList.add("active");
+
+    // Play looped pads on measure
+    doc.pads.forEach(pad => {
+      if (pad.looped) {
+        const steps = pad.loopSteps || [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0];
+        if (steps[currentStep]) {
+          triggerPadVisualAndAudio(pad, 0.85);
+        }
+      }
+    });
+  }, stepIntervalMs);
+}
+startSequencer();
+
+const bpmSlider = document.getElementById("bpm-slider");
+const bpmVal = document.getElementById("bpm-val");
+bpmSlider.oninput = () => {
+  change(d => d.bpm = parseInt(bpmSlider.value));
+  bpmVal.textContent = doc.bpm;
+  startSequencer();
+};
+
+function pauseAllLoops() {
+  let anyPaused = false;
+  change(d => {
+    d.pads.forEach(p => {
+      if (p.looped) {
+        p.looped = false;
+        anyPaused = true;
+      }
+    });
+  });
+  toast(anyPaused ? "All loops stopped" : "No active loops to pause");
+}
+document.getElementById("btn-pause-all").onclick = pauseAllLoops;
+
+// ── STAGE RENDERING & ENTITIES ──────────────────────────────────────────────
 const canvas = document.getElementById("stage-canvas");
 const ctx = canvas.getContext("2d");
 let stageWidth = window.innerWidth;
-let stageHeight = window.innerHeight - 92;
+let stageHeight = window.innerHeight - 124;
 
 function resize() {
   stageWidth = canvas.parentElement.clientWidth;
@@ -700,15 +1040,17 @@ function resize() {
 window.addEventListener("resize", resize);
 resize();
 
-// Visual Entities: Shockwaves, Particles, Dwell progress
 const shockwaves = [];
 const particles = [];
-let handOrbs = []; // [{ x, y, vx, vy, isStriking }]
-const dwellMap = new Map(); // padId -> dwellStartTime (ms)
+let handOrbs = []; // [{ x, y }]
 
-function triggerPad(pad, velocity = 0.8) {
-  play808Sound(pad.type, velocity);
-  // Add Shockwave Ring (Option A style)
+// Strict Tap & Dwell State Tracking
+const padInteractionState = new Map();
+// padId -> { isInside: boolean, hasStruck: boolean, enterTime: number }
+
+function triggerPadVisualAndAudio(pad, velocity = 0.8) {
+  playSound(pad, velocity);
+  // Add Shockwave
   shockwaves.push({
     x: pad.nx * stageWidth,
     y: pad.ny * stageHeight,
@@ -719,7 +1061,7 @@ function triggerPad(pad, velocity = 0.8) {
     width: 3 + velocity * 4
   });
   // Add sparks
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 10; i++) {
     const angle = Math.random() * Math.PI * 2;
     const speed = 2 + Math.random() * 5 * velocity;
     particles.push({
@@ -733,22 +1075,65 @@ function triggerPad(pad, velocity = 0.8) {
   }
 }
 
-// ── TEMPO LOOP ENGINE (120 BPM) ─────────────────────────────────────────────
-let beatStep = 0;
-setInterval(() => {
-  beatStep = (beatStep + 1) % 16;
-  doc.pads.forEach(p => {
-    if (p.looped) {
-      // Loop interval based on instrument type
-      if (p.type === "kick" && (beatStep % 4 === 0)) triggerPad(p, 0.9);
-      if (p.type === "snare" && (beatStep % 8 === 4)) triggerPad(p, 0.85);
-      if (p.type === "hihat" && (beatStep % 2 === 0)) triggerPad(p, 0.65);
-      if (p.type === "rim" && (beatStep % 8 === 2)) triggerPad(p, 0.7);
-      if (p.type === "perc" && (beatStep % 8 === 6)) triggerPad(p, 0.75);
-      if (p.type === "tom" && (beatStep === 14)) triggerPad(p, 0.8);
+// ── STRICT INTERACTION LOGIC (ONE TAP = ONE HIT | HOLD 3S = LOOP) ───────────
+function processInputPoint(x, y, isInteracting, velocity = 0.8) {
+  const now = performance.now();
+
+  doc.pads.forEach(pad => {
+    const px = pad.nx * stageWidth;
+    const py = pad.ny * stageHeight;
+    const dist = Math.hypot(x - px, y - py);
+    const isInside = dist <= pad.radius;
+
+    let state = padInteractionState.get(pad.id);
+    if (!state) {
+      state = { isInside: false, hasStruck: false, enterTime: 0 };
+      padInteractionState.set(pad.id, state);
+    }
+
+    if (isInside && isInteracting) {
+      if (!state.isInside) {
+        // Fresh entry into circle!
+        state.isInside = true;
+        state.enterTime = now;
+
+        if (!state.hasStruck) {
+          // RULE 1: ONE TAP = PLAY SOUND ONCE
+          state.hasStruck = true;
+
+          if (pad.looped) {
+            // Tapping an already looped pad pauses/stops it!
+            pad.looped = false;
+            toast(`${pad.label} Loop Stopped`);
+            scheduleSave();
+          } else {
+            triggerPadVisualAndAudio(pad, velocity);
+          }
+        }
+      } else {
+        // Hand/cursor is dwelling inside the circle
+        const dwellTime = now - state.enterTime;
+        // RULE 2: TAP AND HOLD 3 SECONDS = LOOP SOUND
+        if (dwellTime >= 3000 && !pad.looped) {
+          pad.looped = true;
+          // Capture current step or default rhythmic groove
+          pad.loopSteps = pad.loopSteps || [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0];
+          toast(`★ ${pad.label} Locked into Loop!`);
+          scheduleSave();
+          // Visual celebration burst
+          triggerPadVisualAndAudio(pad, 1.0);
+        }
+      }
+    } else {
+      // Left the pad: reset struck status so next tap fires once again
+      if (state.isInside) {
+        state.isInside = false;
+        state.hasStruck = false;
+        state.enterTime = 0;
+      }
     }
   });
-}, (60000 / 120) / 4);
+}
 
 // ── RENDER LOOP ─────────────────────────────────────────────────────────────
 function render(timestamp) {
@@ -801,20 +1186,19 @@ function render(timestamp) {
     const px = pad.nx * stageWidth;
     const py = pad.ny * stageHeight;
     const isLooped = pad.looped;
-    const dwellStart = dwellMap.get(pad.id);
-    const dwellElapsed = dwellStart ? (timestamp - dwellStart) : 0;
+    const state = padInteractionState.get(pad.id);
+    const dwellElapsed = (state && state.isInside && state.enterTime) ? (performance.now() - state.enterTime) : 0;
     const dwellRatio = Math.min(1.0, dwellElapsed / 3000);
 
     ctx.save();
 
-    // Subtle ambient breathing glow
     const breath = Math.sin(timestamp * 0.003 + pad.id) * 3;
     const r = pad.radius + breath;
 
     // Pad Background disc
     ctx.beginPath();
     ctx.arc(px, py, r, 0, Math.PI * 2);
-    ctx.fillStyle = isLooped ? "rgba(255, 215, 0, 0.12)" : "rgba(0, 240, 255, 0.06)";
+    ctx.fillStyle = isLooped ? "rgba(255, 215, 0, 0.15)" : "rgba(0, 240, 255, 0.06)";
     ctx.fill();
 
     // Pad Perimeter Ring
@@ -849,7 +1233,7 @@ function render(timestamp) {
     ctx.shadowColor = isLooped ? "#ffd700" : "#00f0ff";
     ctx.fill();
 
-    // Labels
+    // Sound Pad Labels
     ctx.font = "600 11px ui-monospace, monospace";
     ctx.fillStyle = "#ffffff";
     ctx.textAlign = "center";
@@ -860,7 +1244,11 @@ function render(timestamp) {
     if (isLooped) {
       ctx.font = "700 9px ui-monospace, monospace";
       ctx.fillStyle = "#ffd700";
-      ctx.fillText("● LOOPING", px, py + r + 30);
+      ctx.fillText("● LOOPING ON MEASURE", px, py + r + 30);
+    } else if (doc.editMode) {
+      ctx.font = "500 9px ui-monospace, monospace";
+      ctx.fillStyle = "rgba(0, 240, 255, 0.8)";
+      ctx.fillText("⚙ Click to Change Sound", px, py + r + 30);
     }
 
     ctx.restore();
@@ -869,7 +1257,6 @@ function render(timestamp) {
   // 4. Draw Luminous Hand Orbs
   handOrbs.forEach(orb => {
     ctx.save();
-    // Ambient energy halo
     const grad = ctx.createRadialGradient(orb.x, orb.y, 4, orb.x, orb.y, 36);
     grad.addColorStop(0, "rgba(255, 0, 127, 0.85)");
     grad.addColorStop(0.5, "rgba(0, 240, 255, 0.35)");
@@ -879,7 +1266,6 @@ function render(timestamp) {
     ctx.arc(orb.x, orb.y, 36, 0, Math.PI * 2);
     ctx.fill();
 
-    // Hot central core
     ctx.beginPath();
     ctx.arc(orb.x, orb.y, 10, 0, Math.PI * 2);
     ctx.fillStyle = "#ffffff";
@@ -893,73 +1279,35 @@ function render(timestamp) {
 }
 requestAnimationFrame(render);
 
-// ── INTERACTION: MOUSE / TOUCH / POINTER FALLBACK ───────────────────────────
+// ── MOUSE / TOUCH POINTER INTERACTION ───────────────────────────────────────
 let draggingPad = null;
 let lastPointerTime = 0;
 let lastPointerY = 0;
-
-function handlePointerHit(x, y, isDown = false) {
-  const now = performance.now();
-  const dt = Math.max(1, now - lastPointerTime);
-  const dy = Math.abs(y - lastPointerY);
-  const velocity = Math.min(1.0, 0.4 + (dy / dt) * 1.5);
-  lastPointerTime = now;
-  lastPointerY = y;
-
-  // Update virtual hand orb position
-  handOrbs = [{ x, y }];
-
-  let hitAny = false;
-  doc.pads.forEach(pad => {
-    const px = pad.nx * stageWidth;
-    const py = pad.ny * stageHeight;
-    const dist = Math.hypot(x - px, y - py);
-
-    if (dist <= pad.radius) {
-      hitAny = true;
-      if (isDown) {
-        if (!dwellMap.has(pad.id)) {
-          dwellMap.set(pad.id, now);
-          triggerPad(pad, velocity);
-        }
-      }
-
-      // Check 3-second hold
-      if (dwellMap.has(pad.id)) {
-        const dwellTime = now - dwellMap.get(pad.id);
-        if (dwellTime >= 3000) {
-          pad.looped = !pad.looped;
-          dwellMap.delete(pad.id);
-          toast(pad.looped ? `${pad.label} Looping!` : `${pad.label} Loop Stopped`);
-          scheduleSave();
-        }
-      }
-    } else {
-      if (dwellMap.has(pad.id) && !isDown) {
-        dwellMap.delete(pad.id);
-      }
-    }
-  });
-
-  if (!hitAny && !isDown) {
-    dwellMap.clear();
-  }
-}
+let isPointerDown = false;
 
 canvas.addEventListener("pointerdown", e => {
   const rect = canvas.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
+  isPointerDown = true;
+  handOrbs = [{ x, y }];
 
   if (doc.editMode) {
-    // Check if dragging pad in layout mode
+    // In edit mode: check if clicking pad to configure or drag
+    let clickedPad = null;
     doc.pads.forEach(p => {
       const px = p.nx * stageWidth;
       const py = p.ny * stageHeight;
-      if (Math.hypot(x - px, y - py) <= p.radius) draggingPad = p;
+      if (Math.hypot(x - px, y - py) <= p.radius) clickedPad = p;
     });
+
+    if (clickedPad) {
+      draggingPad = clickedPad;
+      // Double check if quick tap to configure sound
+      openPadConfig(clickedPad);
+    }
   } else {
-    handlePointerHit(x, y, true);
+    processInputPoint(x, y, true, 0.85);
   }
 });
 
@@ -967,8 +1315,16 @@ canvas.addEventListener("pointermove", e => {
   const rect = canvas.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
+  handOrbs = [{ x, y }];
 
-  if (doc.editMode && draggingPad) {
+  const now = performance.now();
+  const dt = Math.max(1, now - lastPointerTime);
+  const dy = Math.abs(y - lastPointerY);
+  const velocity = Math.min(1.0, 0.35 + (dy / dt) * 1.5);
+  lastPointerTime = now;
+  lastPointerY = y;
+
+  if (doc.editMode && draggingPad && isPointerDown) {
     change(d => {
       const p = d.pads.find(item => item.id === draggingPad.id);
       if (p) {
@@ -977,16 +1333,129 @@ canvas.addEventListener("pointermove", e => {
       }
     });
   } else {
-    handlePointerHit(x, y, e.buttons > 0);
+    processInputPoint(x, y, isPointerDown, velocity);
   }
 });
 
 window.addEventListener("pointerup", () => {
+  isPointerDown = false;
   draggingPad = null;
-  dwellMap.clear();
+  padInteractionState.forEach(state => {
+    state.isInside = false;
+    state.hasStruck = false;
+    state.enterTime = 0;
+  });
 });
 
-// ── WEBCAM & MEDIAPIPE HAND TRACKING ────────────────────────────────────────
+// ── DRAG & DROP CUSTOM SOUND FILES ONTO PADS ────────────────────────────────
+const stageContainer = document.getElementById("stage-container");
+
+window.addEventListener("dragover", e => {
+  e.preventDefault();
+  stageContainer.classList.add("dragging-file");
+});
+window.addEventListener("dragleave", e => {
+  if (e.relatedTarget === null) stageContainer.classList.remove("dragging-file");
+});
+window.addEventListener("drop", async e => {
+  e.preventDefault();
+  stageContainer.classList.remove("dragging-file");
+  const file = e.dataTransfer.files[0];
+  if (!file || !file.type.startsWith("audio/")) return;
+
+  const rect = canvas.getBoundingClientRect();
+  const dropX = e.clientX - rect.left;
+  const dropY = e.clientY - rect.top;
+
+  // Find nearest pad
+  let targetPad = null;
+  doc.pads.forEach(p => {
+    const px = p.nx * stageWidth;
+    const py = p.ny * stageHeight;
+    if (Math.hypot(dropX - px, dropY - py) <= p.radius + 30) targetPad = p;
+  });
+
+  if (targetPad) {
+    await assignCustomAudioFile(targetPad, file);
+  } else {
+    toast("Drop the file directly onto one of the 6 circles");
+  }
+});
+
+async function assignCustomAudioFile(pad, file) {
+  const ctx = getAudioContext();
+  try {
+    toast(`Loading "${file.name}"...`);
+    const arrayBuffer = await file.arrayBuffer();
+    const audioBuffer = await ctx.decodeAudioData(arrayBuffer.slice(0));
+    customSampleBuffers.set(pad.id, audioBuffer);
+
+    // Save ArrayBuffer into IndexedDB so it persists across reloads
+    await idbSet(`sample-${pad.id}`, arrayBuffer);
+
+    change(d => {
+      const p = d.pads.find(item => item.id === pad.id);
+      if (p) {
+        p.label = file.name.replace(/\.[^/.]+$/, "").toUpperCase().slice(0, 14);
+        p.type = "custom";
+      }
+    });
+    toast(`Assigned "${file.name}" to pad!`);
+    triggerPadVisualAndAudio(pad, 1.0);
+  } catch (err) {
+    toast("Could not decode audio file");
+  }
+}
+
+// ── PAD CONFIGURATION DIALOG & PRESET SELECTOR ──────────────────────────────
+let activeConfigPad = null;
+const padConfigDialog = document.getElementById("pad-config-dialog");
+const configTitle = document.getElementById("config-pad-title");
+const presetButtons = document.getElementById("preset-buttons");
+const customAudioUpload = document.getElementById("custom-audio-upload");
+
+function openPadConfig(pad) {
+  activeConfigPad = pad;
+  configTitle.textContent = `Configure Pad ${pad.id}: ${pad.label}`;
+  presetButtons.querySelectorAll(".preset-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.type === pad.type);
+  });
+  padConfigDialog.showModal();
+}
+
+presetButtons.querySelectorAll(".preset-btn").forEach(btn => {
+  btn.onclick = () => {
+    if (!activeConfigPad) return;
+    const selectedType = btn.dataset.type;
+    customSampleBuffers.delete(activeConfigPad.id);
+    idbSet(`sample-${activeConfigPad.id}`, null);
+
+    change(d => {
+      const p = d.pads.find(item => item.id === activeConfigPad.id);
+      if (p) {
+        p.type = selectedType;
+        p.label = btn.textContent.toUpperCase();
+      }
+    });
+    presetButtons.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    toast(`Assigned ${btn.textContent}!`);
+  };
+});
+
+customAudioUpload.onchange = async (e) => {
+  const file = e.target.files[0];
+  if (!file || !activeConfigPad) return;
+  await assignCustomAudioFile(activeConfigPad, file);
+};
+
+document.getElementById("btn-preview-sound").onclick = () => {
+  if (activeConfigPad) {
+    playSound(activeConfigPad, 0.9);
+  }
+};
+
+// ── WEBCAM & MEDIAPIPE AIR HAND TRACKING ────────────────────────────────────
 const videoEl = document.getElementById("webcam-video");
 const statusDot = document.getElementById("status-dot");
 const statusText = document.getElementById("status-text");
@@ -1004,11 +1473,10 @@ async function initCamera() {
     await videoEl.play();
 
     statusDot.classList.add("active");
-    statusText.textContent = "Webcam active. Initializing hands...";
+    statusText.textContent = "Webcam active. Loading MediaPipe...";
     cameraActive = true;
     document.getElementById("btn-camera").classList.add("active");
 
-    // Initialize MediaPipe Hands
     if (window.Hands) {
       const hands = new window.Hands({
         locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`
@@ -1030,10 +1498,10 @@ async function initCamera() {
         cameraInstance.start();
       }
       statusDot.classList.add("vision-ok");
-      statusText.textContent = "Air tracking ready — Wave hands to play";
-      toast("Camera hand tracking enabled!");
+      statusText.textContent = "Air tracking ready — 1 Tap = Hit | Hold 3s = Loop";
+      toast("Camera hand tracking active!");
     } else {
-      statusText.textContent = "Camera on (Pointer fallback ready)";
+      statusText.textContent = "Camera active (Mouse/touch ready)";
     }
   } catch (err) {
     statusText.textContent = "Webcam unavailable — Mouse/touch ready";
@@ -1043,24 +1511,24 @@ async function initCamera() {
 
 function onHandResults(results) {
   if (!results.multiHandLandmarks || results.multiHandLandmarks.length === 0) {
+    handOrbs = [];
     return;
   }
   const newOrbs = [];
   results.multiHandLandmarks.forEach(landmarks => {
     // Landmark 8 is index fingertip
     const tip = landmarks[8];
-    // Mirrored X for natural air drumming reflection
-    const x = (1.0 - tip.x) * stageWidth;
+    const x = (1.0 - tip.x) * stageWidth; // Mirrored
     const y = tip.y * stageHeight;
     newOrbs.push({ x, y });
-    handlePointerHit(x, y, true);
+    processInputPoint(x, y, true, 0.9);
   });
   handOrbs = newOrbs;
 }
 
 document.getElementById("btn-camera").onclick = initCamera;
 
-// ── UI BUTTON CONTROLS & MODES ───────────────────────────────────────────────
+// ── MODE SWITCHING ──────────────────────────────────────────────────────────
 const btnMode = document.getElementById("btn-mode");
 btnMode.onclick = () => {
   change(d => d.editMode = !d.editMode);
@@ -1069,10 +1537,10 @@ btnMode.onclick = () => {
   btnMode.innerHTML = doc.editMode 
     ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg> Done`
     : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Layout`;
-  toast(doc.editMode ? "Layout Mode: Drag pads anywhere" : "Play Mode Active");
+  toast(doc.editMode ? "Layout Mode: Drag pads or click to change sounds" : "Play Mode Active");
 };
 
-// Audio Session Recording
+// ── RECORDING & PROJECT EXPORT ──────────────────────────────────────────────
 const btnRec = document.getElementById("btn-rec");
 btnRec.onclick = () => {
   const ctx = getAudioContext();
@@ -1084,14 +1552,14 @@ btnRec.onclick = () => {
       const blob = new Blob(recordedChunks, { type: "audio/webm" });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download = `gestrum-jam-${Date.now()}.webm`;
+      a.download = `gestrum-recording-${Date.now()}.webm`;
       a.click();
       toast("Audio recording downloaded!");
     };
     mediaRecorder.start();
     btnRec.classList.add("recording");
     btnRec.textContent = "Stop Rec";
-    toast("Recording audio session...");
+    toast("Recording live air-drumming session...");
   } else {
     mediaRecorder.stop();
     btnRec.classList.remove("recording");
@@ -1102,14 +1570,13 @@ btnRec.onclick = () => {
 document.getElementById("btn-undo").onclick = undo;
 document.getElementById("btn-redo").onclick = redo;
 
-// Project Save / Open
 document.getElementById("btn-save-project").onclick = () => {
   const blob = new Blob([JSON.stringify({ format: FORMAT.name, version: FORMAT.version, appVersion: APP.version, data: doc }, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = `gestrum-${Date.now()}.gestrum`;
   a.click();
-  toast("Project file exported");
+  toast("Project file exported (.gestrum)");
 };
 
 document.getElementById("file-open").onchange = async (e) => {
@@ -1126,14 +1593,16 @@ document.getElementById("file-open").onchange = async (e) => {
   }
 };
 
-// ── HELP SEARCH & CONTROL GLOW ──────────────────────────────────────────────
+// ── HELP SEARCH & CONTROL HIGHLIGHT ─────────────────────────────────────────
 const HELP_ITEMS = [
-  { title: "Tap to Play", keys: "Air / Click", control: "#stage-canvas", desc: "Tap your finger down or click any circle to fire an 808 percussion hit." },
-  { title: "3-Second Loop", keys: "Hold 3s", control: "#stage-canvas", desc: "Hold your hand inside a pad for 3 seconds to lock in an automated rhythmic loop." },
-  { title: "Layout / Reposition", keys: "Drag", control: "#btn-mode", desc: "Toggle Layout mode and drag any circle to adapt the 3x2 grid to your arm reach." },
-  { title: "Webcam Hand Tracking", keys: "Camera", control: "#btn-camera", desc: "Enable webcam to track your hands as floating luminous energy orbs." },
-  { title: "Record Audio", keys: "Record", control: "#btn-rec", desc: "Record your live air-drumming performance directly to a .webm audio file." },
-  { title: "Save / Open Project", keys: "Ctrl+S", control: "#btn-save-project", desc: "Export or import your custom drum layout and loop setup." }
+  { title: "One Tap to Play", keys: "1 Tap", control: "#stage-canvas", desc: "A single tap triggers the assigned percussion sound once. Harder strikes create louder hits and wider shockwaves." },
+  { title: "Tap & Hold 3s to Loop", keys: "Hold 3s", control: "#stage-canvas", desc: "Hold your hand or pointer inside a circle for 3 seconds to lock it into a synced loop on the measure." },
+  { title: "Pause / Stop All Loops", keys: "Spacebar", control: "#btn-pause-all", desc: "Instantly pause or stop all active rhythmic loops with one click or by hitting the spacebar." },
+  { title: "Measure Timeline", keys: "BPM 120", control: "#measure-bar-container", desc: "A visual 16-step measure bar. Looped sounds trigger rhythmically on the beat subdivisions." },
+  { title: "Change Sounds / Presets", keys: "Layout", control: "#btn-mode", desc: "Click Layout and click any circle to pick a new preset (808, Acoustic, Sci-Fi) or upload custom audio." },
+  { title: "Drag & Drop Audio Files", keys: "WAV / MP3", control: "#stage-container", desc: "Drag any audio file from your computer and drop it directly onto any circle to assign that sound." },
+  { title: "Camera Hand Tracking", keys: "Camera", control: "#btn-camera", desc: "Enable webcam to track your hands as floating luminous energy orbs with zero video lag." },
+  { title: "Record Audio", keys: "Record", control: "#btn-rec", desc: "Record your live air-drumming performance directly to a downloadable .webm audio file." }
 ];
 
 function ring(selector) {
@@ -1197,8 +1666,21 @@ async function checkForUpdate() {
 }
 chip.onclick = checkForUpdate;
 
-// Restore saved settings on startup
-restore();
+// Restore saved settings and custom sample buffers on startup
+async function startup() {
+  await restore();
+  const ctx = getAudioContext();
+  for (const pad of doc.pads) {
+    const savedBuffer = await idbGet(`sample-${pad.id}`);
+    if (savedBuffer) {
+      try {
+        const decoded = await ctx.decodeAudioData(savedBuffer.slice(0));
+        customSampleBuffers.set(pad.id, decoded);
+      } catch (e) { /* ignore */ }
+    }
+  }
+}
+startup();
 </script>
 </body>
 </html>
