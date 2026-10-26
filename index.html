@@ -14,7 +14,7 @@
 <meta name="theme-color" content="#0d0f12">
 
 <style>
-  :root {
+  :root, body.theme-hiphop, body:not([class*="theme-"]) {
     --bg: #0d0f12;
     --panel: #13171f;
     --panel-border: #1f2735;
@@ -24,7 +24,74 @@
     --magenta: #ff007f;
     --gold: #ffd700;
     --ring: #00f0ff;
+    --stage-gradient: radial-gradient(circle at 50% 50%, #151b26 0%, #0d0f12 70%);
+    --grid-color: rgba(0, 240, 255, 0.07);
+    --logo-gradient: linear-gradient(135deg, #00f0ff, #ff007f);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, ui-sans-serif, sans-serif;
+  }
+
+  /* Rock & Roll Theme Palette */
+  body.theme-rock {
+    --bg: #0c0809;
+    --panel: #181012;
+    --panel-border: #381a1f;
+    --fg: #fdf5f5;
+    --muted: #a8838a;
+    --cyan: #ff2a3b;
+    --magenta: #ff8c00;
+    --gold: #ffea00;
+    --ring: #ff2a3b;
+    --stage-gradient: radial-gradient(circle at 50% 50%, #2b1115 0%, #0c0809 75%);
+    --grid-color: rgba(255, 42, 59, 0.09);
+    --logo-gradient: linear-gradient(135deg, #ff2a3b, #ff8c00);
+  }
+  body.theme-rock .logo-mark {
+    box-shadow: 0 0 18px rgba(255, 42, 59, 0.5);
+  }
+  body.theme-rock button:hover, body.theme-rock label.btn-file:hover {
+    border-color: #ff2a3b;
+  }
+  body.theme-rock .btn-accent {
+    background: rgba(255, 42, 59, 0.14);
+    border-color: #ff2a3b;
+    color: #ff4d5e;
+  }
+  body.theme-rock .btn-accent.active {
+    background: #ff2a3b;
+    color: #fff;
+    box-shadow: 0 0 16px rgba(255, 42, 59, 0.6);
+  }
+
+  /* Midnight Jazz Theme Palette */
+  body.theme-jazz {
+    --bg: #090a12;
+    --panel: #111422;
+    --panel-border: #232942;
+    --fg: #faf6ed;
+    --muted: #8d94ae;
+    --cyan: #e5b567;
+    --magenta: #4ea8de;
+    --gold: #ffd166;
+    --ring: #e5b567;
+    --stage-gradient: radial-gradient(circle at 50% 50%, #151930 0%, #090a12 75%);
+    --grid-color: rgba(229, 181, 103, 0.08);
+    --logo-gradient: linear-gradient(135deg, #e5b567, #4ea8de);
+  }
+  body.theme-jazz .logo-mark {
+    box-shadow: 0 0 18px rgba(229, 181, 103, 0.45);
+  }
+  body.theme-jazz button:hover, body.theme-jazz label.btn-file:hover {
+    border-color: #e5b567;
+  }
+  body.theme-jazz .btn-accent {
+    background: rgba(229, 181, 103, 0.14);
+    border-color: #e5b567;
+    color: #e5b567;
+  }
+  body.theme-jazz .btn-accent.active {
+    background: #e5b567;
+    color: #0b0c14;
+    box-shadow: 0 0 16px rgba(229, 181, 103, 0.5);
   }
 
   * { box-sizing: border-box; user-select: none; }
@@ -36,6 +103,7 @@
     overflow: hidden;
     background: var(--bg);
     color: var(--fg);
+    transition: background 0.3s ease, color 0.3s ease;
   }
 
   body {
@@ -46,14 +114,16 @@
   /* Header Bar */
   header {
     height: 54px;
-    background: rgba(19, 23, 31, 0.9);
+    background: var(--panel);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--panel-border);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 16px;
+    gap: 12px;
     z-index: 50;
+    transition: background 0.3s ease, border-color 0.3s ease;
   }
 
   .logo-group {
@@ -61,16 +131,18 @@
     align-items: center;
     gap: 10px;
     cursor: default;
+    flex-shrink: 0;
   }
   .logo-mark {
     width: 28px;
     height: 28px;
     border-radius: 8px;
-    background: linear-gradient(135deg, var(--cyan), var(--magenta));
+    background: var(--logo-gradient);
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
+    transition: all 0.3s ease;
   }
   .logo-mark span {
     font-weight: 900;
@@ -89,6 +161,243 @@
     color: var(--cyan);
     letter-spacing: 0.08em;
     text-transform: uppercase;
+    transition: color 0.3s ease;
+  }
+
+  /* ── THEME DROPDOWN SELECTOR ────────────────────────────── */
+  .theme-dropdown-wrap {
+    position: relative;
+    display: inline-block;
+    z-index: 60;
+  }
+
+  .theme-dropdown-btn {
+    background: rgba(28, 35, 48, 0.65);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 5px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    transition: all 0.2s ease;
+    min-width: 175px;
+    text-align: left;
+    height: 38px;
+  }
+  .theme-dropdown-btn:hover, .theme-dropdown-wrap.open .theme-dropdown-btn {
+    background: rgba(37, 48, 66, 0.9);
+    border-color: var(--cyan);
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.25);
+  }
+  body.theme-rock .theme-dropdown-btn:hover, body.theme-rock .theme-dropdown-wrap.open .theme-dropdown-btn {
+    border-color: #ff2a3b;
+    box-shadow: 0 0 14px rgba(255, 42, 59, 0.3);
+  }
+  body.theme-jazz .theme-dropdown-btn:hover, body.theme-jazz .theme-dropdown-wrap.open .theme-dropdown-btn {
+    border-color: #e5b567;
+    box-shadow: 0 0 14px rgba(229, 181, 103, 0.3);
+  }
+
+  .theme-btn-icon {
+    font-size: 16px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+  }
+  .theme-btn-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+  .theme-btn-kicker {
+    font-size: 8.5px;
+    font-family: ui-monospace, monospace;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--cyan);
+    text-transform: uppercase;
+    line-height: 1.1;
+    transition: color 0.3s ease;
+  }
+  .theme-btn-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .theme-chevron-icon {
+    transition: transform 0.2s ease;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .theme-dropdown-wrap.open .theme-chevron-icon {
+    transform: rotate(180deg);
+    color: var(--cyan);
+  }
+
+  .theme-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 300px;
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.06);
+    padding: 6px;
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    backdrop-filter: blur(20px);
+    z-index: 100;
+    animation: fadeInDown 0.16s ease-out;
+  }
+  .theme-dropdown-wrap.open .theme-dropdown-menu {
+    display: flex;
+  }
+
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .theme-menu-header {
+    font-size: 9.5px;
+    font-family: ui-monospace, monospace;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    padding: 6px 8px 4px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 2px;
+  }
+
+  .theme-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: transparent;
+    border: 1px solid transparent;
+  }
+  .theme-menu-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  .theme-menu-item.active {
+    background: rgba(0, 240, 255, 0.09);
+    border-color: var(--cyan);
+  }
+  body.theme-rock .theme-menu-item.active {
+    background: rgba(255, 42, 59, 0.12);
+    border-color: #ff2a3b;
+  }
+  body.theme-jazz .theme-menu-item.active {
+    background: rgba(229, 181, 103, 0.12);
+    border-color: #e5b567;
+  }
+
+  .theme-item-badge {
+    font-size: 18px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .theme-item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+  }
+  .theme-item-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+  }
+  .theme-item-name {
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .theme-tag {
+    font-size: 9px;
+    font-family: ui-monospace, monospace;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .tag-hiphop {
+    background: rgba(0, 240, 255, 0.15);
+    color: #00f0ff;
+    border: 1px solid rgba(0, 240, 255, 0.3);
+  }
+  .tag-rock {
+    background: rgba(255, 42, 59, 0.18);
+    color: #ff4d5e;
+    border: 1px solid rgba(255, 42, 59, 0.4);
+  }
+  .tag-jazz {
+    background: rgba(229, 181, 103, 0.18);
+    color: #f0c987;
+    border: 1px solid rgba(229, 181, 103, 0.4);
+  }
+
+  .theme-item-desc {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: ui-monospace, monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .theme-check {
+    color: var(--cyan);
+    font-weight: 900;
+    font-size: 13px;
+    opacity: 0;
+    margin-left: 2px;
+  }
+  .theme-menu-item.active .theme-check {
+    opacity: 1;
+  }
+
+  @media (max-width: 900px) {
+    .theme-dropdown-btn {
+      min-width: unset;
+      padding: 5px 8px;
+    }
+    .theme-btn-kicker {
+      display: none;
+    }
+  }
+  @media (max-width: 600px) {
+    .theme-btn-content {
+      display: none;
+    }
   }
 
   .nav-controls {
@@ -212,7 +521,8 @@
     flex: 1;
     position: relative;
     overflow: hidden;
-    background: radial-gradient(circle at 50% 50%, #151b26 0%, #0d0f12 70%);
+    background: var(--stage-gradient, radial-gradient(circle at 50% 50%, #151b26 0%, #0d0f12 70%));
+    transition: background 0.4s ease;
   }
 
   canvas#stage-canvas {
@@ -237,8 +547,8 @@
     opacity: 0;
     transition: opacity 0.4s ease;
     background-image: 
-      linear-gradient(rgba(0, 240, 255, 0.07) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0, 240, 255, 0.07) 1px, transparent 1px);
+      linear-gradient(var(--grid-color, rgba(0, 240, 255, 0.07)) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color, rgba(0, 240, 255, 0.07)) 1px, transparent 1px);
     background-size: 40px 40px;
   }
   .edit-mode .grid-overlay {
@@ -342,7 +652,9 @@
     color: var(--fg);
     border: 1px solid var(--panel-border);
     border-radius: 12px;
-    max-width: 540px;
+    max-width: 560px;
+    max-height: 85vh;
+    overflow-y: auto;
     width: 90%;
     padding: 24px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.8);
@@ -364,11 +676,21 @@
     margin: 8px 0;
   }
 
+  .preset-category-title {
+    font-size: 10px;
+    font-family: ui-monospace, monospace;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin: 10px 0 4px 0;
+  }
+
   .preset-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 8px;
-    margin: 10px 0 16px 0;
+    margin: 6px 0 16px 0;
   }
   .preset-btn {
     background: #171f2b;
@@ -628,10 +950,62 @@
 
 <header>
   <div class="logo-group">
-    <div class="logo-mark"><span>G</span></div>
+    <div class="logo-mark" id="brand-logo-mark"><span>G</span></div>
     <div>
       <div class="brand-title">Gestrum</div>
-      <div class="brand-sub">Spatial Air-Percussion</div>
+      <div class="brand-sub" id="brand-sub-text">Spatial Air-Percussion</div>
+    </div>
+  </div>
+
+  <!-- THEME DROPDOWN SELECTOR -->
+  <div class="theme-dropdown-wrap" id="theme-dropdown-wrap">
+    <button class="theme-dropdown-btn" id="theme-dropdown-btn" aria-haspopup="true" aria-expanded="false" title="Switch Instrument Theme & Sound Kit">
+      <span class="theme-btn-icon" id="theme-btn-icon">🎧</span>
+      <div class="theme-btn-content">
+        <span class="theme-btn-kicker">INSTRUMENT THEME</span>
+        <span class="theme-btn-title" id="theme-btn-title">Hip-Hop / 808</span>
+      </div>
+      <svg class="theme-chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <div class="theme-dropdown-menu" id="theme-dropdown-menu">
+      <div class="theme-menu-header">SELECT INSTRUMENT & SOUND KIT</div>
+      
+      <div class="theme-menu-item active" data-theme="hiphop">
+        <div class="theme-item-badge">🎧</div>
+        <div class="theme-item-details">
+          <div class="theme-item-row">
+            <span class="theme-item-name">Hip-Hop / 808</span>
+            <span class="theme-tag tag-hiphop">Cyber Neon</span>
+          </div>
+          <span class="theme-item-desc">Sub 808s, Trap Snares, Glitch Perc • 120 BPM</span>
+        </div>
+        <span class="theme-check">✓</span>
+      </div>
+
+      <div class="theme-menu-item" data-theme="rock">
+        <div class="theme-item-badge">🎸</div>
+        <div class="theme-item-details">
+          <div class="theme-item-row">
+            <span class="theme-item-name">Rock & Roll</span>
+            <span class="theme-tag tag-rock">Crimson Stage</span>
+          </div>
+          <span class="theme-item-desc">Heavy Kick, Punch Snare, Power Chord • 132 BPM</span>
+        </div>
+        <span class="theme-check">✓</span>
+      </div>
+
+      <div class="theme-menu-item" data-theme="jazz">
+        <div class="theme-item-badge">🎷</div>
+        <div class="theme-item-details">
+          <div class="theme-item-row">
+            <span class="theme-item-name">Midnight Jazz</span>
+            <span class="theme-tag tag-jazz">Velvet Lounge</span>
+          </div>
+          <span class="theme-item-desc">Upright Bass, Brushed Snare, Vibraphone • 100 BPM</span>
+        </div>
+        <span class="theme-check">✓</span>
+      </div>
     </div>
   </div>
 
@@ -784,7 +1158,9 @@
   </div>
 
   <div style="font-size: 11px; font-weight: 600; color: var(--cyan); text-transform: uppercase; margin-top: 14px;">Synthesized Presets</div>
+  
   <div class="preset-grid" id="preset-buttons">
+    <div class="preset-category-title" style="grid-column: 1 / -1;">🎧 Hip-Hop / 808 Presets</div>
     <button class="preset-btn" data-type="kick">808 Sub Kick</button>
     <button class="preset-btn" data-type="snare">Trap Snare</button>
     <button class="preset-btn" data-type="hihat">808 Closed Hat</button>
@@ -794,9 +1170,27 @@
     <button class="preset-btn" data-type="tom">808 Pitch Tom</button>
     <button class="preset-btn" data-type="clap">808 Clap</button>
     <button class="preset-btn" data-type="cowbell">808 Cowbell</button>
+    <button class="preset-btn" data-type="subdrop">808 Sub Boom</button>
+
+    <div class="preset-category-title" style="grid-column: 1 / -1; margin-top: 6px;">🎸 Rock & Roll Presets</div>
+    <button class="preset-btn" data-type="rock-kick">Heavy Kick</button>
+    <button class="preset-btn" data-type="rock-snare">Punch Snare</button>
+    <button class="preset-btn" data-type="rock-crash">Crash Cymbal</button>
+    <button class="preset-btn" data-type="rock-tom">Rack Tom</button>
+    <button class="preset-btn" data-type="rock-floortom">Floor Tom</button>
+    <button class="preset-btn" data-type="rock-chord">Power Chord</button>
+
+    <div class="preset-category-title" style="grid-column: 1 / -1; margin-top: 6px;">🎷 Midnight Jazz Presets</div>
+    <button class="preset-btn" data-type="jazz-kick">Bebop Kick</button>
+    <button class="preset-btn" data-type="jazz-brush">Brushed Snare</button>
+    <button class="preset-btn" data-type="jazz-crossstick">Cross-Stick</button>
+    <button class="preset-btn" data-type="jazz-ride">Ride Cymbal</button>
+    <button class="preset-btn" data-type="jazz-bass">Upright Bass</button>
+    <button class="preset-btn" data-type="jazz-vibes">Vibraphone</button>
+
+    <div class="preset-category-title" style="grid-column: 1 / -1; margin-top: 6px;">⚡ Synth & Acoustic Presets</div>
     <button class="preset-btn" data-type="laser">Sci-Fi Laser</button>
     <button class="preset-btn" data-type="plasma">Plasma Pulse</button>
-    <button class="preset-btn" data-type="subdrop">808 Sub Boom</button>
     <button class="preset-btn" data-type="crystal">Crystal Bell</button>
     <button class="preset-btn" data-type="acoustic-kick">Acoustic Kick</button>
     <button class="preset-btn" data-type="acoustic-snare">Acoustic Snare</button>
@@ -827,7 +1221,7 @@
     <div class="logo-mark" style="width: 36px; height: 36px;"><span>G</span></div>
     <div>
       <h2 style="margin: 0;">Gestrum</h2>
-      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-004</span>
+      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-005</span>
     </div>
   </div>
   <p><strong>Raison d'Être:</strong> Gestrum exists because drumming in mid-air should make real sound, turning your laptop camera into a zero-latency stage instrument.</p>
@@ -847,15 +1241,116 @@
 const APP = {
   name: "Gestrum",
   id: "gestrum",
-  version: "v00000-004",
+  version: "v00000-005",
   author: "Keegan McConnell",
   site: "https://keeganrmc.github.io/",
   repo: "https://github.com/keeganrmc/gestrum"
 };
-const FORMAT = { name: APP.id, version: 4 };
+const FORMAT = { name: APP.id, version: 5 };
 document.getElementById("chip").textContent = APP.version + " ↻";
 
+// ── THEME CONFIGURATIONS & SIGNATURE INSTRUMENT KITS ─────────────────────────
+const THEMES = {
+  hiphop: {
+    id: "hiphop",
+    name: "Hip-Hop / 808",
+    subtitle: "Spatial Air-Percussion • 808 Trap",
+    icon: "🎧",
+    badge: "Cyber Neon",
+    bpm: 120,
+    colors: {
+      primary: "#00f0ff",
+      secondary: "#ff007f",
+      accent: "#ffd700",
+      padStroke: "rgba(0, 240, 255, 0.85)",
+      padFill: "rgba(0, 240, 255, 0.07)",
+      padCore: "#00f0ff",
+      shockwaveHi: "#ff007f",
+      shockwaveLo: "#00f0ff",
+      handInner: "rgba(255, 0, 127, 0.85)",
+      handOuter: "rgba(0, 240, 255, 0.45)"
+    },
+    pads: [
+      { id: 1, label: "808 HI-HAT", type: "hihat", nx: 0.24, ny: 0.32, radius: 48, shape: "circle", looped: false, rate: 2 },
+      { id: 2, label: "GLITCH PERC", type: "perc",  nx: 0.50, ny: 0.30, radius: 48, shape: "circle", looped: false, rate: 1 },
+      { id: 3, label: "808 RIMSHOT", type: "rim",   nx: 0.76, ny: 0.32, radius: 48, shape: "circle", looped: false, rate: 1 },
+      { id: 4, label: "808 KICK",   type: "kick",  nx: 0.24, ny: 0.68, radius: 48, shape: "circle", looped: false, rate: 1 },
+      { id: 5, label: "TRAP SNARE", type: "snare", nx: 0.50, ny: 0.70, radius: 48, shape: "circle", looped: false, rate: 0.5 },
+      { id: 6, label: "808 TOM",    type: "tom",   nx: 0.76, ny: 0.68, radius: 48, shape: "circle", looped: false, rate: 0.25 },
+    ]
+  },
+  rock: {
+    id: "rock",
+    name: "Rock & Roll",
+    subtitle: "Spatial Air-Percussion • Stadium Rock",
+    icon: "🎸",
+    badge: "Crimson Stage",
+    bpm: 132,
+    colors: {
+      primary: "#ff2a3b",
+      secondary: "#ff8c00",
+      accent: "#ffea00",
+      padStroke: "rgba(255, 42, 59, 0.88)",
+      padFill: "rgba(255, 42, 59, 0.08)",
+      padCore: "#ff2a3b",
+      shockwaveHi: "#ff8c00",
+      shockwaveLo: "#ff2a3b",
+      handInner: "rgba(255, 140, 0, 0.9)",
+      handOuter: "rgba(255, 42, 59, 0.5)"
+    },
+    pads: [
+      { id: 1, label: "CRASH CYMBAL", type: "rock-crash",    nx: 0.24, ny: 0.32, radius: 48, shape: "diamond",  looped: false, rate: 0.25 },
+      { id: 2, label: "RACK TOM",     type: "rock-tom",      nx: 0.50, ny: 0.30, radius: 48, shape: "circle",   looped: false, rate: 1 },
+      { id: 3, label: "POWER CHORD",  type: "rock-chord",    nx: 0.76, ny: 0.32, radius: 48, shape: "triangle", looped: false, rate: 0.5 },
+      { id: 4, label: "HEAVY KICK",   type: "rock-kick",     nx: 0.24, ny: 0.68, radius: 48, shape: "square",   looped: false, rate: 1 },
+      { id: 5, label: "PUNCH SNARE",  type: "rock-snare",    nx: 0.50, ny: 0.70, radius: 48, shape: "circle",   looped: false, rate: 1 },
+      { id: 6, label: "FLOOR TOM",    type: "rock-floortom", nx: 0.76, ny: 0.68, radius: 48, shape: "square",   looped: false, rate: 0.5 },
+    ]
+  },
+  jazz: {
+    id: "jazz",
+    name: "Midnight Jazz",
+    subtitle: "Spatial Air-Percussion • Midnight Jazz",
+    icon: "🎷",
+    badge: "Velvet Lounge",
+    bpm: 100,
+    colors: {
+      primary: "#e5b567",
+      secondary: "#4ea8de",
+      accent: "#ffd166",
+      padStroke: "rgba(229, 181, 103, 0.85)",
+      padFill: "rgba(229, 181, 103, 0.08)",
+      padCore: "#e5b567",
+      shockwaveHi: "#4ea8de",
+      shockwaveLo: "#e5b567",
+      handInner: "rgba(78, 168, 222, 0.85)",
+      handOuter: "rgba(229, 181, 103, 0.5)"
+    },
+    pads: [
+      { id: 1, label: "RIDE CYMBAL",    type: "jazz-ride",       nx: 0.24, ny: 0.32, radius: 48, shape: "circle",   looped: false, rate: 2 },
+      { id: 2, label: "VIBRAPHONE",     type: "jazz-vibes",      nx: 0.50, ny: 0.30, radius: 48, shape: "diamond",  looped: false, rate: 0.5 },
+      { id: 3, label: "BRUSHED SNARE",  type: "jazz-brush",      nx: 0.76, ny: 0.32, radius: 48, shape: "circle",   looped: false, rate: 1 },
+      { id: 4, label: "UPRIGHT BASS",   type: "jazz-bass",       nx: 0.24, ny: 0.68, radius: 48, shape: "square",   looped: false, rate: 1 },
+      { id: 5, label: "CROSS-STICK",    type: "jazz-crossstick", nx: 0.50, ny: 0.70, radius: 48, shape: "triangle", looped: false, rate: 0.5 },
+      { id: 6, label: "BOP KICK",       type: "jazz-kick",       nx: 0.76, ny: 0.68, radius: 48, shape: "circle",   looped: false, rate: 0.5 },
+    ]
+  }
+};
+
 // ── EXPANDED WEB AUDIO SYNTHESIS ENGINE ─────────────────────────────────────
+let cachedDistortionCurve = null;
+function getDistortionCurve() {
+  if (!cachedDistortionCurve) {
+    const n = 1024, curve = new Float32Array(n), deg = Math.PI / 180, k = 35;
+    for (let i = 0; i < n; ++i) {
+      const x = (i * 2) / n - 1;
+      curve[i] = ((3 + k) * x * 20 * deg) / (Math.PI + k * Math.abs(x));
+    }
+    cachedDistortionCurve = curve;
+  }
+  return cachedDistortionCurve;
+}
+
 let audioCtx = null;
 let mediaRecorder = null;
 let recordedChunks = [];
@@ -1153,19 +1648,366 @@ function playSound(pad, velocity = 0.8) {
     gain.connect(out);
     osc.start(now);
     osc.stop(now + 0.18);
+  } else if (type === "rock-kick") {
+    // Stadium Rock Heavy Kick (Punch Click + Deep Shell Decay)
+    const click = ctx.createOscillator();
+    const clickGain = ctx.createGain();
+    click.type = "triangle";
+    click.frequency.setValueAtTime(340 * sizeFactor, now);
+    click.frequency.exponentialRampToValueAtTime(80 * sizeFactor, now + 0.02);
+    clickGain.gain.setValueAtTime(0.7 * v, now);
+    clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
+    click.connect(clickGain);
+    clickGain.connect(out);
+    click.start(now);
+    click.stop(now + 0.03);
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime((160 + v * 30) * sizeFactor, now);
+    osc.frequency.exponentialRampToValueAtTime(46 * sizeFactor, now + 0.09);
+    gain.gain.setValueAtTime(1.0, now);
+    const decay = Math.min(0.75, 0.42 / sizeFactor);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + decay);
+    osc.connect(gain);
+    gain.connect(out);
+    osc.start(now);
+    osc.stop(now + decay + 0.03);
+  } else if (type === "rock-snare") {
+    // Rock Crack Rimshot Snare
+    const tone = ctx.createOscillator();
+    const toneGain = ctx.createGain();
+    tone.type = "triangle";
+    tone.frequency.setValueAtTime(260 * sizeFactor, now);
+    tone.frequency.exponentialRampToValueAtTime(135 * sizeFactor, now + 0.07);
+    toneGain.gain.setValueAtTime(0.85, now);
+    toneGain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+    tone.connect(toneGain);
+    toneGain.connect(out);
+    tone.start(now);
+    tone.stop(now + 0.18);
+
+    const bufferSize = Math.floor(ctx.sampleRate * 0.28);
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = ctx.createBiquadFilter();
+    filter.type = "bandpass";
+    filter.frequency.setValueAtTime((2400 + v * 600) * sizeFactor, now);
+    filter.Q.value = 1.6;
+    const noiseGain = ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.95, now);
+    const decay = Math.min(0.45, 0.26 / sizeFactor);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + decay);
+    noise.connect(filter);
+    filter.connect(noiseGain);
+    noiseGain.connect(out);
+    noise.start(now);
+    noise.stop(now + decay + 0.03);
+  } else if (type === "rock-crash") {
+    // Explosive Rock Crash Cymbal (Inharmonic Cluster + High Shimmer Wash)
+    [315, 435, 580, 840, 1180].forEach(freq => {
+      const osc = ctx.createOscillator();
+      const oscGain = ctx.createGain();
+      osc.type = "square";
+      osc.frequency.setValueAtTime(freq * sizeFactor, now);
+      const bpf = ctx.createBiquadFilter();
+      bpf.type = "bandpass";
+      bpf.frequency.setValueAtTime(freq * 1.5 * sizeFactor, now);
+      bpf.Q.value = 3.0;
+      oscGain.gain.setValueAtTime(0.08, now);
+      oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.75);
+      osc.connect(bpf);
+      bpf.connect(oscGain);
+      oscGain.connect(out);
+      osc.start(now);
+      osc.stop(now + 0.8);
+    });
+
+    const bufferSize = Math.floor(ctx.sampleRate * 1.3);
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const hpf = ctx.createBiquadFilter();
+    hpf.type = "highpass";
+    hpf.frequency.setValueAtTime(Math.min(18000, 4800 * sizeFactor), now);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.85, now);
+    const decay = Math.min(1.8, 1.25 / sizeFactor);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + decay);
+    noise.connect(hpf);
+    hpf.connect(gain);
+    gain.connect(out);
+    noise.start(now);
+    noise.stop(now + decay + 0.05);
+  } else if (type === "rock-tom") {
+    // Punchy Acoustic Rack Tom
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime((240 + v * 35) * sizeFactor, now);
+    osc.frequency.exponentialRampToValueAtTime(105 * sizeFactor, now + 0.16);
+    gain.gain.setValueAtTime(0.9, now);
+    const decay = Math.min(0.65, 0.35 / sizeFactor);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + decay);
+    osc.connect(gain);
+    gain.connect(out);
+    osc.start(now);
+    osc.stop(now + decay + 0.03);
+  } else if (type === "rock-floortom") {
+    // Deep Resonant Floor Tom
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime((145 + v * 25) * sizeFactor, now);
+    osc.frequency.exponentialRampToValueAtTime(52 * sizeFactor, now + 0.22);
+    gain.gain.setValueAtTime(0.95, now);
+    const decay = Math.min(0.9, 0.55 / sizeFactor);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + decay);
+    osc.connect(gain);
+    gain.connect(out);
+    osc.start(now);
+    osc.stop(now + decay + 0.03);
+  } else if (type === "rock-chord") {
+    // Electric Guitar Power Chord with Cabinet Filter & Overdrive
+    const chordFreqs = [82.4, 123.5, 164.8, 246.9];
+    const distortion = ctx.createWaveShaper();
+    distortion.curve = getDistortionCurve();
+    distortion.oversample = "4x";
+
+    const cabFilter = ctx.createBiquadFilter();
+    cabFilter.type = "lowpass";
+    cabFilter.frequency.setValueAtTime(2600 * sizeFactor, now);
+    cabFilter.Q.value = 1.2;
+
+    const chordGain = ctx.createGain();
+    chordGain.gain.setValueAtTime(0.7, now);
+    const decay = Math.min(1.1, 0.6 / sizeFactor);
+    chordGain.gain.exponentialRampToValueAtTime(0.001, now + decay);
+
+    chordFreqs.forEach(f => {
+      const osc = ctx.createOscillator();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(f * sizeFactor, now);
+      osc.detune.setValueAtTime((Math.random() - 0.5) * 14, now);
+      osc.connect(distortion);
+      osc.start(now);
+      osc.stop(now + decay + 0.05);
+    });
+
+    distortion.connect(cabFilter);
+    cabFilter.connect(chordGain);
+    chordGain.connect(out);
+  } else if (type === "jazz-kick") {
+    // Bebop Warm Felt Kick (Soft attack, round acoustic resonance)
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(130 * sizeFactor, now);
+    osc.frequency.exponentialRampToValueAtTime(62 * sizeFactor, now + 0.12);
+    gain.gain.setValueAtTime(0.01, now);
+    gain.gain.linearRampToValueAtTime(0.85, now + 0.012);
+    const decay = Math.min(0.75, 0.45 / sizeFactor);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + decay);
+    osc.connect(gain);
+    gain.connect(out);
+    osc.start(now);
+    osc.stop(now + decay + 0.03);
+  } else if (type === "jazz-brush") {
+    // Wire Brush Snare Swirl & Tap
+    const wood = ctx.createOscillator();
+    const woodGain = ctx.createGain();
+    wood.type = "sine";
+    wood.frequency.setValueAtTime(175 * sizeFactor, now);
+    wood.frequency.exponentialRampToValueAtTime(80 * sizeFactor, now + 0.05);
+    woodGain.gain.setValueAtTime(0.35, now);
+    woodGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+    wood.connect(woodGain);
+    woodGain.connect(out);
+    wood.start(now);
+    wood.stop(now + 0.09);
+
+    const bufferSize = Math.floor(ctx.sampleRate * 0.38);
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = ctx.createBiquadFilter();
+    filter.type = "bandpass";
+    filter.frequency.setValueAtTime(2200 * sizeFactor, now);
+    filter.Q.value = 1.0;
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.01, now);
+    gain.gain.linearRampToValueAtTime(0.65, now + 0.015);
+    const decay = Math.min(0.6, 0.36 / sizeFactor);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + decay);
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(out);
+    noise.start(now);
+    noise.stop(now + decay + 0.03);
+  } else if (type === "jazz-crossstick") {
+    // Wood Cross-Stick Rim Click
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    const g1 = ctx.createGain();
+    osc1.type = "sine";
+    osc1.frequency.setValueAtTime(1620 * sizeFactor, now);
+    osc2.type = "triangle";
+    osc2.frequency.setValueAtTime(840 * sizeFactor, now);
+    g1.gain.setValueAtTime(0.85, now);
+    g1.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+    osc1.connect(g1);
+    osc2.connect(g1);
+    g1.connect(out);
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + 0.06);
+    osc2.stop(now + 0.06);
+
+    const bufferSize = Math.floor(ctx.sampleRate * 0.05);
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const bpf = ctx.createBiquadFilter();
+    bpf.type = "bandpass";
+    bpf.frequency.setValueAtTime(960 * sizeFactor, now);
+    bpf.Q.value = 4.0;
+    const ng = ctx.createGain();
+    ng.gain.setValueAtTime(0.5, now);
+    ng.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+    noise.connect(bpf);
+    bpf.connect(ng);
+    ng.connect(out);
+    noise.start(now);
+    noise.stop(now + 0.05);
+  } else if (type === "jazz-ride") {
+    // Jazz Ride Cymbal Stick Ping & Brass Wash
+    [540, 785].forEach(freq => {
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(freq * sizeFactor, now);
+      g.gain.setValueAtTime(0.12, now);
+      g.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+      osc.connect(g);
+      g.connect(out);
+      osc.start(now);
+      osc.stop(now + 0.75);
+    });
+
+    const bufferSize = Math.floor(ctx.sampleRate * 0.85);
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const hpf = ctx.createBiquadFilter();
+    hpf.type = "highpass";
+    hpf.frequency.setValueAtTime(Math.min(18000, 7200 * sizeFactor), now);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.7, now);
+    const decay = Math.min(1.3, 0.75 / sizeFactor);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + decay);
+    noise.connect(hpf);
+    hpf.connect(gain);
+    gain.connect(out);
+    noise.start(now);
+    noise.stop(now + decay + 0.03);
+  } else if (type === "jazz-bass") {
+    // Upright Double Bass Acoustic Pluck
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(104 * sizeFactor, now);
+    osc.frequency.exponentialRampToValueAtTime(98 * sizeFactor, now + 0.04);
+
+    const harm = ctx.createOscillator();
+    const harmGain = ctx.createGain();
+    harm.type = "triangle";
+    harm.frequency.setValueAtTime(196 * sizeFactor, now);
+    harmGain.gain.setValueAtTime(0.35, now);
+    harmGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+    harm.connect(harmGain);
+    harmGain.connect(out);
+    harm.start(now);
+    harm.stop(now + 0.25);
+
+    const click = ctx.createOscillator();
+    const clickGain = ctx.createGain();
+    click.type = "triangle";
+    click.frequency.setValueAtTime(850 * sizeFactor, now);
+    clickGain.gain.setValueAtTime(0.4, now);
+    clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+    click.connect(clickGain);
+    clickGain.connect(out);
+    click.start(now);
+    click.stop(now + 0.03);
+
+    gain.gain.setValueAtTime(0.95, now);
+    const decay = Math.min(1.2, 0.75 / sizeFactor);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + decay);
+    osc.connect(gain);
+    gain.connect(out);
+    osc.start(now);
+    osc.stop(now + decay + 0.03);
+  } else if (type === "jazz-vibes") {
+    // Smoky Vibraphone with Rotary Motor Tremolo LFO
+    const osc = ctx.createOscillator();
+    const overtone = ctx.createOscillator();
+    const tremoloGain = ctx.createGain();
+    const mainGain = ctx.createGain();
+
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(523.25 * sizeFactor, now);
+    overtone.type = "sine";
+    overtone.frequency.setValueAtTime(1570 * sizeFactor, now);
+
+    const lfo = ctx.createOscillator();
+    const lfoGain = ctx.createGain();
+    lfo.frequency.setValueAtTime(5.5, now);
+    lfoGain.gain.setValueAtTime(0.22, now);
+    lfo.connect(lfoGain);
+    lfoGain.connect(tremoloGain.gain);
+
+    tremoloGain.gain.setValueAtTime(0.75, now);
+    const decay = Math.min(1.6, 1.1 / sizeFactor);
+    mainGain.gain.setValueAtTime(0.75, now);
+    mainGain.gain.exponentialRampToValueAtTime(0.001, now + decay);
+
+    osc.connect(tremoloGain);
+    overtone.connect(tremoloGain);
+    tremoloGain.connect(mainGain);
+    mainGain.connect(out);
+
+    lfo.start(now);
+    osc.start(now);
+    overtone.start(now);
+    lfo.stop(now + decay + 0.05);
+    osc.stop(now + decay + 0.05);
+    overtone.stop(now + decay + 0.05);
   }
 }
 
 // ── DOCUMENT STATE & STATIONARY 3X2 GRID ────────────────────────────────────
 function defaultDoc() {
   return {
+    theme: "hiphop",
     bpm: 120,
     editMode: false,
     pads: [
       // Top Row (3) — Radius 48, default circle
       { id: 1, label: "808 HI-HAT", type: "hihat", nx: 0.24, ny: 0.32, radius: 48, shape: "circle", looped: false, rate: 2 },
       { id: 2, label: "GLITCH PERC", type: "perc",  nx: 0.50, ny: 0.30, radius: 48, shape: "circle", looped: false, rate: 1 },
-      { id: 3, label: "RIMSHOT",    type: "rim",   nx: 0.76, ny: 0.32, radius: 48, shape: "circle", looped: false, rate: 1 },
+      { id: 3, label: "808 RIMSHOT", type: "rim",   nx: 0.76, ny: 0.32, radius: 48, shape: "circle", looped: false, rate: 1 },
       // Bottom Row (3)
       { id: 4, label: "808 KICK",   type: "kick",  nx: 0.24, ny: 0.68, radius: 48, shape: "circle", looped: false, rate: 1 },
       { id: 5, label: "TRAP SNARE", type: "snare", nx: 0.50, ny: 0.70, radius: 48, shape: "circle", looped: false, rate: 0.5 },
@@ -1254,6 +2096,7 @@ async function restore() {
   const saved = await idbGet("doc");
   if (saved && saved.data && saved.data.pads) {
     doc = saved.data;
+    if (!doc.theme) doc.theme = "hiphop";
     // Preserve custom radius and shape, default safely if missing
     doc.pads.forEach(p => {
       if (typeof p.radius !== "number" || isNaN(p.radius)) p.radius = 48;
@@ -1265,6 +2108,105 @@ async function restore() {
       document.getElementById("bpm-val").textContent = doc.bpm;
     }
   }
+}
+
+// ── THEME SWITCHING & DROPDOWN CONTROLLER ───────────────────────────────────
+function applyTheme(themeKey, switchPads = true) {
+  if (!THEMES[themeKey]) themeKey = "hiphop";
+  const theme = THEMES[themeKey];
+  doc.theme = themeKey;
+
+  // 1. Update body styling classes
+  document.body.classList.remove("theme-hiphop", "theme-rock", "theme-jazz");
+  document.body.classList.add(`theme-${themeKey}`);
+
+  // 2. Update brand subtitle
+  const subText = document.getElementById("brand-sub-text");
+  if (subText) subText.textContent = theme.subtitle;
+
+  // 3. Update Dropdown Button UI
+  const btnIcon = document.getElementById("theme-btn-icon");
+  const btnTitle = document.getElementById("theme-btn-title");
+  if (btnIcon) btnIcon.textContent = theme.icon;
+  if (btnTitle) btnTitle.textContent = theme.name;
+
+  // 4. Update Dropdown Menu active selection
+  document.querySelectorAll(".theme-menu-item").forEach(item => {
+    item.classList.toggle("active", item.dataset.theme === themeKey);
+  });
+
+  // 5. Update Pads to match theme instrument kit if requested
+  if (switchPads) {
+    change(d => {
+      d.theme = themeKey;
+      d.bpm = theme.bpm;
+      theme.pads.forEach((tp, idx) => {
+        if (d.pads[idx]) {
+          d.pads[idx].label = tp.label;
+          d.pads[idx].type = tp.type;
+          d.pads[idx].rate = tp.rate;
+          d.pads[idx].shape = tp.shape;
+          // Clear any custom buffer for this pad so synthesized sound plays immediately
+          customSampleBuffers.delete(d.pads[idx].id);
+        }
+      });
+    });
+
+    const bpmSlider = document.getElementById("bpm-slider");
+    const bpmVal = document.getElementById("bpm-val");
+    if (bpmSlider && bpmVal) {
+      bpmSlider.value = doc.bpm;
+      bpmVal.textContent = doc.bpm;
+      startSequencer();
+    }
+
+    // Play preview signature sound
+    const previewType = themeKey === "rock" ? "rock-chord" : (themeKey === "jazz" ? "jazz-vibes" : "kick");
+    playSound({ type: previewType, radius: 48 }, 0.9);
+
+    toast(`${theme.icon} ${theme.name} Activated! (${theme.bpm} BPM)`);
+  }
+
+  syncLayoutToolbar();
+  scheduleSave();
+}
+
+// Wire up Theme Dropdown trigger and options
+const themeDropdownWrap = document.getElementById("theme-dropdown-wrap");
+const themeDropdownBtn = document.getElementById("theme-dropdown-btn");
+
+if (themeDropdownBtn && themeDropdownWrap) {
+  themeDropdownBtn.onclick = (e) => {
+    e.stopPropagation();
+    const isOpen = themeDropdownWrap.classList.toggle("open");
+    themeDropdownBtn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  };
+
+  document.querySelectorAll(".theme-menu-item").forEach(item => {
+    item.onclick = (e) => {
+      e.stopPropagation();
+      const selectedTheme = item.dataset.theme;
+      applyTheme(selectedTheme, true);
+      themeDropdownWrap.classList.remove("open");
+      themeDropdownBtn.setAttribute("aria-expanded", "false");
+    };
+  });
+
+  // Close dropdown on outside click
+  window.addEventListener("click", (e) => {
+    if (!themeDropdownWrap.contains(e.target)) {
+      themeDropdownWrap.classList.remove("open");
+      themeDropdownBtn.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  // Close dropdown on Escape key
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && themeDropdownWrap.classList.contains("open")) {
+      themeDropdownWrap.classList.remove("open");
+      themeDropdownBtn.setAttribute("aria-expanded", "false");
+    }
+  });
 }
 
 // ── UI TOAST ─────────────────────────────────────────────────────────────────
@@ -1525,6 +2467,7 @@ function triggerPadVisualAndAudio(pad, velocity = 0.8) {
   playSound(pad, velocity);
   const r = pad.radius || 48;
   const shape = pad.shape || "circle";
+  const curTheme = THEMES[doc.theme || "hiphop"] || THEMES.hiphop;
 
   // Add Shape-echo Shockwave
   shockwaves.push({
@@ -1534,7 +2477,7 @@ function triggerPadVisualAndAudio(pad, velocity = 0.8) {
     shape: shape,
     growthRate: 3.2 + velocity * 1.6,
     maxR: r + 55 + velocity * 45,
-    color: velocity > 0.65 ? "#ff007f" : "#00f0ff",
+    color: velocity > 0.65 ? curTheme.colors.shockwaveHi : curTheme.colors.shockwaveLo,
     alpha: 1.0,
     width: 3 + velocity * 4
   });
@@ -1549,7 +2492,7 @@ function triggerPadVisualAndAudio(pad, velocity = 0.8) {
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
       life: 1.0,
-      color: velocity > 0.65 ? "#ff007f" : "#00f0ff"
+      color: velocity > 0.65 ? curTheme.colors.secondary : curTheme.colors.primary
     });
   }
 }
@@ -1660,6 +2603,8 @@ function render(timestamp) {
     ctx.restore();
   }
 
+  const curTheme = THEMES[doc.theme || "hiphop"] || THEMES.hiphop;
+
   // 3. Draw Sound Pads (Supports Circle, Square, Triangle, Diamond, Heart & Variable Radius)
   doc.pads.forEach(pad => {
     const px = pad.nx * stageWidth;
@@ -1676,18 +2621,18 @@ function render(timestamp) {
     ctx.save();
 
     // Pad Background Fill
-    ctx.fillStyle = isLooped ? "rgba(255, 215, 0, 0.16)" : (isSelected ? "rgba(255, 0, 127, 0.12)" : "rgba(0, 240, 255, 0.07)");
+    ctx.fillStyle = isLooped ? "rgba(255, 215, 0, 0.16)" : (isSelected ? "rgba(255, 0, 127, 0.12)" : curTheme.colors.padFill);
     drawShapePath(ctx, shape, px, py, r);
     ctx.fill();
 
     // Pad Perimeter Ring
-    ctx.strokeStyle = isLooped ? "#ffd700" : (isSelected ? "#ff007f" : "rgba(0, 240, 255, 0.85)");
+    ctx.strokeStyle = isLooped ? "#ffd700" : (isSelected ? "#ff007f" : curTheme.colors.padStroke);
     ctx.lineWidth = isLooped ? 4 : (isSelected ? 3 : 2.5);
     if (doc.editMode) {
       ctx.setLineDash(isSelected ? [4, 4] : [6, 6]);
     }
     ctx.shadowBlur = isLooped ? 20 : (isSelected ? 16 : 8);
-    ctx.shadowColor = isLooped ? "#ffd700" : (isSelected ? "#ff007f" : "#00f0ff");
+    ctx.shadowColor = isLooped ? "#ffd700" : (isSelected ? "#ff007f" : curTheme.colors.primary);
     drawShapePath(ctx, shape, px, py, r);
     ctx.stroke();
 
@@ -1708,9 +2653,9 @@ function render(timestamp) {
 
     // Inner Core Indicator
     const coreR = Math.max(6, Math.min(12, r * 0.18));
-    ctx.fillStyle = isLooped ? "#ffd700" : (isSelected ? "#ff007f" : "#00f0ff");
+    ctx.fillStyle = isLooped ? "#ffd700" : (isSelected ? "#ff007f" : curTheme.colors.padCore);
     ctx.shadowBlur = 12;
-    ctx.shadowColor = isLooped ? "#ffd700" : (isSelected ? "#ff007f" : "#00f0ff");
+    ctx.shadowColor = isLooped ? "#ffd700" : (isSelected ? "#ff007f" : curTheme.colors.primary);
     ctx.setLineDash([]);
     drawShapePath(ctx, shape, px, py, coreR);
     ctx.fill();
@@ -1754,7 +2699,7 @@ function render(timestamp) {
       ctx.fillText(`● LOOP [${rateLabel}]`, px, py + r + 30);
     } else if (doc.editMode) {
       ctx.font = "500 9px ui-monospace, monospace";
-      ctx.fillStyle = isSelected ? "rgba(255, 0, 127, 0.9)" : "rgba(0, 240, 255, 0.8)";
+      ctx.fillStyle = isSelected ? "rgba(255, 0, 127, 0.9)" : curTheme.colors.primary;
       ctx.fillText(isSelected ? `★ Selected (${r}px)` : "⚙ Click to Select", px, py + r + 30);
     }
 
@@ -1765,9 +2710,9 @@ function render(timestamp) {
   handOrbs.forEach(orb => {
     ctx.save();
     const grad = ctx.createRadialGradient(orb.x, orb.y, 4, orb.x, orb.y, 34);
-    grad.addColorStop(0, "rgba(255, 0, 127, 0.85)");
-    grad.addColorStop(0.5, "rgba(0, 240, 255, 0.35)");
-    grad.addColorStop(1, "rgba(0, 240, 255, 0)");
+    grad.addColorStop(0, curTheme.colors.handInner);
+    grad.addColorStop(0.5, curTheme.colors.handOuter);
+    grad.addColorStop(1, "rgba(0, 0, 0, 0)");
     ctx.fillStyle = grad;
     ctx.beginPath();
     ctx.arc(orb.x, orb.y, 34, 0, Math.PI * 2);
@@ -1777,7 +2722,7 @@ function render(timestamp) {
     ctx.arc(orb.x, orb.y, 10, 0, Math.PI * 2);
     ctx.fillStyle = "#ffffff";
     ctx.shadowBlur = 14;
-    ctx.shadowColor = "#00f0ff";
+    ctx.shadowColor = curTheme.colors.primary;
     ctx.fill();
     ctx.restore();
   });
@@ -2418,6 +3363,7 @@ document.getElementById("file-open").onchange = async (e) => {
     const parsed = JSON.parse(text);
     if (parsed.format !== FORMAT.name && !parsed.pads) throw new Error("Invalid Gestrum project");
     change(d => Object.assign(d, parsed.data || parsed));
+    applyTheme(doc.theme || "hiphop", false);
     toast("Project loaded!");
   } catch (err) {
     toast("Could not open project file");
@@ -2426,6 +3372,7 @@ document.getElementById("file-open").onchange = async (e) => {
 
 // ── HELP SEARCH & CONTROL HIGHLIGHT ─────────────────────────────────────────
 const HELP_ITEMS = [
+  { title: "Theme & Instrument Kits", keys: "Theme Dropdown", control: "#theme-dropdown-wrap", desc: "Instantly switch between Hip-Hop / 808, Rock & Roll, and Midnight Jazz with custom visuals, tempo, and authentic instrument kits." },
   { title: "One Tap to Play", keys: "1 Tap", control: "#stage-canvas", desc: "A single tap triggers the assigned percussion sound once. Harder strikes create louder hits and wider shockwaves." },
   { title: "Tap & Hold 3s to Loop", keys: "Hold 3s", control: "#stage-canvas", desc: "Hold your hand inside any shape for 3 seconds to lock it into a synced loop on the measure." },
   { title: "Pause / Stop All Loops", keys: "Spacebar", control: "#btn-pause-all", desc: "Instantly pause or stop all active rhythmic loops with one click or by hitting the spacebar." },
@@ -2433,7 +3380,7 @@ const HELP_ITEMS = [
   { title: "Pad Shapes: Circle, Square, Triangle, Diamond, Heart", keys: "Layout", control: "#btn-mode", desc: "Switch pads into circles, rounded squares, triangles, diamonds, or hearts with all rounded corners." },
   { title: "Dynamic Pad Resizing", keys: "Wheel / ⤡", control: "#layout-toolbar", desc: "Drag the corner resize handle, use the slider/pills in Layout Mode, or hover and scroll your mouse wheel." },
   { title: "Per-Sound BPM / Speed", keys: "Layout ⚙", control: "#btn-mode", desc: "Click Layout and tap any shape to choose individual loop rates (1/4, 1/8, 1/16 roll, 1/2)." },
-  { title: "Presets & Custom Audio", keys: "WAV / MP3", control: "#stage-container", desc: "Pick from 15 synthesized presets or drop your own audio files directly onto any pad." }
+  { title: "Presets & Custom Audio", keys: "WAV / MP3", control: "#stage-container", desc: "Pick from over 25 synthesized presets across Hip-Hop, Rock, and Jazz or drop your own audio files directly onto any pad." }
 ];
 
 function ring(selector) {
@@ -2500,6 +3447,7 @@ chip.onclick = checkForUpdate;
 // Restore saved settings on startup
 async function startup() {
   await restore();
+  applyTheme(doc.theme || "hiphop", false);
   syncLayoutToolbar();
   const ctx = getAudioContext();
   for (const pad of doc.pads) {

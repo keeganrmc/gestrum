@@ -1,12 +1,19 @@
 # HANDOFF.md: Gestrum
 
 ## Current Status
-- **Current Version:** `v00000-004`
+- **Current Version:** `v00000-005`
 - **Live Deployment:** `https://keeganrmc.github.io/gestrum/`
 - **GitHub Repository:** `https://github.com/keeganrmc/gestrum`
 - **Architecture:** Single-file HTML5 PWA (`index.html`) + Service Worker (`sw.js`) + Manifest (`manifest.webmanifest`).
 
 ## What Works
+- **Top Instrument Theme Dropdown Menu:** Header dropdown allowing users to swap between three distinct genres, visual aesthetics, and authentic instrument kits:
+  - 🎧 **Hip-Hop / 808 (Cyber Neon):** Neon cyan and magenta cyber palette, 120 BPM, 808 Trap kit (808 Sub Kick, Trap Snare, 808 Closed Hat, Glitch Perc, 808 Rimshot, 808 Tom).
+  - 🎸 **Rock & Roll (Crimson Stage):** Charcoal concert stage, crimson red, molten amber, and electric gold palette, 132 BPM, authentic acoustic rock kit (Stadium Heavy Kick, Punch Snare, Explosive Crash Cymbal, Rack Tom, Deep Booming Floor Tom, and Overdriven Guitar Power Chord).
+  - 🎷 **Midnight Jazz (Velvet Lounge):** Velvet midnight blue, champagne gold/brass, and Blue Note indigo palette, 100 BPM, expressive acoustic jazz kit (Bebop Warm Felt Kick, Swirled Wire Brush Snare, Wood Cross-Stick Click, Blue Note Ride Cymbal with ping & wash, Upright Acoustic Double Bass, and Tremolo Vibraphone with spinning motor LFO).
+- **Genre-Specific Audio Engines:** Procedural synthesis for rock distortion curves, speaker cabinet filters, crash cymbal clusters, vibraphone motor tremolo LFO, and brush wire textures.
+- **Dynamic Theming Engine:** CSS custom variables, logo gradients, canvas shockwaves, sparks, pad strokes, and hand tracking orbs dynamically reflect the active theme.
+- **Categorized Presets Grid:** Over 25 presets organized by genre in the Pad Sound Configuration dialog, allowing any sound to be mapped to any pad.
 - **5 Pad Shapes (All Rounded Corners):** Circle, Square (Squircle), Triangle, Diamond, and Heart with zero sharp corners or vertices.
 - **Dynamic Pad Resizing:** Adjustable radius from 28px to 96px with quick preset pills (`S:36px`, `M:48px`, `L:64px`, `XL:80px`), slider, stepper buttons, and mouse wheel / trackpad scroll resizing.
 - **On-Stage Floating Layout Toolbar:** Docked inspector bar active in Layout Mode for immediate shape swapping, sizing, preset pills, "All Shapes", "All Sizes", "Reset 3x2 Grid", and sound configuration.
@@ -20,7 +27,6 @@
 - **Strict gesture semantics:** 1 tap = 1 sound; 3s dwell = loop on measure; tap looping pad = stop loop.
 - **Pause All Loops button:** in header and via `Spacebar`.
 - **16-Step Measure Timeline Bar:** with dynamic beat lighting and BPM slider (60–180 BPM).
-- **15 Synthesized Presets:** accessible via pad sound configuration dialog (including sub bass drop, laser, zap, bells, snaps, etc.).
 - **Custom audio sample upload & direct drag-and-drop:** onto any pad, persisted in IndexedDB.
 - **Luminous Hand Orbs:** tracking hands in real-time with MediaPipe Hands (with instant mouse/touch fallback).
 - **Velocity power scaling:** strike speed scales audio gain, filter brightness, and shockwave ring radius.
@@ -42,3 +48,4 @@
 5. Multi-hand hit testing must be batched together to prevent alternate-frame collision resets.
 6. In Layout Mode, distinguish clearly between dragging to move, dragging to resize, mouse-wheel resizing, and clicking to configure.
 7. Always provide per-pad loop subdivision speed control and an instant master pause/kill switch.
+8. When switching instrument themes, update the pads, BPM, visual styling, and canvas colors together as a unified acoustic and visual identity.

@@ -2,6 +2,17 @@
 
 All notable changes to **Gestrum** will be documented in this file.
 
+## [v00000-005] - 2026-10-25
+### Added
+- **Top Theme Dropdown Menu:** Header dropdown selector allowing instant switching between three distinct genres and visual/acoustic themes:
+  - 🎧 **Hip-Hop / 808 (Cyber Neon):** Neon cyan and magenta cyber aesthetic, 120 BPM, flagship 808 Trap kit (808 Sub Kick, Trap Snare, 808 Closed Hat, Glitch Perc, 808 Rimshot, 808 Tom).
+  - 🎸 **Rock & Roll (Crimson Stage):** High-octane arena concert aesthetic with deep crimson red, fiery molten amber, electric gold highlights, smoke/charcoal stage gradient, 132 BPM, and authentic acoustic rock instruments (Stadium Heavy Kick, Punch Snare, Explosive Crash Cymbal, Rack Tom, Deep Booming Floor Tom, and an Overdriven Electric Guitar Power Chord with amplifier cabinet emulation).
+  - 🎷 **Midnight Jazz (Velvet Lounge):** Smoky Blue Note jazz lounge aesthetic with warm champagne gold/brass, deep velvet midnight blue, pearl ivory highlights, 100 BPM, and silky acoustic jazz instruments (Bebop Warm Felt Kick, Swirled Wire Brush Snare, Wood Cross-Stick Rim Click, Blue Note Ride Cymbal with ping & wash, Upright Acoustic Double Bass pluck with fingerboard click, and a resonant Vibraphone bar with rotating motor tremolo LFO).
+- **Genre-Specific Audio Synthesizers:** Expanded procedural Web Audio synthesis engine with custom algorithms for rock saturation/distortion, cabinet filters, inharmonic cymbal clusters, motor tremolo modulation, and wire brush textures.
+- **Dynamic Theming Engine:** CSS custom properties, canvas rendering (pad colors, shockwave ripples, perimeter sparks, hand tracking orbs, on-canvas handles), and logo gradients fully synchronize with the chosen theme.
+- **Categorized Presets Grid:** Pad Sound Configuration dialog organized into genre sections (Hip-Hop, Rock, Jazz, Synth/SFX), making all new sounds available for custom individual pad assignments.
+- **Automatic Theme Persistence:** Active theme, tempo, and instrument assignments persist across sessions in IndexedDB and export/import via `.gestrum` project files.
+
 ## [v00000-004] - 2026-10-25
 ### Added
 - **5 Expressive Pad Shapes (All Rounded Corners):** Support for Circle, Square (Squircle), Triangle, Diamond, and Heart. All corners are smoothly rounded with zero sharp points or vertices.
