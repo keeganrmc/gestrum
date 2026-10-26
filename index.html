@@ -459,6 +459,165 @@
     outline-offset: 4px !important;
     transition: outline-color 1.2s;
   }
+
+  /* Floating Layout Toolbar */
+  .layout-toolbar {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%) translateY(25px);
+    background: rgba(19, 23, 31, 0.95);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--panel-border);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.8), 0 0 24px rgba(0, 240, 255, 0.15);
+    border-radius: 12px;
+    padding: 10px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 70;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    max-width: 95vw;
+  }
+  .edit-mode .layout-toolbar {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+  .layout-toolbar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .layout-pad-badge {
+    font-size: 11px;
+    font-family: ui-monospace, monospace;
+    font-weight: 700;
+    color: var(--cyan);
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    padding: 4px 9px;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+  .toolbar-label {
+    font-size: 11px;
+    font-family: ui-monospace, monospace;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .shape-selector {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .shape-btn {
+    background: #171f2b;
+    border: 1px solid #2b394e;
+    color: #cbd5e1;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    padding: 0;
+  }
+  .shape-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+  }
+  .shape-btn:hover {
+    border-color: var(--cyan);
+    color: #fff;
+    background: #1f2a3a;
+  }
+  .shape-btn.active {
+    background: rgba(0, 240, 255, 0.2);
+    border-color: var(--cyan);
+    color: var(--cyan);
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+  }
+  .size-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+  }
+  .btn-step {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .size-val-display {
+    min-width: 44px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--cyan);
+    font-weight: 600;
+  }
+  .size-pills {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .size-btn-pill {
+    background: #151c27;
+    border: 1px solid #283548;
+    color: #cbd5e1;
+    padding: 3px 7px;
+    border-radius: 4px;
+    font-size: 10px;
+    cursor: pointer;
+    font-family: ui-monospace, monospace;
+    transition: all 0.15s;
+  }
+  .size-btn-pill:hover {
+    border-color: var(--cyan);
+    color: #fff;
+  }
+  .size-btn-pill.active {
+    background: var(--cyan);
+    color: #000;
+    font-weight: 700;
+    border-color: var(--cyan);
+  }
+  .btn-micro {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #cbd5e1;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: ui-monospace, monospace;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .btn-micro:hover {
+    border-color: var(--cyan);
+    color: #fff;
+    background: rgba(0, 240, 255, 0.1);
+  }
+  .layout-action-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+  }
 </style>
 
 <!-- Load MediaPipe Hands via CDN -->
@@ -524,6 +683,52 @@
   <canvas id="stage-canvas"></canvas>
   <video id="webcam-video" playsinline></video>
   <div id="toast">Ready</div>
+
+  <!-- Floating Layout Inspector & Toolbar (Active in Layout Mode) -->
+  <div id="layout-toolbar" class="layout-toolbar">
+    <div class="layout-toolbar-row">
+      <div class="layout-pad-badge" id="layout-pad-badge">Pad 1: 808 HI-HAT</div>
+      <div class="shape-selector" id="layout-shape-selector">
+        <span class="toolbar-label">Shape:</span>
+        <button class="shape-btn" data-shape="circle" title="Rounded Circle">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg>
+        </button>
+        <button class="shape-btn" data-shape="square" title="Rounded Square">
+          <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4.5"/></svg>
+        </button>
+        <button class="shape-btn" data-shape="triangle" title="Rounded Triangle">
+          <svg viewBox="0 0 24 24"><path d="M12 4.5 C12.8 3.3 14.2 3.3 15 4.5 L20.5 15.5 C21.4 17 20.6 18.5 18.8 18.5 L5.2 18.5 C3.4 18.5 2.6 17 3.5 15.5 Z"/></svg>
+        </button>
+        <button class="shape-btn" data-shape="diamond" title="Rounded Diamond">
+          <svg viewBox="0 0 24 24"><path d="M12 3.5 C12.6 2.8 13.4 2.8 14 3.5 L20.5 11 C21.2 11.6 21.2 12.4 20.5 13 L14 20.5 C13.4 21.2 12.6 21.2 12 20.5 L3.5 13 C2.8 12.4 2.8 11.6 3.5 11 Z"/></svg>
+        </button>
+        <button class="shape-btn" data-shape="heart" title="Rounded Heart">
+          <svg viewBox="0 0 24 24"><path d="M12 20 C11.5 20 4.5 14.5 3.5 9.5 C2.5 5.5 6 3 9.5 4.5 C11 5.2 12 7 12 7 C12 7 13 5.2 14.5 4.5 C18 3 21.5 5.5 20.5 9.5 C19.5 14.5 12.5 20 12 20 Z"/></svg>
+        </button>
+        <button id="btn-apply-shape-all" class="btn-micro" title="Apply current shape to all 6 pads">All Shapes</button>
+      </div>
+    </div>
+    <div class="layout-toolbar-row">
+      <div class="size-control">
+        <span class="toolbar-label">Size:</span>
+        <button id="btn-size-dec" class="btn-step" title="Decrease pad size">-</button>
+        <input type="range" id="layout-size-slider" min="28" max="96" value="48" step="1" style="width: 86px; accent-color: var(--cyan);">
+        <button id="btn-size-inc" class="btn-step" title="Increase pad size">+</button>
+        <span id="layout-size-val" class="size-val-display">48px</span>
+        <div class="size-pills" id="layout-size-pills">
+          <button class="size-btn-pill" data-size="36">S</button>
+          <button class="size-btn-pill" data-size="48">M</button>
+          <button class="size-btn-pill" data-size="64">L</button>
+          <button class="size-btn-pill" data-size="80">XL</button>
+        </div>
+        <button id="btn-apply-size-all" class="btn-micro" title="Apply current size to all 6 pads">All Sizes</button>
+      </div>
+      <div class="layout-action-group">
+        <button id="btn-layout-sound-config" title="Open sound & loop speed configuration">⚙ Sound</button>
+        <button id="btn-reset-layout" title="Reset pads to clean centered 3x2 grid">Reset 3x2</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <footer>
@@ -540,9 +745,36 @@
 <!-- Pad Sound Configuration Dialog -->
 <dialog id="pad-config-dialog">
   <h2 id="config-pad-title">Configure Sound Pad</h2>
-  <p style="font-size: 13px; color: var(--muted); margin-bottom: 12px;">Choose a preset, set individual loop speed, or upload custom audio.</p>
+  <p style="font-size: 13px; color: var(--muted); margin-bottom: 12px;">Choose shape, size, presets, individual loop speed, or upload custom audio.</p>
   
-  <div style="font-size: 11px; font-weight: 600; color: var(--cyan); text-transform: uppercase; margin-top: 10px;">Loop Speed / Subdivision</div>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+    <div style="font-size: 11px; font-weight: 600; color: var(--cyan); text-transform: uppercase;">Pad Shape (All Rounded Corners)</div>
+    <button id="btn-dialog-apply-shape-all" class="btn-micro" title="Apply this shape to all 6 pads">Apply to All</button>
+  </div>
+  <div class="shape-selector" id="dialog-shape-buttons" style="margin-top: 6px; display: flex; gap: 8px;">
+    <button class="shape-btn" data-shape="circle" title="Rounded Circle"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/></svg></button>
+    <button class="shape-btn" data-shape="square" title="Rounded Square"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4.5"/></svg></button>
+    <button class="shape-btn" data-shape="triangle" title="Rounded Triangle"><svg viewBox="0 0 24 24"><path d="M12 4.5 C12.8 3.3 14.2 3.3 15 4.5 L20.5 15.5 C21.4 17 20.6 18.5 18.8 18.5 L5.2 18.5 C3.4 18.5 2.6 17 3.5 15.5 Z"/></svg></button>
+    <button class="shape-btn" data-shape="diamond" title="Rounded Diamond"><svg viewBox="0 0 24 24"><path d="M12 3.5 C12.6 2.8 13.4 2.8 14 3.5 L20.5 11 C21.2 11.6 21.2 12.4 20.5 13 L14 20.5 C13.4 21.2 12.6 21.2 12 20.5 L3.5 13 C2.8 12.4 2.8 11.6 3.5 11 Z"/></svg></button>
+    <button class="shape-btn" data-shape="heart" title="Rounded Heart"><svg viewBox="0 0 24 24"><path d="M12 20 C11.5 20 4.5 14.5 3.5 9.5 C2.5 5.5 6 3 9.5 4.5 C11 5.2 12 7 12 7 C12 7 13 5.2 14.5 4.5 C18 3 21.5 5.5 20.5 9.5 C19.5 14.5 12.5 20 12 20 Z"/></svg></button>
+  </div>
+
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px;">
+    <div style="font-size: 11px; font-weight: 600; color: var(--cyan); text-transform: uppercase;">Pad Size</div>
+    <button id="btn-dialog-apply-size-all" class="btn-micro" title="Apply this size to all 6 pads">Apply to All</button>
+  </div>
+  <div style="display: flex; align-items: center; gap: 10px; margin-top: 6px;">
+    <input type="range" id="dialog-size-slider" min="28" max="96" value="48" style="flex: 1; accent-color: var(--cyan);">
+    <span id="dialog-size-val" style="font-family: ui-monospace, monospace; font-size: 11px; color: var(--cyan); min-width: 44px; text-align: right;">48px</span>
+  </div>
+  <div class="size-pills" id="dialog-size-pills" style="margin-top: 6px;">
+    <button class="size-btn-pill" data-size="36">S (36px)</button>
+    <button class="size-btn-pill" data-size="48">M (48px)</button>
+    <button class="size-btn-pill" data-size="64">L (64px)</button>
+    <button class="size-btn-pill" data-size="80">XL (80px)</button>
+  </div>
+
+  <div style="font-size: 11px; font-weight: 600; color: var(--cyan); text-transform: uppercase; margin-top: 14px;">Loop Speed / Subdivision</div>
   <div class="speed-selector" id="speed-buttons">
     <button class="speed-btn" data-rate="1">1/4 (Beat)</button>
     <button class="speed-btn" data-rate="2">1/8 (2x)</button>
@@ -595,7 +827,7 @@
     <div class="logo-mark" style="width: 36px; height: 36px;"><span>G</span></div>
     <div>
       <h2 style="margin: 0;">Gestrum</h2>
-      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-003</span>
+      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-004</span>
     </div>
   </div>
   <p><strong>Raison d'Être:</strong> Gestrum exists because drumming in mid-air should make real sound, turning your laptop camera into a zero-latency stage instrument.</p>
@@ -615,12 +847,12 @@
 const APP = {
   name: "Gestrum",
   id: "gestrum",
-  version: "v00000-003",
+  version: "v00000-004",
   author: "Keegan McConnell",
   site: "https://keeganrmc.github.io/",
   repo: "https://github.com/keeganrmc/gestrum"
 };
-const FORMAT = { name: APP.id, version: 3 };
+const FORMAT = { name: APP.id, version: 4 };
 document.getElementById("chip").textContent = APP.version + " ↻";
 
 // ── EXPANDED WEB AUDIO SYNTHESIS ENGINE ─────────────────────────────────────
@@ -644,12 +876,16 @@ function playSound(pad, velocity = 0.8) {
   const ctx = getAudioContext();
   const now = ctx.currentTime;
   const v = Math.max(0.15, Math.min(velocity, 1.0));
+  const r = pad.radius || 48;
+  // Acoustic resonance scaling based on pad size (larger = deeper punch/decay, smaller = tighter/higher pitch)
+  const sizeFactor = Math.sqrt(48 / r);
 
   if (customSampleBuffers.has(pad.id)) {
     const source = ctx.createBufferSource();
     source.buffer = customSampleBuffers.get(pad.id);
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(v, now);
+    source.playbackRate.setValueAtTime(Math.max(0.65, Math.min(1.4, sizeFactor)), now);
     source.connect(gain);
     gain.connect(ctx.destination);
     if (audioDestinationNode) gain.connect(audioDestinationNode);
@@ -669,21 +905,22 @@ function playSound(pad, velocity = 0.8) {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(140 + v * 40, now);
-    osc.frequency.exponentialRampToValueAtTime(36, now + 0.12);
+    osc.frequency.setValueAtTime((140 + v * 40) * sizeFactor, now);
+    osc.frequency.exponentialRampToValueAtTime(36 * sizeFactor, now + 0.12);
     gain.gain.setValueAtTime(1.0, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.65);
+    const decay = Math.min(1.2, 0.65 / sizeFactor);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + decay);
     osc.connect(gain);
     gain.connect(out);
     osc.start(now);
-    osc.stop(now + 0.68);
+    osc.stop(now + decay + 0.03);
   } else if (type === "snare") {
     // Trap Snare
     const tone = ctx.createOscillator();
     const toneGain = ctx.createGain();
     tone.type = "triangle";
-    tone.frequency.setValueAtTime(190, now);
-    tone.frequency.exponentialRampToValueAtTime(80, now + 0.08);
+    tone.frequency.setValueAtTime(190 * sizeFactor, now);
+    tone.frequency.exponentialRampToValueAtTime(80 * sizeFactor, now + 0.08);
     toneGain.gain.setValueAtTime(0.7, now);
     toneGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
     tone.connect(toneGain);
@@ -691,7 +928,7 @@ function playSound(pad, velocity = 0.8) {
     tone.start(now);
     tone.stop(now + 0.2);
 
-    const bufferSize = ctx.sampleRate * 0.22;
+    const bufferSize = Math.floor(ctx.sampleRate * 0.22);
     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const data = buffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
@@ -699,7 +936,7 @@ function playSound(pad, velocity = 0.8) {
     noise.buffer = buffer;
     const filter = ctx.createBiquadFilter();
     filter.type = "bandpass";
-    filter.frequency.setValueAtTime(1600 + v * 800, now);
+    filter.frequency.setValueAtTime((1600 + v * 800) * sizeFactor, now);
     filter.Q.value = 2.0;
     const noiseGain = ctx.createGain();
     noiseGain.gain.setValueAtTime(0.8, now);
@@ -711,7 +948,7 @@ function playSound(pad, velocity = 0.8) {
     noise.stop(now + 0.25);
   } else if (type === "hihat") {
     // 808 Closed Hat
-    const bufferSize = ctx.sampleRate * 0.08;
+    const bufferSize = Math.floor(ctx.sampleRate * 0.08);
     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const data = buffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
@@ -719,7 +956,7 @@ function playSound(pad, velocity = 0.8) {
     noise.buffer = buffer;
     const filter = ctx.createBiquadFilter();
     filter.type = "highpass";
-    filter.frequency.setValueAtTime(7500, now);
+    filter.frequency.setValueAtTime(Math.min(18000, 7500 * sizeFactor), now);
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(0.9, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
@@ -730,7 +967,7 @@ function playSound(pad, velocity = 0.8) {
     noise.stop(now + 0.08);
   } else if (type === "openhat") {
     // 808 Open Hat
-    const bufferSize = ctx.sampleRate * 0.35;
+    const bufferSize = Math.floor(ctx.sampleRate * 0.35);
     const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
     const data = buffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
@@ -738,24 +975,25 @@ function playSound(pad, velocity = 0.8) {
     noise.buffer = buffer;
     const filter = ctx.createBiquadFilter();
     filter.type = "highpass";
-    filter.frequency.setValueAtTime(6500, now);
+    filter.frequency.setValueAtTime(Math.min(18000, 6500 * sizeFactor), now);
     const gain = ctx.createGain();
     gain.gain.setValueAtTime(0.85, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+    const decay = Math.min(0.6, 0.32 / sizeFactor);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + decay);
     noise.connect(filter);
     filter.connect(gain);
     gain.connect(out);
     noise.start(now);
-    noise.stop(now + 0.35);
+    noise.stop(now + decay + 0.03);
   } else if (type === "perc") {
     // Glitch Perc
     const carrier = ctx.createOscillator();
     const modulator = ctx.createOscillator();
     const modGain = ctx.createGain();
     const gain = ctx.createGain();
-    carrier.frequency.setValueAtTime(540, now);
-    carrier.frequency.exponentialRampToValueAtTime(120, now + 0.1);
-    modulator.frequency.setValueAtTime(1200, now);
+    carrier.frequency.setValueAtTime(540 * sizeFactor, now);
+    carrier.frequency.exponentialRampToValueAtTime(120 * sizeFactor, now + 0.1);
+    modulator.frequency.setValueAtTime(1200 * sizeFactor, now);
     modGain.gain.setValueAtTime(800 * v, now);
     modGain.gain.exponentialRampToValueAtTime(10, now + 0.08);
     modulator.connect(modGain);
@@ -773,8 +1011,8 @@ function playSound(pad, velocity = 0.8) {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(880, now);
-    osc.frequency.exponentialRampToValueAtTime(320, now + 0.03);
+    osc.frequency.setValueAtTime(880 * sizeFactor, now);
+    osc.frequency.exponentialRampToValueAtTime(320 * sizeFactor, now + 0.03);
     gain.gain.setValueAtTime(0.9, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
     osc.connect(gain);
@@ -786,18 +1024,19 @@ function playSound(pad, velocity = 0.8) {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(180, now);
-    osc.frequency.exponentialRampToValueAtTime(75, now + 0.15);
+    osc.frequency.setValueAtTime(180 * sizeFactor, now);
+    osc.frequency.exponentialRampToValueAtTime(75 * sizeFactor, now + 0.15);
     gain.gain.setValueAtTime(0.85, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+    const decay = Math.min(0.7, 0.35 / sizeFactor);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + decay);
     osc.connect(gain);
     gain.connect(out);
     osc.start(now);
-    osc.stop(now + 0.38);
+    osc.stop(now + decay + 0.03);
   } else if (type === "clap") {
     // 808 Clap
     [0, 0.012, 0.024].forEach((delay, idx) => {
-      const bufferSize = ctx.sampleRate * 0.04;
+      const bufferSize = Math.floor(ctx.sampleRate * 0.04);
       const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const data = buffer.getChannelData(0);
       for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
@@ -805,7 +1044,7 @@ function playSound(pad, velocity = 0.8) {
       noise.buffer = buffer;
       const filter = ctx.createBiquadFilter();
       filter.type = "bandpass";
-      filter.frequency.setValueAtTime(1200, now + delay);
+      filter.frequency.setValueAtTime(1200 * sizeFactor, now + delay);
       const gain = ctx.createGain();
       gain.gain.setValueAtTime(idx === 2 ? 0.9 : 0.4, now + delay);
       gain.gain.exponentialRampToValueAtTime(0.001, now + delay + (idx === 2 ? 0.18 : 0.04));
@@ -821,10 +1060,10 @@ function playSound(pad, velocity = 0.8) {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = "square";
-      osc.frequency.setValueAtTime(freq, now);
+      osc.frequency.setValueAtTime(freq * sizeFactor, now);
       const filter = ctx.createBiquadFilter();
       filter.type = "bandpass";
-      filter.frequency.setValueAtTime(800, now);
+      filter.frequency.setValueAtTime(800 * sizeFactor, now);
       filter.Q.value = 3;
       gain.gain.setValueAtTime(0.4, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
@@ -839,8 +1078,8 @@ function playSound(pad, velocity = 0.8) {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "sawtooth";
-    osc.frequency.setValueAtTime(1600, now);
-    osc.frequency.exponentialRampToValueAtTime(60, now + 0.14);
+    osc.frequency.setValueAtTime(1600 * sizeFactor, now);
+    osc.frequency.exponentialRampToValueAtTime(60 * sizeFactor, now + 0.14);
     gain.gain.setValueAtTime(0.75, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
     osc.connect(gain);
@@ -852,8 +1091,8 @@ function playSound(pad, velocity = 0.8) {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "triangle";
-    osc.frequency.setValueAtTime(420, now);
-    osc.frequency.exponentialRampToValueAtTime(110, now + 0.2);
+    osc.frequency.setValueAtTime(420 * sizeFactor, now);
+    osc.frequency.exponentialRampToValueAtTime(110 * sizeFactor, now + 0.2);
     gain.gain.setValueAtTime(0.85, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
     osc.connect(gain);
@@ -865,46 +1104,49 @@ function playSound(pad, velocity = 0.8) {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(120, now);
-    osc.frequency.exponentialRampToValueAtTime(28, now + 0.5);
+    osc.frequency.setValueAtTime(120 * sizeFactor, now);
+    osc.frequency.exponentialRampToValueAtTime(28 * sizeFactor, now + 0.5);
     gain.gain.setValueAtTime(1.0, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+    const decay = Math.min(1.5, 0.9 / sizeFactor);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + decay);
     osc.connect(gain);
     gain.connect(out);
     osc.start(now);
-    osc.stop(now + 0.95);
+    osc.stop(now + decay + 0.05);
   } else if (type === "crystal") {
     // Crystal Bell
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(1046.5, now);
+    osc.frequency.setValueAtTime(1046.5 * sizeFactor, now);
     gain.gain.setValueAtTime(0.65, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+    const decay = Math.min(1.3, 0.8 / sizeFactor);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + decay);
     osc.connect(gain);
     gain.connect(out);
     osc.start(now);
-    osc.stop(now + 0.85);
+    osc.stop(now + decay + 0.05);
   } else if (type === "acoustic-kick") {
     // Acoustic Natural Kick
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "sine";
-    osc.frequency.setValueAtTime(110, now);
-    osc.frequency.exponentialRampToValueAtTime(45, now + 0.09);
+    osc.frequency.setValueAtTime(110 * sizeFactor, now);
+    osc.frequency.exponentialRampToValueAtTime(45 * sizeFactor, now + 0.09);
     gain.gain.setValueAtTime(0.9, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+    const decay = Math.min(0.6, 0.3 / sizeFactor);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + decay);
     osc.connect(gain);
     gain.connect(out);
     osc.start(now);
-    osc.stop(now + 0.32);
+    osc.stop(now + decay + 0.03);
   } else if (type === "acoustic-snare") {
     // Acoustic Wood Snare
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = "triangle";
-    osc.frequency.setValueAtTime(240, now);
-    osc.frequency.exponentialRampToValueAtTime(140, now + 0.08);
+    osc.frequency.setValueAtTime(240 * sizeFactor, now);
+    osc.frequency.exponentialRampToValueAtTime(140 * sizeFactor, now + 0.08);
     gain.gain.setValueAtTime(0.8, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
     osc.connect(gain);
@@ -920,14 +1162,14 @@ function defaultDoc() {
     bpm: 120,
     editMode: false,
     pads: [
-      // Top Row (3) — All identical radius 48, stationary
-      { id: 1, label: "808 HI-HAT", type: "hihat", nx: 0.24, ny: 0.32, radius: 48, looped: false, rate: 2 },
-      { id: 2, label: "GLITCH PERC", type: "perc",  nx: 0.50, ny: 0.30, radius: 48, looped: false, rate: 1 },
-      { id: 3, label: "RIMSHOT",    type: "rim",   nx: 0.76, ny: 0.32, radius: 48, looped: false, rate: 1 },
-      // Bottom Row (3) — All identical radius 48, stationary
-      { id: 4, label: "808 KICK",   type: "kick",  nx: 0.24, ny: 0.68, radius: 48, looped: false, rate: 1 },
-      { id: 5, label: "TRAP SNARE", type: "snare", nx: 0.50, ny: 0.70, radius: 48, looped: false, rate: 0.5 },
-      { id: 6, label: "808 TOM",    type: "tom",   nx: 0.76, ny: 0.68, radius: 48, looped: false, rate: 0.25 },
+      // Top Row (3) — Radius 48, default circle
+      { id: 1, label: "808 HI-HAT", type: "hihat", nx: 0.24, ny: 0.32, radius: 48, shape: "circle", looped: false, rate: 2 },
+      { id: 2, label: "GLITCH PERC", type: "perc",  nx: 0.50, ny: 0.30, radius: 48, shape: "circle", looped: false, rate: 1 },
+      { id: 3, label: "RIMSHOT",    type: "rim",   nx: 0.76, ny: 0.32, radius: 48, shape: "circle", looped: false, rate: 1 },
+      // Bottom Row (3)
+      { id: 4, label: "808 KICK",   type: "kick",  nx: 0.24, ny: 0.68, radius: 48, shape: "circle", looped: false, rate: 1 },
+      { id: 5, label: "TRAP SNARE", type: "snare", nx: 0.50, ny: 0.70, radius: 48, shape: "circle", looped: false, rate: 0.5 },
+      { id: 6, label: "808 TOM",    type: "tom",   nx: 0.76, ny: 0.68, radius: 48, shape: "circle", looped: false, rate: 0.25 },
     ]
   };
 }
@@ -948,6 +1190,7 @@ function undo() {
   redoStack.push(JSON.stringify(doc));
   doc = JSON.parse(undoStack.pop());
   scheduleSave();
+  syncLayoutToolbar();
   toast("Undo");
 }
 function redo() {
@@ -955,6 +1198,7 @@ function redo() {
   undoStack.push(JSON.stringify(doc));
   doc = JSON.parse(redoStack.pop());
   scheduleSave();
+  syncLayoutToolbar();
   toast("Redo");
 }
 
@@ -975,7 +1219,7 @@ window.addEventListener("keydown", e => {
 // ── INDEXEDDB PERSISTENCE ───────────────────────────────────────────────────
 function idb() {
   return new Promise((res, rej) => {
-    const r = indexedDB.open(APP.id, 3);
+    const r = indexedDB.open(APP.id, 4);
     r.onupgradeneeded = () => r.result.createObjectStore("kv");
     r.onsuccess = () => res(r.result);
     r.onerror = () => rej(r.error);
@@ -1010,9 +1254,10 @@ async function restore() {
   const saved = await idbGet("doc");
   if (saved && saved.data && saved.data.pads) {
     doc = saved.data;
-    // Ensure all pads are stationary radius 48
+    // Preserve custom radius and shape, default safely if missing
     doc.pads.forEach(p => {
-      p.radius = 48;
+      if (typeof p.radius !== "number" || isNaN(p.radius)) p.radius = 48;
+      if (!p.shape) p.shape = "circle";
       if (!p.rate) p.rate = 1;
     });
     if (doc.bpm) {
@@ -1056,11 +1301,6 @@ function startSequencer() {
     doc.pads.forEach(pad => {
       if (pad.looped) {
         const rate = pad.rate || 1;
-        // rate 4 = 1/16 note (every step)
-        // rate 2 = 1/8 note (every 2 steps)
-        // rate 1 = 1/4 note (every 4 steps, beats 1, 2, 3, 4)
-        // rate 0.5 = 1/2 note (every 8 steps, beats 1, 3)
-        // rate 0.25 = 1/1 bar (every 16 steps, beat 1)
         let trigger = false;
         if (rate >= 4) trigger = true;
         else if (rate >= 2) trigger = (currentStep % 2 === 0);
@@ -1099,7 +1339,162 @@ function pauseAllLoops() {
 }
 document.getElementById("btn-pause-all").onclick = pauseAllLoops;
 
-// ── STAGE RENDERING (COMPLETELY STATIONARY CIRCLES) ─────────────────────────
+// ── SHAPE PATH GENERATORS (ALL ROUNDED CORNERS, NO SHARP VERTICES) ───────────
+function drawShapePath(ctx, shape, cx, cy, r) {
+  ctx.beginPath();
+  if (shape === "square") {
+    // Rounded Square (Squircle) - smooth arcTo corners
+    const s = r * 0.92;
+    const cr = Math.min(s * 0.38, 22);
+    ctx.moveTo(cx - s + cr, cy - s);
+    ctx.arcTo(cx + s, cy - s, cx + s, cy + s, cr);
+    ctx.arcTo(cx + s, cy + s, cx - s, cy + s, cr);
+    ctx.arcTo(cx - s, cy + s, cx - s, cy - s, cr);
+    ctx.arcTo(cx - s, cy - s, cx + s, cy - s, cr);
+    ctx.closePath();
+  } else if (shape === "triangle") {
+    // Equilateral rounded triangle (all 3 vertices softly rounded)
+    const Rt = r * 1.15;
+    const cr = r * 0.34;
+    const p0 = { x: cx, y: cy - Rt + r * 0.12 };
+    const p1 = { x: cx + Rt * 0.866, y: cy + Rt * 0.5 + r * 0.12 };
+    const p2 = { x: cx - Rt * 0.866, y: cy + Rt * 0.5 + r * 0.12 };
+    const m20 = { x: (p2.x + p0.x) / 2, y: (p2.y + p0.y) / 2 };
+    ctx.moveTo(m20.x, m20.y);
+    ctx.arcTo(p0.x, p0.y, p1.x, p1.y, cr);
+    ctx.arcTo(p1.x, p1.y, p2.x, p2.y, cr);
+    ctx.arcTo(p2.x, p2.y, p0.x, p0.y, cr);
+    ctx.closePath();
+  } else if (shape === "diamond") {
+    // Rounded Diamond (Rhombus with rounded tips)
+    const Rd = r * 1.18;
+    const cr = r * 0.34;
+    const p0 = { x: cx, y: cy - Rd };
+    const p1 = { x: cx + Rd, y: cy };
+    const p2 = { x: cx, y: cy + Rd };
+    const p3 = { x: cx - Rd, y: cy };
+    const m30 = { x: (p3.x + p0.x) / 2, y: (p3.y + p0.y) / 2 };
+    ctx.moveTo(m30.x, m30.y);
+    ctx.arcTo(p0.x, p0.y, p1.x, p1.y, cr);
+    ctx.arcTo(p1.x, p1.y, p2.x, p2.y, cr);
+    ctx.arcTo(p2.x, p2.y, p3.x, p3.y, cr);
+    ctx.arcTo(p3.x, p3.y, p0.x, p0.y, cr);
+    ctx.closePath();
+  } else if (shape === "heart") {
+    // Organic Aesthetic Heart: rounded bottom tip, rounded lobes, and gentle rounded cleft
+    const s = r / 48;
+    ctx.moveTo(cx - 7 * s, cy + 38 * s);
+    // Smooth quadratic curve rounding the bottom tip
+    ctx.quadraticCurveTo(cx, cy + 45 * s, cx + 7 * s, cy + 38 * s);
+    // Right lower curve to outer lobe
+    ctx.bezierCurveTo(cx + 42 * s, cy + 22 * s, cx + 52 * s, cy - 8 * s, cx + 27 * s, cy - 36 * s);
+    // Right lobe into gentle horizontal top cleft
+    ctx.bezierCurveTo(cx + 12 * s, cy - 44 * s, cx + 4 * s, cy - 24 * s, cx, cy - 18 * s);
+    // Gentle top cleft into left lobe
+    ctx.bezierCurveTo(cx - 4 * s, cy - 24 * s, cx - 12 * s, cy - 44 * s, cx - 27 * s, cy - 36 * s);
+    // Left lobe back down to bottom tip
+    ctx.bezierCurveTo(cx - 52 * s, cy - 8 * s, cx - 42 * s, cy + 22 * s, cx - 7 * s, cy + 38 * s);
+    ctx.closePath();
+  } else {
+    // Classic Circle
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  }
+}
+
+function createShapePath(shape, cx, cy, r) {
+  const p = new Path2D();
+  if (shape === "square") {
+    const s = r * 0.92;
+    const cr = Math.min(s * 0.38, 22);
+    p.moveTo(cx - s + cr, cy - s);
+    p.arcTo(cx + s, cy - s, cx + s, cy + s, cr);
+    p.arcTo(cx + s, cy + s, cx - s, cy + s, cr);
+    p.arcTo(cx - s, cy + s, cx - s, cy - s, cr);
+    p.arcTo(cx - s, cy - s, cx + s, cy - s, cr);
+    p.closePath();
+  } else if (shape === "triangle") {
+    const Rt = r * 1.15;
+    const cr = r * 0.34;
+    const p0 = { x: cx, y: cy - Rt + r * 0.12 };
+    const p1 = { x: cx + Rt * 0.866, y: cy + Rt * 0.5 + r * 0.12 };
+    const p2 = { x: cx - Rt * 0.866, y: cy + Rt * 0.5 + r * 0.12 };
+    const m20 = { x: (p2.x + p0.x) / 2, y: (p2.y + p0.y) / 2 };
+    p.moveTo(m20.x, m20.y);
+    p.arcTo(p0.x, p0.y, p1.x, p1.y, cr);
+    p.arcTo(p1.x, p1.y, p2.x, p2.y, cr);
+    p.arcTo(p2.x, p2.y, p0.x, p0.y, cr);
+    p.closePath();
+  } else if (shape === "diamond") {
+    const Rd = r * 1.18;
+    const cr = r * 0.34;
+    const p0 = { x: cx, y: cy - Rd };
+    const p1 = { x: cx + Rd, y: cy };
+    const p2 = { x: cx, y: cy + Rd };
+    const p3 = { x: cx - Rd, y: cy };
+    const m30 = { x: (p3.x + p0.x) / 2, y: (p3.y + p0.y) / 2 };
+    p.moveTo(m30.x, m30.y);
+    p.arcTo(p0.x, p0.y, p1.x, p1.y, cr);
+    p.arcTo(p1.x, p1.y, p2.x, p2.y, cr);
+    p.arcTo(p2.x, p2.y, p3.x, p3.y, cr);
+    p.arcTo(p3.x, p3.y, p0.x, p0.y, cr);
+    p.closePath();
+  } else if (shape === "heart") {
+    const s = r / 48;
+    p.moveTo(cx - 7 * s, cy + 38 * s);
+    p.quadraticCurveTo(cx, cy + 45 * s, cx + 7 * s, cy + 38 * s);
+    p.bezierCurveTo(cx + 42 * s, cy + 22 * s, cx + 52 * s, cy - 8 * s, cx + 27 * s, cy - 36 * s);
+    p.bezierCurveTo(cx + 12 * s, cy - 44 * s, cx + 4 * s, cy - 24 * s, cx, cy - 18 * s);
+    p.bezierCurveTo(cx - 4 * s, cy - 24 * s, cx - 12 * s, cy - 44 * s, cx - 27 * s, cy - 36 * s);
+    p.bezierCurveTo(cx - 52 * s, cy - 8 * s, cx - 42 * s, cy + 22 * s, cx - 7 * s, cy + 38 * s);
+    p.closePath();
+  } else {
+    p.arc(cx, cy, r, 0, Math.PI * 2);
+  }
+  return p;
+}
+
+function getShapePerimeter(shape, r) {
+  if (shape === "square") return 8 * r * 0.92;
+  if (shape === "triangle") return 6.2 * r;
+  if (shape === "diamond") return 6.8 * r;
+  if (shape === "heart") return 7.4 * r;
+  return 2 * Math.PI * r;
+}
+
+function isPointInsidePad(pad, px, py, x, y) {
+  const r = pad.radius || 48;
+  const dx = x - px;
+  const dy = y - py;
+  const dist = Math.hypot(dx, dy);
+
+  if (dist > r * 1.35) return false;
+
+  const shape = pad.shape || "circle";
+  if (shape === "circle") return dist <= r;
+
+  // Try exact Path2D hit-testing if supported
+  try {
+    const path = createShapePath(shape, px, py, r);
+    if (ctx.isPointInPath(path, x, y)) return true;
+    const dpr = window.devicePixelRatio || 1;
+    if (dpr !== 1 && ctx.isPointInPath(path, x * dpr, y * dpr)) return true;
+  } catch (e) {}
+
+  // High-accuracy fallback per shape
+  if (shape === "square") {
+    const s = r * 0.92;
+    return Math.abs(dx) <= s && Math.abs(dy) <= s;
+  } else if (shape === "diamond") {
+    return (Math.abs(dx) + Math.abs(dy)) <= r * 1.32;
+  } else if (shape === "triangle") {
+    return dist <= r * 1.1 && dy <= r * 0.85;
+  } else if (shape === "heart") {
+    return dist <= r * 1.1;
+  }
+  return dist <= r;
+}
+
+// ── STAGE RENDERING & SHOCKWAVE SYSTEM ───────────────────────────────────────
 const canvas = document.getElementById("stage-canvas");
 const ctx = canvas.getContext("2d");
 let stageWidth = window.innerWidth;
@@ -1118,6 +1513,9 @@ resize();
 const shockwaves = [];
 const particles = [];
 let handOrbs = [];
+let selectedPad = null;
+let isResizingPad = false;
+let resizingPadId = null;
 
 // Dedicated per-pad state tracking
 const padTracker = new Map();
@@ -1125,23 +1523,29 @@ const padTracker = new Map();
 
 function triggerPadVisualAndAudio(pad, velocity = 0.8) {
   playSound(pad, velocity);
-  // Add Shockwave
+  const r = pad.radius || 48;
+  const shape = pad.shape || "circle";
+
+  // Add Shape-echo Shockwave
   shockwaves.push({
     x: pad.nx * stageWidth,
     y: pad.ny * stageHeight,
-    r: 48,
-    maxR: 48 + 55 + velocity * 45,
+    r: r,
+    shape: shape,
+    growthRate: 3.2 + velocity * 1.6,
+    maxR: r + 55 + velocity * 45,
     color: velocity > 0.65 ? "#ff007f" : "#00f0ff",
     alpha: 1.0,
     width: 3 + velocity * 4
   });
-  // Add sparks
-  for (let i = 0; i < 8; i++) {
+
+  // Add sparks along perimeter
+  for (let i = 0; i < 9; i++) {
     const angle = Math.random() * Math.PI * 2;
     const speed = 2 + Math.random() * 4 * velocity;
     particles.push({
-      x: pad.nx * stageWidth,
-      y: pad.ny * stageHeight,
+      x: pad.nx * stageWidth + Math.cos(angle) * (r * 0.4),
+      y: pad.ny * stageHeight + Math.sin(angle) * (r * 0.4),
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
       life: 1.0,
@@ -1164,13 +1568,12 @@ function updateAllInputPoints(points, isDown = false) {
       padTracker.set(pad.id, tracker);
     }
 
-    // Check if ANY hand/pointer is inside this pad
+    // Check if ANY hand/pointer is inside this pad's shape boundary
     let hasPointInside = false;
     let maxVelocity = 0.8;
 
     for (const pt of points) {
-      const dist = Math.hypot(pt.x - px, pt.y - py);
-      if (dist <= 48) {
+      if (isPointInsidePad(pad, px, py, pt.x, pt.y)) {
         hasPointInside = true;
         if (pt.velocity) maxVelocity = Math.max(maxVelocity, pt.velocity);
       }
@@ -1178,7 +1581,7 @@ function updateAllInputPoints(points, isDown = false) {
 
     if (hasPointInside && (isDown || cameraActive)) {
       if (!tracker.anyHandInside) {
-        // Hand just entered the circle!
+        // Hand just entered the shape!
         tracker.anyHandInside = true;
         tracker.enterTime = now;
 
@@ -1195,7 +1598,7 @@ function updateAllInputPoints(points, isDown = false) {
           }
         }
       } else {
-        // Hand is holding inside the circle
+        // Hand is holding inside the shape
         const dwellTime = now - tracker.enterTime;
         if (dwellTime >= 3000 && !pad.looped) {
           pad.looped = true;
@@ -1212,27 +1615,26 @@ function updateAllInputPoints(points, isDown = false) {
   });
 }
 
-// ── RENDER LOOP (SOLID, STATIONARY CIRCLES) ─────────────────────────────────
+// ── RENDER LOOP (SHAPES, SHOCKWAVES, RESIZE HANDLES) ────────────────────────
 function render(timestamp) {
   ctx.clearRect(0, 0, stageWidth, stageHeight);
 
-  // 1. Draw Shockwave Rings
+  // 1. Draw Shockwave Ripples (Echoing chosen shape)
   for (let i = shockwaves.length - 1; i >= 0; i--) {
     const sw = shockwaves[i];
-    sw.r += 3.5;
+    sw.r += sw.growthRate || 3.5;
     sw.alpha -= 0.035;
     if (sw.alpha <= 0) {
       shockwaves.splice(i, 1);
       continue;
     }
     ctx.save();
-    ctx.beginPath();
-    ctx.arc(sw.x, sw.y, sw.r, 0, Math.PI * 2);
     ctx.strokeStyle = sw.color;
     ctx.lineWidth = sw.width;
     ctx.globalAlpha = sw.alpha;
     ctx.shadowBlur = 14;
     ctx.shadowColor = sw.color;
+    drawShapePath(ctx, sw.shape || "circle", sw.x, sw.y, sw.r);
     ctx.stroke();
     ctx.restore();
   }
@@ -1258,12 +1660,14 @@ function render(timestamp) {
     ctx.restore();
   }
 
-  // 3. Draw Stationary Sound Pads (3x2 Grid)
+  // 3. Draw Sound Pads (Supports Circle, Square, Triangle, Diamond, Heart & Variable Radius)
   doc.pads.forEach(pad => {
     const px = pad.nx * stageWidth;
     const py = pad.ny * stageHeight;
     const isLooped = pad.looped;
-    const r = 48; // Stationary, identical size across all 6 pads
+    const r = pad.radius || 48;
+    const shape = pad.shape || "circle";
+    const isSelected = doc.editMode && selectedPad && selectedPad.id === pad.id;
 
     const tracker = padTracker.get(pad.id);
     const dwellElapsed = (tracker && tracker.anyHandInside && tracker.enterTime) ? (performance.now() - tracker.enterTime) : 0;
@@ -1271,43 +1675,69 @@ function render(timestamp) {
 
     ctx.save();
 
-    // Pad Background disc
-    ctx.beginPath();
-    ctx.arc(px, py, r, 0, Math.PI * 2);
-    ctx.fillStyle = isLooped ? "rgba(255, 215, 0, 0.16)" : "rgba(0, 240, 255, 0.07)";
+    // Pad Background Fill
+    ctx.fillStyle = isLooped ? "rgba(255, 215, 0, 0.16)" : (isSelected ? "rgba(255, 0, 127, 0.12)" : "rgba(0, 240, 255, 0.07)");
+    drawShapePath(ctx, shape, px, py, r);
     ctx.fill();
 
     // Pad Perimeter Ring
-    ctx.beginPath();
-    ctx.arc(px, py, r, 0, Math.PI * 2);
-    ctx.strokeStyle = isLooped ? "#ffd700" : "rgba(0, 240, 255, 0.85)";
-    ctx.lineWidth = isLooped ? 4 : 2.5;
+    ctx.strokeStyle = isLooped ? "#ffd700" : (isSelected ? "#ff007f" : "rgba(0, 240, 255, 0.85)");
+    ctx.lineWidth = isLooped ? 4 : (isSelected ? 3 : 2.5);
     if (doc.editMode) {
-      ctx.setLineDash([6, 6]);
-      ctx.strokeStyle = "rgba(0, 240, 255, 0.5)";
+      ctx.setLineDash(isSelected ? [4, 4] : [6, 6]);
     }
-    ctx.shadowBlur = isLooped ? 20 : 8;
-    ctx.shadowColor = isLooped ? "#ffd700" : "#00f0ff";
+    ctx.shadowBlur = isLooped ? 20 : (isSelected ? 16 : 8);
+    ctx.shadowColor = isLooped ? "#ffd700" : (isSelected ? "#ff007f" : "#00f0ff");
+    drawShapePath(ctx, shape, px, py, r);
     ctx.stroke();
 
-    // Clockwise 3-Second Dwell Looping Progress Gauge
+    // Clockwise 3-Second Dwell Looping Progress Contour Gauge
     if (dwellRatio > 0 && !isLooped) {
-      ctx.beginPath();
-      ctx.arc(px, py, r + 6, -Math.PI / 2, -Math.PI / 2 + dwellRatio * Math.PI * 2);
+      const dwellR = r + 6;
+      const perim = getShapePerimeter(shape, dwellR);
+      ctx.save();
       ctx.strokeStyle = "#ffd700";
       ctx.lineWidth = 4;
       ctx.shadowBlur = 16;
       ctx.shadowColor = "#ffd700";
+      ctx.setLineDash([perim * dwellRatio, perim]);
+      drawShapePath(ctx, shape, px, py, dwellR);
       ctx.stroke();
+      ctx.restore();
     }
 
     // Inner Core Indicator
-    ctx.beginPath();
-    ctx.arc(px, py, 10, 0, Math.PI * 2);
-    ctx.fillStyle = isLooped ? "#ffd700" : "#00f0ff";
+    const coreR = Math.max(6, Math.min(12, r * 0.18));
+    ctx.fillStyle = isLooped ? "#ffd700" : (isSelected ? "#ff007f" : "#00f0ff");
     ctx.shadowBlur = 12;
-    ctx.shadowColor = isLooped ? "#ffd700" : "#00f0ff";
+    ctx.shadowColor = isLooped ? "#ffd700" : (isSelected ? "#ff007f" : "#00f0ff");
+    ctx.setLineDash([]);
+    drawShapePath(ctx, shape, px, py, coreR);
     ctx.fill();
+
+    // On-Canvas Interactive Resize Handle for Selected Pad in Layout Mode
+    if (isSelected) {
+      const hx = px + r * 0.75;
+      const hy = py + r * 0.75;
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(hx, hy, 8, 0, Math.PI * 2);
+      ctx.fillStyle = "#ff007f";
+      ctx.shadowBlur = 12;
+      ctx.shadowColor = "#ff007f";
+      ctx.fill();
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "9px ui-monospace, monospace";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.shadowBlur = 0;
+      ctx.fillText("⤡", hx, hy);
+      ctx.restore();
+    }
 
     // Sound Pad Labels
     ctx.font = "600 11px ui-monospace, monospace";
@@ -1324,8 +1754,8 @@ function render(timestamp) {
       ctx.fillText(`● LOOP [${rateLabel}]`, px, py + r + 30);
     } else if (doc.editMode) {
       ctx.font = "500 9px ui-monospace, monospace";
-      ctx.fillStyle = "rgba(0, 240, 255, 0.8)";
-      ctx.fillText("⚙ Click to Edit", px, py + r + 30);
+      ctx.fillStyle = isSelected ? "rgba(255, 0, 127, 0.9)" : "rgba(0, 240, 255, 0.8)";
+      ctx.fillText(isSelected ? `★ Selected (${r}px)` : "⚙ Click to Select", px, py + r + 30);
     }
 
     ctx.restore();
@@ -1356,11 +1786,15 @@ function render(timestamp) {
 }
 requestAnimationFrame(render);
 
-// ── MOUSE / TOUCH POINTER INTERACTION ───────────────────────────────────────
+// ── MOUSE / TOUCH POINTER & RESIZE INTERACTION ──────────────────────────────
 let draggingPad = null;
 let lastPointerTime = 0;
 let lastPointerY = 0;
 let isPointerDown = false;
+let dragStartPos = { x: 0, y: 0 };
+let padStartNorm = { nx: 0, ny: 0 };
+let didMovePad = false;
+let lastClickTime = 0;
 
 canvas.addEventListener("pointerdown", e => {
   const rect = canvas.getBoundingClientRect();
@@ -1370,16 +1804,51 @@ canvas.addEventListener("pointerdown", e => {
   handOrbs = [{ x, y }];
 
   if (doc.editMode) {
+    // 1. Check if user clicked on the on-canvas resize handle of selected pad
+    if (selectedPad) {
+      const spx = selectedPad.nx * stageWidth;
+      const spy = selectedPad.ny * stageHeight;
+      const sr = selectedPad.radius || 48;
+      const hx = spx + sr * 0.75;
+      const hy = spy + sr * 0.75;
+      if (Math.hypot(x - hx, y - hy) <= 14) {
+        isResizingPad = true;
+        resizingPadId = selectedPad.id;
+        return;
+      }
+    }
+
+    // 2. Check if user clicked inside any pad
     let clickedPad = null;
-    doc.pads.forEach(p => {
+    for (let i = doc.pads.length - 1; i >= 0; i--) {
+      const p = doc.pads[i];
       const px = p.nx * stageWidth;
       const py = p.ny * stageHeight;
-      if (Math.hypot(x - px, y - py) <= 48) clickedPad = p;
-    });
+      if (isPointInsidePad(p, px, py, x, y)) {
+        clickedPad = p;
+        break;
+      }
+    }
+
+    const now = performance.now();
+    const isDoubleClick = (clickedPad && selectedPad && clickedPad.id === selectedPad.id && (now - lastClickTime < 320));
+    lastClickTime = now;
 
     if (clickedPad) {
+      selectedPad = clickedPad;
       draggingPad = clickedPad;
-      openPadConfig(clickedPad);
+      dragStartPos = { x, y };
+      padStartNorm = { nx: clickedPad.nx, ny: clickedPad.ny };
+      didMovePad = false;
+      syncLayoutToolbar();
+
+      if (isDoubleClick) {
+        openPadConfig(clickedPad);
+      }
+    } else {
+      // Clicked stage background in edit mode: deselect
+      selectedPad = null;
+      syncLayoutToolbar();
     }
   } else {
     updateAllInputPoints([{ x, y, velocity: 0.85 }], true);
@@ -1399,24 +1868,97 @@ canvas.addEventListener("pointermove", e => {
   lastPointerTime = now;
   lastPointerY = y;
 
-  if (doc.editMode && draggingPad && isPointerDown) {
-    change(d => {
-      const p = d.pads.find(item => item.id === draggingPad.id);
-      if (p) {
-        p.nx = Math.max(0.08, Math.min(0.92, x / stageWidth));
-        p.ny = Math.max(0.12, Math.min(0.88, y / stageHeight));
+  if (doc.editMode) {
+    // Dynamic cursor styling
+    if (selectedPad) {
+      const spx = selectedPad.nx * stageWidth;
+      const spy = selectedPad.ny * stageHeight;
+      const sr = selectedPad.radius || 48;
+      const hx = spx + sr * 0.75;
+      const hy = spy + sr * 0.75;
+      if (Math.hypot(x - hx, y - hy) <= 14) {
+        canvas.style.cursor = "nwse-resize";
+      } else {
+        const overPad = doc.pads.some(p => isPointInsidePad(p, p.nx * stageWidth, p.ny * stageHeight, x, y));
+        canvas.style.cursor = overPad ? "grab" : "default";
       }
-    });
+    } else {
+      const overPad = doc.pads.some(p => isPointInsidePad(p, p.nx * stageWidth, p.ny * stageHeight, x, y));
+      canvas.style.cursor = overPad ? "grab" : "default";
+    }
+
+    // Direct on-canvas resize dragging
+    if (isResizingPad) {
+      const p = doc.pads.find(item => item.id === resizingPadId);
+      if (p) {
+        const px = p.nx * stageWidth;
+        const py = p.ny * stageHeight;
+        const newRadius = Math.round(Math.max(28, Math.min(96, Math.hypot(x - px, y - py))));
+        p.radius = newRadius;
+        syncLayoutToolbar();
+      }
+      return;
+    }
+
+    // Direct on-canvas pad dragging
+    if (draggingPad && isPointerDown) {
+      const dx = x - dragStartPos.x;
+      const dy = y - dragStartPos.y;
+      if (Math.hypot(dx, dy) > 4) {
+        didMovePad = true;
+        const marginX = (draggingPad.radius || 48) / stageWidth + 0.02;
+        const marginY = (draggingPad.radius || 48) / stageHeight + 0.04;
+        draggingPad.nx = Math.max(marginX, Math.min(1 - marginX, padStartNorm.nx + dx / stageWidth));
+        draggingPad.ny = Math.max(marginY, Math.min(1 - marginY, padStartNorm.ny + dy / stageHeight));
+      }
+      return;
+    }
   } else {
+    canvas.style.cursor = "pointer";
     updateAllInputPoints([{ x, y, velocity }], isPointerDown);
   }
 });
 
 window.addEventListener("pointerup", () => {
   isPointerDown = false;
-  draggingPad = null;
-  updateAllInputPoints([], false);
+  if (doc.editMode) {
+    if (isResizingPad) {
+      isResizingPad = false;
+      resizingPadId = null;
+      scheduleSave();
+      toast(`${selectedPad?.label || "Pad"} size updated`);
+    } else if (draggingPad) {
+      if (didMovePad) scheduleSave();
+      draggingPad = null;
+    }
+  } else {
+    updateAllInputPoints([], false);
+  }
 });
+
+// Mouse wheel quick-resizing on stage pads in Layout Mode
+canvas.addEventListener("wheel", e => {
+  if (!doc.editMode) return;
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  const hoveredPad = doc.pads.find(p => isPointInsidePad(p, p.nx * stageWidth, p.ny * stageHeight, x, y));
+  if (hoveredPad) {
+    e.preventDefault();
+    const delta = e.deltaY < 0 ? 3 : -3;
+    const newR = Math.max(28, Math.min(96, (hoveredPad.radius || 48) + delta));
+    if (newR !== (hoveredPad.radius || 48)) {
+      selectedPad = hoveredPad;
+      change(d => {
+        const target = d.pads.find(item => item.id === hoveredPad.id);
+        if (target) target.radius = newR;
+      });
+      syncLayoutToolbar();
+      toast(`${hoveredPad.label} Size: ${newR}px`);
+    }
+  }
+}, { passive: false });
 
 // ── DRAG & DROP CUSTOM SOUND FILES ──────────────────────────────────────────
 const stageContainer = document.getElementById("stage-container");
@@ -1442,13 +1984,14 @@ window.addEventListener("drop", async e => {
   doc.pads.forEach(p => {
     const px = p.nx * stageWidth;
     const py = p.ny * stageHeight;
-    if (Math.hypot(dropX - px, dropY - py) <= 48 + 30) targetPad = p;
+    const r = p.radius || 48;
+    if (Math.hypot(dropX - px, dropY - py) <= r + 30) targetPad = p;
   });
 
   if (targetPad) {
     await assignCustomAudioFile(targetPad, file);
   } else {
-    toast("Drop directly onto one of the 6 circles");
+    toast("Drop directly onto one of the 6 pads");
   }
 });
 
@@ -1475,6 +2018,157 @@ async function assignCustomAudioFile(pad, file) {
   }
 }
 
+// ── LAYOUT TOOLBAR & PAD CONFIG SYNCHRONIZATION ──────────────────────────────
+const layoutPadBadge = document.getElementById("layout-pad-badge");
+const layoutShapeButtons = document.querySelectorAll("#layout-shape-selector .shape-btn");
+const layoutSizeSlider = document.getElementById("layout-size-slider");
+const layoutSizeVal = document.getElementById("layout-size-val");
+const layoutSizePills = document.querySelectorAll("#layout-size-pills .size-btn-pill");
+
+const dialogShapeButtons = document.querySelectorAll("#dialog-shape-buttons .shape-btn");
+const dialogSizeSlider = document.getElementById("dialog-size-slider");
+const dialogSizeVal = document.getElementById("dialog-size-val");
+const dialogSizePills = document.querySelectorAll("#dialog-size-pills .size-btn-pill");
+
+function syncLayoutToolbar() {
+  const target = selectedPad || (doc.pads.length ? doc.pads[0] : null);
+  if (!target) {
+    layoutPadBadge.textContent = "Select a Pad";
+    return;
+  }
+
+  layoutPadBadge.textContent = `Pad ${target.id}: ${target.label}`;
+
+  const currentShape = target.shape || "circle";
+  layoutShapeButtons.forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.shape === currentShape);
+  });
+  dialogShapeButtons.forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.shape === currentShape);
+  });
+
+  const currentRadius = target.radius || 48;
+  layoutSizeSlider.value = currentRadius;
+  layoutSizeVal.textContent = `${currentRadius}px`;
+  dialogSizeSlider.value = currentRadius;
+  dialogSizeVal.textContent = `${currentRadius}px`;
+
+  layoutSizePills.forEach(pill => {
+    pill.classList.toggle("active", parseInt(pill.dataset.size) === currentRadius);
+  });
+  dialogSizePills.forEach(pill => {
+    pill.classList.toggle("active", parseInt(pill.dataset.size) === currentRadius);
+  });
+}
+
+function setPadShape(shape) {
+  if (!selectedPad && doc.pads.length > 0) selectedPad = doc.pads[0];
+  if (!selectedPad) return;
+  change(d => {
+    const target = d.pads.find(p => p.id === selectedPad.id);
+    if (target) target.shape = shape;
+  });
+  syncLayoutToolbar();
+  toast(`${selectedPad.label} shape: ${shape.toUpperCase()}`);
+}
+
+function setPadSize(radius) {
+  if (!selectedPad && doc.pads.length > 0) selectedPad = doc.pads[0];
+  if (!selectedPad) return;
+  const clamped = Math.max(28, Math.min(96, radius));
+  change(d => {
+    const target = d.pads.find(p => p.id === selectedPad.id);
+    if (target) target.radius = clamped;
+  });
+  syncLayoutToolbar();
+}
+
+function applyShapeToAll(shape) {
+  change(d => {
+    d.pads.forEach(p => p.shape = shape);
+  });
+  syncLayoutToolbar();
+  toast(`All pads changed to ${shape.toUpperCase()}`);
+}
+
+function applySizeToAll(radius) {
+  change(d => {
+    d.pads.forEach(p => p.radius = radius);
+  });
+  syncLayoutToolbar();
+  toast(`All pads resized to ${radius}px`);
+}
+
+function resetTo3x2Grid() {
+  change(d => {
+    // Top Row (3)
+    d.pads[0].nx = 0.24; d.pads[0].ny = 0.32;
+    d.pads[1].nx = 0.50; d.pads[1].ny = 0.30;
+    d.pads[2].nx = 0.76; d.pads[2].ny = 0.32;
+    // Bottom Row (3)
+    d.pads[3].nx = 0.24; d.pads[3].ny = 0.68;
+    d.pads[4].nx = 0.50; d.pads[4].ny = 0.70;
+    d.pads[5].nx = 0.76; d.pads[5].ny = 0.68;
+  });
+  toast("Grid reset to centered 3x2 layout");
+}
+
+// Layout Toolbar event listeners
+layoutShapeButtons.forEach(btn => {
+  btn.onclick = () => setPadShape(btn.dataset.shape);
+});
+dialogShapeButtons.forEach(btn => {
+  btn.onclick = () => setPadShape(btn.dataset.shape);
+});
+
+layoutSizeSlider.oninput = () => {
+  setPadSize(parseInt(layoutSizeSlider.value));
+  layoutSizeVal.textContent = `${layoutSizeSlider.value}px`;
+};
+dialogSizeSlider.oninput = () => {
+  setPadSize(parseInt(dialogSizeSlider.value));
+  dialogSizeVal.textContent = `${dialogSizeSlider.value}px`;
+};
+
+document.getElementById("btn-size-dec").onclick = () => {
+  const currentR = selectedPad?.radius || 48;
+  setPadSize(currentR - 4);
+};
+document.getElementById("btn-size-inc").onclick = () => {
+  const currentR = selectedPad?.radius || 48;
+  setPadSize(currentR + 4);
+};
+
+layoutSizePills.forEach(pill => {
+  pill.onclick = () => setPadSize(parseInt(pill.dataset.size));
+});
+dialogSizePills.forEach(pill => {
+  pill.onclick = () => setPadSize(parseInt(pill.dataset.size));
+});
+
+document.getElementById("btn-apply-shape-all").onclick = () => {
+  const shape = selectedPad?.shape || "circle";
+  applyShapeToAll(shape);
+};
+document.getElementById("btn-dialog-apply-shape-all").onclick = () => {
+  const shape = selectedPad?.shape || "circle";
+  applyShapeToAll(shape);
+};
+
+document.getElementById("btn-apply-size-all").onclick = () => {
+  const radius = selectedPad?.radius || 48;
+  applySizeToAll(radius);
+};
+document.getElementById("btn-dialog-apply-size-all").onclick = () => {
+  const radius = selectedPad?.radius || 48;
+  applySizeToAll(radius);
+};
+
+document.getElementById("btn-reset-layout").onclick = resetTo3x2Grid;
+document.getElementById("btn-layout-sound-config").onclick = () => {
+  openPadConfig(selectedPad || doc.pads[0]);
+};
+
 // ── PAD CONFIG DIALOG: PRESETS & PER-SOUND BPM/SUBDIVISION ──────────────────
 let activeConfigPad = null;
 const padConfigDialog = document.getElementById("pad-config-dialog");
@@ -1485,8 +2179,9 @@ const customAudioUpload = document.getElementById("custom-audio-upload");
 
 function openPadConfig(pad) {
   activeConfigPad = pad;
+  selectedPad = pad;
   configTitle.textContent = `Configure Pad ${pad.id}: ${pad.label}`;
-  
+
   presetButtons.querySelectorAll(".preset-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.type === pad.type);
   });
@@ -1496,6 +2191,7 @@ function openPadConfig(pad) {
     btn.classList.toggle("active", parseFloat(btn.dataset.rate) === activeRate);
   });
 
+  syncLayoutToolbar();
   padConfigDialog.showModal();
 }
 
@@ -1668,7 +2364,11 @@ btnMode.onclick = () => {
   btnMode.innerHTML = doc.editMode 
     ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg> Done`
     : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Layout`;
-  toast(doc.editMode ? "Layout Mode: Drag pads or click to change sound/speed" : "Play Mode Active");
+  if (doc.editMode) {
+    if (!selectedPad && doc.pads.length) selectedPad = doc.pads[0];
+    syncLayoutToolbar();
+  }
+  toast(doc.editMode ? "Layout Mode: Drag pads, drag handle or scroll wheel to resize, pick shapes below" : "Play Mode Active");
 };
 
 // ── RECORDING & PROJECT EXPORT ──────────────────────────────────────────────
@@ -1727,10 +2427,12 @@ document.getElementById("file-open").onchange = async (e) => {
 // ── HELP SEARCH & CONTROL HIGHLIGHT ─────────────────────────────────────────
 const HELP_ITEMS = [
   { title: "One Tap to Play", keys: "1 Tap", control: "#stage-canvas", desc: "A single tap triggers the assigned percussion sound once. Harder strikes create louder hits and wider shockwaves." },
-  { title: "Tap & Hold 3s to Loop", keys: "Hold 3s", control: "#stage-canvas", desc: "Hold your hand inside a circle for 3 seconds to lock it into a synced loop on the measure." },
+  { title: "Tap & Hold 3s to Loop", keys: "Hold 3s", control: "#stage-canvas", desc: "Hold your hand inside any shape for 3 seconds to lock it into a synced loop on the measure." },
   { title: "Pause / Stop All Loops", keys: "Spacebar", control: "#btn-pause-all", desc: "Instantly pause or stop all active rhythmic loops with one click or by hitting the spacebar." },
   { title: "Turn Camera On / Off", keys: "Camera", control: "#btn-camera", desc: "Toggle the camera tracking on or off anytime with a single click." },
-  { title: "Per-Sound BPM / Speed", keys: "Layout ⚙", control: "#btn-mode", desc: "Click Layout and tap any circle to choose individual loop rates (1/4, 1/8, 1/16 roll, 1/2)." },
+  { title: "Pad Shapes: Circle, Square, Triangle, Diamond, Heart", keys: "Layout", control: "#btn-mode", desc: "Switch pads into circles, rounded squares, triangles, diamonds, or hearts with all rounded corners." },
+  { title: "Dynamic Pad Resizing", keys: "Wheel / ⤡", control: "#layout-toolbar", desc: "Drag the corner resize handle, use the slider/pills in Layout Mode, or hover and scroll your mouse wheel." },
+  { title: "Per-Sound BPM / Speed", keys: "Layout ⚙", control: "#btn-mode", desc: "Click Layout and tap any shape to choose individual loop rates (1/4, 1/8, 1/16 roll, 1/2)." },
   { title: "Presets & Custom Audio", keys: "WAV / MP3", control: "#stage-container", desc: "Pick from 15 synthesized presets or drop your own audio files directly onto any pad." }
 ];
 
@@ -1798,6 +2500,7 @@ chip.onclick = checkForUpdate;
 // Restore saved settings on startup
 async function startup() {
   await restore();
+  syncLayoutToolbar();
   const ctx = getAudioContext();
   for (const pad of doc.pads) {
     const savedBuffer = await idbGet(`sample-${pad.id}`);

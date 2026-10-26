@@ -2,6 +2,17 @@
 
 All notable changes to **Gestrum** will be documented in this file.
 
+## [v00000-004] - 2026-10-25
+### Added
+- **5 Expressive Pad Shapes (All Rounded Corners):** Support for Circle, Square (Squircle), Triangle, Diamond, and Heart. All corners are smoothly rounded with zero sharp points or vertices.
+- **On-Stage Floating Layout Toolbar:** Docked controls in Layout Mode providing direct access to Shape selectors, Size slider (28px–96px), `+`/`-` stepper buttons, size preset pills (`S:36px`, `M:48px`, `L:64px`, `XL:80px`), and Sound Config.
+- **On-Canvas Interactive Resize Handle:** Selected pads in Layout Mode display a hot magenta corner grab handle (`⤡`) to resize pads directly on the stage canvas.
+- **Mouse Wheel Quick-Resize:** Hovering over any pad in Layout Mode and scrolling the mouse wheel or trackpad dynamically scales the pad's size in real-time.
+- **Batch "Apply to All" Convenience:** One-click "All Shapes" and "All Sizes" actions in both Layout toolbar and configuration dialog to transform the entire drum kit with a single tap.
+- **Shape-Echo Shockwaves & Contour Loops:** Shockwave rings expand echoing the chosen shape (hearts ripple glowing hearts, triangles ripple triangles, etc.). The 3-second dwell looping meter dynamically wraps around the shape's contour.
+- **Acoustic Pitch & Body Resonance Scaling:** Pad size dynamically modulates percussion acoustics—larger pads produce deeper sub-bass rumble, punchier low-end, and longer decay; smaller pads produce tighter, snappier, higher-pitched sizzle and crack.
+- **Reset 3x2 Grid:** Quick one-click action to realign pads back to a clean, centered 3x2 beat-grid layout.
+
 ## [v00000-003] - 2026-10-14
 ### Added
 - **Camera On/Off Toggle:** Camera button now fully shuts down active webcam media tracks and stops MediaPipe camera processing cleanly, clearing hand orbs when toggled off.
