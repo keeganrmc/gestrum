@@ -7,6 +7,7 @@
 - **Architecture:** Single-file HTML5 PWA (`index.html`) + Service Worker (`sw.js`) + Manifest (`manifest.webmanifest`).
 
 ## What Works
+- **Theme-Reactive Air-Drum Logo:** Integrated custom air-drum logo (drum shell, rim, floating strike orbs, and acoustic swooshes) rendered via CSS masking and drop-shadow glow. Automatically alters its gradient fill and neon bloom to match whichever theme is active (Cyan/Magenta in Hip-Hop, Crimson/Amber in Rock, Champagne/Indigo in Jazz). Clicking the logo plays a theme-specific drum strike and triggers a bouncy spin animation.
 - **Top Instrument Theme Dropdown Menu:** Header dropdown allowing users to swap between three distinct genres, visual aesthetics, and authentic instrument kits:
   - 🎧 **Hip-Hop / 808 (Cyber Neon):** Neon cyan and magenta cyber palette, 120 BPM, 808 Trap kit (808 Sub Kick, Trap Snare, 808 Closed Hat, Glitch Perc, 808 Rimshot, 808 Tom).
   - 🎸 **Rock & Roll (Crimson Stage):** Charcoal concert stage, crimson red, molten amber, and electric gold palette, 132 BPM, authentic acoustic rock kit (Stadium Heavy Kick, Punch Snare, Explosive Crash Cymbal, Rack Tom, Deep Booming Floor Tom, and Overdriven Guitar Power Chord).

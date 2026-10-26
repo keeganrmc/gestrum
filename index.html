@@ -27,6 +27,7 @@
     --stage-gradient: radial-gradient(circle at 50% 50%, #151b26 0%, #0d0f12 70%);
     --grid-color: rgba(0, 240, 255, 0.07);
     --logo-gradient: linear-gradient(135deg, #00f0ff, #ff007f);
+    --logo-shadow: rgba(0, 240, 255, 0.7);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, ui-sans-serif, sans-serif;
   }
 
@@ -44,9 +45,7 @@
     --stage-gradient: radial-gradient(circle at 50% 50%, #2b1115 0%, #0c0809 75%);
     --grid-color: rgba(255, 42, 59, 0.09);
     --logo-gradient: linear-gradient(135deg, #ff2a3b, #ff8c00);
-  }
-  body.theme-rock .logo-mark {
-    box-shadow: 0 0 18px rgba(255, 42, 59, 0.5);
+    --logo-shadow: rgba(255, 42, 59, 0.75);
   }
   body.theme-rock button:hover, body.theme-rock label.btn-file:hover {
     border-color: #ff2a3b;
@@ -76,9 +75,7 @@
     --stage-gradient: radial-gradient(circle at 50% 50%, #151930 0%, #090a12 75%);
     --grid-color: rgba(229, 181, 103, 0.08);
     --logo-gradient: linear-gradient(135deg, #e5b567, #4ea8de);
-  }
-  body.theme-jazz .logo-mark {
-    box-shadow: 0 0 18px rgba(229, 181, 103, 0.45);
+    --logo-shadow: rgba(229, 181, 103, 0.7);
   }
   body.theme-jazz button:hover, body.theme-jazz label.btn-file:hover {
     border-color: #e5b567;
@@ -129,25 +126,43 @@
   .logo-group {
     display: flex;
     align-items: center;
-    gap: 10px;
-    cursor: default;
+    gap: 11px;
+    cursor: pointer;
     flex-shrink: 0;
   }
   .logo-mark {
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    background: var(--logo-gradient);
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
-    transition: all 0.3s ease;
+    position: relative;
+    flex-shrink: 0;
   }
-  .logo-mark span {
-    font-weight: 900;
-    font-size: 14px;
-    color: #000;
+  .logo-drum-graphic {
+    width: 100%;
+    height: 100%;
+    background: var(--logo-gradient);
+    -webkit-mask: url('logo.png') no-repeat center / contain;
+    mask: url('logo.png') no-repeat center / contain;
+    filter: drop-shadow(0 0 6px var(--logo-shadow, var(--cyan)));
+    transition: background 0.35s ease, filter 0.35s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .logo-group:hover .logo-drum-graphic {
+    transform: scale(1.12) rotate(-5deg);
+    filter: drop-shadow(0 0 12px var(--logo-shadow, var(--cyan)));
+  }
+  .logo-group:active .logo-drum-graphic {
+    transform: scale(0.92) rotate(4deg);
+  }
+  @keyframes logoTapBounce {
+    0% { transform: scale(1); }
+    35% { transform: scale(1.3) rotate(-12deg); }
+    70% { transform: scale(0.88) rotate(6deg); }
+    100% { transform: scale(1); }
+  }
+  .logo-mark.tapped .logo-drum-graphic {
+    animation: logoTapBounce 0.45s ease-out;
   }
   .brand-title {
     font-size: 18px;
@@ -949,8 +964,10 @@
 <body>
 
 <header>
-  <div class="logo-group">
-    <div class="logo-mark" id="brand-logo-mark"><span>G</span></div>
+  <div class="logo-group" title="Gestrum — Spatial Air-Percussion">
+    <div class="logo-mark" id="brand-logo-mark">
+      <div class="logo-drum-graphic"></div>
+    </div>
     <div>
       <div class="brand-title">Gestrum</div>
       <div class="brand-sub" id="brand-sub-text">Spatial Air-Percussion</div>
@@ -1217,8 +1234,10 @@
 
 <!-- About Dialog -->
 <dialog id="about-dialog">
-  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-    <div class="logo-mark" style="width: 36px; height: 36px;"><span>G</span></div>
+  <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
+    <div class="logo-mark" style="width: 44px; height: 44px;">
+      <div class="logo-drum-graphic"></div>
+    </div>
     <div>
       <h2 style="margin: 0;">Gestrum</h2>
       <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-005</span>
@@ -2207,6 +2226,20 @@ if (themeDropdownBtn && themeDropdownWrap) {
       themeDropdownBtn.setAttribute("aria-expanded", "false");
     }
   });
+}
+
+// Interactive Drum Logo Click Trigger
+const brandLogoMark = document.getElementById("brand-logo-mark");
+if (brandLogoMark) {
+  brandLogoMark.onclick = (e) => {
+    e.stopPropagation();
+    const curTheme = doc.theme || "hiphop";
+    const soundType = curTheme === "rock" ? "rock-kick" : (curTheme === "jazz" ? "jazz-crossstick" : "kick");
+    playSound({ type: soundType, radius: 48 }, 0.95);
+    brandLogoMark.classList.remove("tapped");
+    void brandLogoMark.offsetWidth;
+    brandLogoMark.classList.add("tapped");
+  };
 }
 
 // ── UI TOAST ─────────────────────────────────────────────────────────────────

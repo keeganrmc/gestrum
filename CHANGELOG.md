@@ -4,6 +4,7 @@ All notable changes to **Gestrum** will be documented in this file.
 
 ## [v00000-005] - 2026-10-25
 ### Added
+- **Theme-Reactive Air-Drum Logo:** Replaced the generic "G" letter mark with the user's custom air-drum instrument logo. Using CSS vector masking and drop-shadow bloom, the drum, rim, and floating orbs dynamically transform their gradient and neon glow to match the active theme (Cyber Cyan/Magenta in Hip-Hop, Molten Crimson/Amber in Rock, and Champagne Gold/Indigo in Jazz). Clicking the logo triggers an acoustic strike and playful bounce animation.
 - **Top Theme Dropdown Menu:** Header dropdown selector allowing instant switching between three distinct genres and visual/acoustic themes:
   - 🎧 **Hip-Hop / 808 (Cyber Neon):** Neon cyan and magenta cyber aesthetic, 120 BPM, flagship 808 Trap kit (808 Sub Kick, Trap Snare, 808 Closed Hat, Glitch Perc, 808 Rimshot, 808 Tom).
   - 🎸 **Rock & Roll (Crimson Stage):** High-octane arena concert aesthetic with deep crimson red, fiery molten amber, electric gold highlights, smoke/charcoal stage gradient, 132 BPM, and authentic acoustic rock instruments (Stadium Heavy Kick, Punch Snare, Explosive Crash Cymbal, Rack Tom, Deep Booming Floor Tom, and an Overdriven Electric Guitar Power Chord with amplifier cabinet emulation).
