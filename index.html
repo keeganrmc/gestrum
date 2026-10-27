@@ -7,10 +7,14 @@
 <meta name="description" content="Touchless spatial air-percussion instrument. Tap the air to play, hold to loop, and sculpt your sound.">
 <meta property="og:title" content="Gestrum">
 <meta property="og:description" content="Touchless spatial air-percussion instrument. Tap the air to play, hold to loop, and sculpt your sound.">
-<meta property="og:image" content="icon.svg">
+<meta property="og:image" content="logo.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="192x192" href="logo.png">
+<link rel="icon" type="image/png" sizes="32x32" href="logo.png">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="logo.png">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icon.svg">
 <meta name="theme-color" content="#0d0f12">
 
 <style>
@@ -109,7 +113,7 @@
   }
 
   /* Header Bar */
-  header {
+  header#app-header, body > header:not(.lp-hero) {
     height: 54px;
     background: var(--panel);
     backdrop-filter: blur(12px);
@@ -139,6 +143,23 @@
     position: relative;
     flex-shrink: 0;
   }
+  .logo-drum-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 6px var(--logo-shadow, var(--cyan)));
+    transition: filter 0.35s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    user-select: none;
+    -webkit-user-drag: none;
+    pointer-events: none;
+  }
+  .logo-group:hover .logo-drum-img, .lp-brand:hover .logo-drum-img {
+    transform: scale(1.12) rotate(-5deg);
+    filter: drop-shadow(0 0 12px var(--logo-shadow, var(--cyan)));
+  }
+  .logo-group:active .logo-drum-img, .lp-brand:active .logo-drum-img {
+    transform: scale(0.92) rotate(4deg);
+  }
   .logo-drum-graphic {
     width: 100%;
     height: 100%;
@@ -161,7 +182,7 @@
     70% { transform: scale(0.88) rotate(6deg); }
     100% { transform: scale(1); }
   }
-  .logo-mark.tapped .logo-drum-graphic {
+  .logo-mark.tapped .logo-drum-graphic, .logo-mark.tapped .logo-drum-img {
     animation: logoTapBounce 0.45s ease-out;
   }
   .brand-title {
@@ -1112,7 +1133,12 @@
 
   /* Hero Section */
   .lp-hero {
-    padding: 64px 0 40px 0;
+    height: auto !important;
+    min-height: auto;
+    display: block;
+    background: transparent;
+    border: none;
+    padding: 64px 0 44px 0;
   }
   .lp-eyebrow {
     font-size: 11px;
@@ -1209,8 +1235,8 @@
   .lp-kits-row {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-    margin-bottom: 24px;
+    gap: 16px;
+    margin-bottom: 32px;
   }
   .lp-kit-card {
     background: var(--panel);
@@ -1277,8 +1303,10 @@
 
   /* Section Dividers & General Structure */
   .lp-section {
-    padding: 52px 0;
+    padding: 56px 0;
     border-top: 1px solid var(--panel-border);
+    position: relative;
+    clear: both;
   }
   .lp-section-header {
     margin-bottom: 24px;
@@ -1391,19 +1419,34 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
+    gap: 24px;
     flex-wrap: wrap;
     background: var(--panel);
     border: 1px solid var(--panel-border);
     border-radius: 10px;
-    padding: 20px 24px;
+    padding: 22px 26px;
     margin-bottom: 20px;
   }
+  .lp-designer-quote-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 680px;
+  }
+  .lp-designer-quote {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.45;
+    border-left: 3px solid var(--cyan);
+    padding-left: 14px;
+  }
+  body.theme-rock .lp-designer-quote { border-color: var(--cyan); }
+  body.theme-jazz .lp-designer-quote { border-color: var(--gold); }
   .lp-designer-bio-p {
     font-size: 13.5px;
     line-height: 1.6;
     color: #b0c0d0;
-    max-width: 640px;
     margin: 0;
   }
   .lp-designer-bio-p strong {
@@ -1577,7 +1620,7 @@
     <div class="lp-nav-inner">
       <div class="lp-brand" id="lp-nav-brand" title="Gestrum — Spatial Air-Percussion">
         <div class="logo-mark lp-logo-mark">
-          <div class="logo-drum-graphic"></div>
+          <img src="logo.png" alt="Gestrum Logo" class="logo-drum-img">
         </div>
         <div>
           <div class="lp-brand-title">Gestrum</div>
@@ -1602,7 +1645,7 @@
   </nav>
 
   <!-- Hero Section -->
-  <header class="lp-hero">
+  <section class="lp-hero">
     <div class="lp-container">
       <div class="lp-eyebrow">Touchless Spatial Percussion • WebAssembly Vision</div>
       <h1 class="lp-hero-title">Play drums in mid-air.</h1>
@@ -1681,7 +1724,7 @@
         </div>
       </div>
     </div>
-  </header>
+  </section>
 
   <!-- How It Works Section -->
   <section class="lp-section">
@@ -1774,9 +1817,12 @@
       </div>
 
       <div class="lp-designer-intro-bar">
-        <p class="lp-designer-bio-p">
-          Industrial design student at <strong>Kendall College of Art and Design (KCAD)</strong> with engineering background from <strong>Michigan State University</strong>, currently Technical Illustrator at <strong>Haworth</strong>. Focused on reducing physical friction and solving mechanical user problems.
-        </p>
+        <div class="lp-designer-quote-wrap">
+          <div class="lp-designer-quote">“I design products that solve real-world problems and address real user needs.”</div>
+          <p class="lp-designer-bio-p">
+            Industrial design student at <strong>Kendall College of Art and Design (KCAD)</strong> with an engineering foundation from <strong>Michigan State University</strong>, currently Technical Illustrator at <strong>Haworth</strong>.
+          </p>
+        </div>
         <a href="https://keeganmcconnell.myportfolio.com/" target="_blank" rel="noopener" class="lp-portfolio-btn" title="View Keegan McConnell's Industrial Design Portfolio">
           <span>Portfolio (keeganmcconnell.myportfolio.com)</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
@@ -1834,10 +1880,10 @@
   </footer>
 </div>
 
-<header>
+<header id="app-header">
   <div class="logo-group" title="Gestrum — Spatial Air-Percussion">
     <div class="logo-mark" id="brand-logo-mark">
-      <div class="logo-drum-graphic"></div>
+      <img src="logo.png" alt="Gestrum Logo" class="logo-drum-img">
     </div>
     <div>
       <div class="brand-title">Gestrum</div>
@@ -2111,11 +2157,11 @@
 <dialog id="about-dialog">
   <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
     <div class="logo-mark" style="width: 44px; height: 44px;">
-      <div class="logo-drum-graphic"></div>
+      <img src="logo.png" alt="Gestrum Logo" class="logo-drum-img">
     </div>
     <div>
       <h2 style="margin: 0;">Gestrum</h2>
-      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-007</span>
+      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-008</span>
     </div>
   </div>
   <p><strong>Raison d'Être:</strong> Gestrum exists because drumming in mid-air should make real sound, turning your laptop camera into a zero-latency stage instrument.</p>
@@ -2136,12 +2182,12 @@
 const APP = {
   name: "Gestrum",
   id: "gestrum",
-  version: "v00000-007",
+  version: "v00000-008",
   author: "Keegan McConnell",
   site: "https://keeganmcconnell.myportfolio.com/",
   repo: "https://github.com/keeganrmc/gestrum"
 };
-const FORMAT = { name: APP.id, version: 7 };
+const FORMAT = { name: APP.id, version: 8 };
 document.getElementById("chip").textContent = APP.version + " ↻";
 
 // ── THEME CONFIGURATIONS & SIGNATURE INSTRUMENT KITS ─────────────────────────

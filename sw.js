@@ -1,10 +1,11 @@
 const APP_ID = "gestrum";
-const VERSION = "v00000-007";
+const VERSION = "v00000-008";
 const CACHE = APP_ID + "-" + VERSION;
 const FILES = [
   "./",
   "./index.html",
   "./manifest.webmanifest",
+  "./favicon.ico",
   "./icon.svg",
   "./logo.png",
   "./work-cleanstep.png",

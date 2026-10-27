@@ -2,6 +2,15 @@
 
 All notable changes to **Gestrum** will be documented in this file.
 
+## [v00000-008] - 2026-10-27
+### Fixed & Refined
+- **Landing Page Layout Separation:** Fixed section overlap where "Tactile Air-Percussion" was covered by the three genre kit cards due to global `header` height inheritance. Scoped studio header styles to `header#app-header`, converted hero wrapper to `<section class="lp-hero">` with dynamic height (`height: auto !important`), and added generous vertical clearance (`margin-bottom: 32px` on `.lp-kits-row`).
+- **Creator Design Statement:** Updated designer bio to prominently feature Keegan McConnell's design statement quote: *“I design products that solve real-world problems and address real user needs.”* styled with cyan accent border and bold typography.
+- **Web Bar Logo & Favicon Integration:**
+  - Added dedicated `favicon.ico` and PNG favicons (`logo.png` 192x192, 96x96, 32x32) into `<head>` and `manifest.webmanifest`.
+  - Replaced CSS mask in top navigation bars (`#lp-nav-brand` and `#brand-logo-mark`) with direct transparent `<img src="logo.png">` elements to ensure the authentic Gestrum air-drum logo displays reliably across all browser tabs, PWA window title bars, and local file views.
+- **Service Worker Cache:** Bumped cache to `gestrum-v00000-008` precaching `favicon.ico`.
+
 ## [v00000-007] - 2026-10-27
 ### Changed & Streamlined
 - **Intriguing, Visual & Symbol-Driven Launch Gateway:**

@@ -1,12 +1,15 @@
 # HANDOFF.md: Gestrum
 
 ## Current Status
-- **Current Version:** `v00000-007`
+- **Current Version:** `v00000-008`
 - **Live Deployment:** `https://keeganrmc.github.io/gestrum/`
 - **GitHub Repository:** `https://github.com/keeganrmc/gestrum`
 - **Architecture:** Single-file HTML5 PWA (`index.html`) + Service Worker (`sw.js`) + Manifest (`manifest.webmanifest`).
 
 ## What Works
+- **Fixed Landing Page Layout & Spacing (v00000-008):** Fixed hero container height issue to ensure full visual separation between the 3 genre kit cards and the "Tactile Air-Percussion" section.
+- **Creator Design Statement (v00000-008):** Prominently displays Keegan McConnell's quote: *“I design products that solve real-world problems and address real user needs.”*
+- **Web Bar Logo & Dedicated Favicon (v00000-008):** High-res Gestrum logo loaded in browser tab favicons, PWA window title bars, and top navbar headers.
 - **Visual, Symbol-Driven Gateway Landing Page (v00000-007):** Completely cleaned and streamlined launch page:
   - **Zero AI Slop / Word-Count Reduction:** Dense text paragraphs replaced by high-impact visual badges and iconography.
   - **Punchy Hero Section:** Headline (*"Play drums in mid-air."*), feature pills (`60 FPS On-Device Vision`, `Procedural Web Audio`, `100% Client-Side Privacy`), and direct action buttons.
