@@ -6,7 +6,8 @@ const FILES = [
   "./index.html",
   "./manifest.webmanifest",
   "./icon.svg",
-  "./logo.png"
+  "./logo.png",
+  "./work-cleanstep.png"
 ];
 
 self.addEventListener("install", e => {

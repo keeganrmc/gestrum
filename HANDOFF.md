@@ -7,17 +7,13 @@
 - **Architecture:** Single-file HTML5 PWA (`index.html`) + Service Worker (`sw.js`) + Manifest (`manifest.webmanifest`).
 
 ## What Works
-- **Robust Gateway Landing Page (New in v00000-006):** Complete, responsive, and thoughtfully written landing page welcoming all visitors before launching into the instrument:
-  - **Hero & Identity:** Brand mark, tagline, "Launch Gestrum" primary CTA, direct kit launch pills (Hip-Hop 120 BPM, Rock 132 BPM, Jazz 100 BPM), and 4 trust & architecture badges (100% Client-Side Privacy, Zero-Latency Web Audio, 21-Joint On-Device Vision, 3s Dwell Looper).
-  - **Interactive Visual Blueprint:** Diagram illustrating the 3x2 Beat-Grid, downward velocity vectors, dynamic neon shockwaves, 3-second dwell progress arc, and luminous fingertip tracking orbs.
-  - **The Core Experience (What It Does):** Narrative explaining embodied air-drumming, zero-latency on-device tracking, velocity sensitivity, and dwell-to-loop mechanics, with a side-by-side comparison table between traditional MIDI setups and Gestrum.
-  - **Deep Dive Features:** 6 detailed cards covering touchless MediaPipe vision, 16-step quantized dwell looping, 3 curated acoustic/visual themes, 25+ procedural presets and custom WAV/MP3 drag-and-drop, draggable/resizable pads with acoustic pitch scaling, and live session recording with offline PWA support.
-  - **4-Step Quick Start Guide:** Frictionless onboarding instructions covering spatial framing, camera initialization, striking the air, and locking in grooves.
-  - **Story & Creator Philosophy:** Documenting author Keegan McConnell, the *AirDrummer* conceptual origin, single-file HTML5 PWA architecture, native Web Audio DSP synthesis, and privacy by design (video frames processed in volatile memory and discarded; zero server transmission).
-  - **Open Source Attribution & Hygiene:** Clear legal and ethical disclosure for Gestrum (MIT License), Google MediaPipe Hands (Apache 2.0), W3C standards, and transparent AI pair programming assistance.
-  - **Grounded Product Roadmap:** 5 upcoming milestones including a per-pad 16-step pattern sequencer grid, Web MIDI input/output, articulated air gestures (cymbal choke and pitch bend), expanded genre sound packs, and camera calibration guides.
-  - **Interactive Theme Previewing:** Live theme switcher pills in the navbar dynamically recolor the entire landing page in real time (Cyber Cyan/Magenta, Crimson/Amber, Champagne/Indigo).
-  - **Bi-Directional Navigation:** Clean hash routing (`#studio` / `#landing`), browser history Back/Forward support, and an "Overview" / "Landing Page" button in the studio header to seamlessly return to the landing page at any time.
+- **Elevated & Streamlined Gateway Landing Page (v00000-006):** Redesigned the entry experience to be clean, intriguing, and informative—free of AI buzzwords, repetitive cards, and tacky marketing banners:
+  - **Editorial Hero & Concept:** Concise explanation of touchless air-percussion, real-time computer vision, and zero-latency Web Audio synthesis.
+  - **Curated Kits Strip:** Clean interactive cards for Hip-Hop / 808 (120 BPM), Rock & Roll (132 BPM), and Midnight Jazz (100 BPM) with real-time palette shifts and acoustic feedback.
+  - **Interaction & Architecture (01 Strike, 02 Dwell, 03 Synthesis, 04 Sculpt):** 4-card technical breakdown explaining MediaPipe 21-joint velocity downstrokes, 3-second dwell looping on a 16-step grid, zero-dependency Web Audio DSP synthesis, and spatial pad repositioning.
+  - **Designer Bio & Physical Work Showcase:** Authentic bio for creator Keegan McConnell (Industrial Design Senior @ KCAD, Technical Illustrator @ Haworth, prior engineering foundation @ MSU) with direct link to [`keeganmcconnell.myportfolio.com`](https://keeganmcconnell.myportfolio.com/) and real portfolio photography of his physical industrial design work (*CleanStep Odor-Free Cat Care Architecture*).
+  - **Privacy & Open Source Standards:** Documented 100% on-device vision processing (volatile memory, zero network transmission), MIT License, Google MediaPipe (Apache 2.0), and planned roadmap (16-step pattern sequencer per pad and Web MIDI API integration).
+  - **Minimalist Footer:** Eliminated cluttered promotional banners in favor of a clean, sophisticated bottom navigation bar.
 - **Theme-Reactive Air-Drum Logo:** Integrated custom air-drum logo rendered via CSS masking and drop-shadow glow. Gradient and neon bloom automatically match the active theme. Clicking triggers an acoustic strike and bouncy spin animation.
 - **Top Instrument Theme Dropdown Menu:** Header dropdown allowing users to swap between three distinct genres, visual aesthetics, and authentic instrument kits:
   - 🎧 **Hip-Hop / 808 (Cyber Neon):** Neon cyan and magenta cyber palette, 120 BPM, 808 Trap kit.
