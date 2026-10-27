@@ -1,19 +1,20 @@
 # HANDOFF.md: Gestrum
 
 ## Current Status
-- **Current Version:** `v00000-006`
+- **Current Version:** `v00000-007`
 - **Live Deployment:** `https://keeganrmc.github.io/gestrum/`
 - **GitHub Repository:** `https://github.com/keeganrmc/gestrum`
 - **Architecture:** Single-file HTML5 PWA (`index.html`) + Service Worker (`sw.js`) + Manifest (`manifest.webmanifest`).
 
 ## What Works
-- **Elevated & Streamlined Gateway Landing Page (v00000-006):** Redesigned the entry experience to be clean, intriguing, and informative—free of AI buzzwords, repetitive cards, and tacky marketing banners:
-  - **Editorial Hero & Concept:** Concise explanation of touchless air-percussion, real-time computer vision, and zero-latency Web Audio synthesis.
-  - **Curated Kits Strip:** Clean interactive cards for Hip-Hop / 808 (120 BPM), Rock & Roll (132 BPM), and Midnight Jazz (100 BPM) with real-time palette shifts and acoustic feedback.
-  - **Interaction & Architecture (01 Strike, 02 Dwell, 03 Synthesis, 04 Sculpt):** 4-card technical breakdown explaining MediaPipe 21-joint velocity downstrokes, 3-second dwell looping on a 16-step grid, zero-dependency Web Audio DSP synthesis, and spatial pad repositioning.
-  - **Designer Bio & Physical Work Showcase:** Authentic bio for creator Keegan McConnell (Industrial Design Senior @ KCAD, Technical Illustrator @ Haworth, prior engineering foundation @ MSU) with direct link to [`keeganmcconnell.myportfolio.com`](https://keeganmcconnell.myportfolio.com/) and real portfolio photography of his physical industrial design work (*CleanStep Odor-Free Cat Care Architecture*).
-  - **Privacy & Open Source Standards:** Documented 100% on-device vision processing (volatile memory, zero network transmission), MIT License, Google MediaPipe (Apache 2.0), and planned roadmap (16-step pattern sequencer per pad and Web MIDI API integration).
-  - **Minimalist Footer:** Eliminated cluttered promotional banners in favor of a clean, sophisticated bottom navigation bar.
+- **Visual, Symbol-Driven Gateway Landing Page (v00000-007):** Completely cleaned and streamlined launch page:
+  - **Zero AI Slop / Word-Count Reduction:** Dense text paragraphs replaced by high-impact visual badges and iconography.
+  - **Punchy Hero Section:** Headline (*"Play drums in mid-air."*), feature pills (`60 FPS On-Device Vision`, `Procedural Web Audio`, `100% Client-Side Privacy`), and direct action buttons.
+  - **Kit Tag Strips:** Replaced wordy kit descriptions with instrument tag pills (`Sub Kick`, `Trap Snare`, `Heavy Kick`, `Overdrive`, `Brushed Snare`, `Upright Bass`) that live-preview themes on click.
+  - **4-Step Visual Flow Cards:** Dedicated SVG iconography for `01 / TRACK`, `02 / STRIKE`, `03 / LOOP`, and `04 / SCULPT`.
+  - **Dual Physical Design Showcase:** Side-by-side presentation of creator Keegan McConnell's physical industrial design work (*CleanStep Cat Care Architecture* and *ALINE Ultralight Seating*) with high-res photography, physical specs, and portfolio links.
+  - **Discreet Right-Aligned Footer:** Completely removed bottom CTA banners, redundant launch buttons, and left-side headers. The footer now strictly contains quiet, right-aligned text and portfolio/GitHub links.
+- **Offline Cache Invalidation (v00000-007):** Precaching `work-cleanstep.png` and `work-aline.png` with unconditional `self.skipWaiting()` on install to purge stale caches immediately.
 - **Theme-Reactive Air-Drum Logo:** Integrated custom air-drum logo rendered via CSS masking and drop-shadow glow. Gradient and neon bloom automatically match the active theme. Clicking triggers an acoustic strike and bouncy spin animation.
 - **Top Instrument Theme Dropdown Menu:** Header dropdown allowing users to swap between three distinct genres, visual aesthetics, and authentic instrument kits:
   - 🎧 **Hip-Hop / 808 (Cyber Neon):** Neon cyan and magenta cyber palette, 120 BPM, 808 Trap kit.

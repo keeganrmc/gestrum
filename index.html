@@ -1112,7 +1112,7 @@
 
   /* Hero Section */
   .lp-hero {
-    padding: 72px 0 48px 0;
+    padding: 64px 0 40px 0;
   }
   .lp-eyebrow {
     font-size: 11px;
@@ -1139,30 +1139,45 @@
     font-weight: 900;
     letter-spacing: -0.035em;
     line-height: 1.05;
-    margin: 0 0 16px 0;
+    margin: 0 0 14px 0;
     color: #fff;
   }
   .lp-hero-lead {
-    font-size: clamp(17px, 2.2vw, 22px);
+    font-size: clamp(16px, 2vw, 20px);
     font-weight: 500;
     line-height: 1.45;
-    color: #dce5ee;
-    max-width: 760px;
-    margin: 0 0 18px 0;
-  }
-  .lp-hero-text {
-    font-size: 15px;
-    line-height: 1.65;
-    color: var(--muted);
+    color: #cbd5e1;
     max-width: 720px;
-    margin: 0 0 32px 0;
+    margin: 0 0 20px 0;
+  }
+  .lp-hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .lp-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    font-family: ui-monospace, monospace;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--panel-border);
+    color: #94a3b8;
+  }
+  .lp-pill svg {
+    color: var(--cyan);
   }
   .lp-hero-actions {
     display: flex;
     align-items: center;
     gap: 16px;
     flex-wrap: wrap;
-    margin-bottom: 48px;
+    margin-bottom: 40px;
   }
   .lp-btn-cta {
     background: var(--cyan);
@@ -1177,7 +1192,7 @@
     align-items: center;
     gap: 8px;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
   }
   body.theme-rock .lp-btn-cta { color: #fff; }
   body.theme-jazz .lp-btn-cta { color: #090a12; }
@@ -1194,17 +1209,17 @@
   .lp-kits-row {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    gap: 14px;
     margin-bottom: 24px;
   }
   .lp-kit-card {
     background: var(--panel);
     border: 1px solid var(--panel-border);
     border-radius: 10px;
-    padding: 18px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     cursor: pointer;
     transition: all 0.18s ease;
     text-align: left;
@@ -1226,7 +1241,7 @@
     justify-content: space-between;
   }
   .lp-kit-title {
-    font-size: 14px;
+    font-size: 13.5px;
     font-weight: 700;
     color: #fff;
     display: flex;
@@ -1241,56 +1256,89 @@
     padding: 2px 6px;
     border-radius: 4px;
   }
-  .lp-kit-desc {
-    font-size: 12px;
-    line-height: 1.5;
-    color: var(--muted);
+  .lp-kit-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .lp-tag {
+    font-size: 10px;
+    font-family: ui-monospace, monospace;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    color: #94a3b8;
+    padding: 3px 6px;
+    border-radius: 4px;
+  }
+  .lp-kit-card.active .lp-tag {
+    border-color: rgba(0, 240, 255, 0.25);
+    color: #e2e8f0;
   }
 
   /* Section Dividers & General Structure */
   .lp-section {
-    padding: 60px 0;
+    padding: 52px 0;
     border-top: 1px solid var(--panel-border);
   }
   .lp-section-header {
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
   .lp-section-title {
     font-size: clamp(22px, 3.2vw, 32px);
     font-weight: 800;
     letter-spacing: -0.02em;
     color: #fff;
-    margin: 0 0 8px 0;
+    margin: 0 0 6px 0;
   }
   .lp-section-lead {
-    font-size: 15px;
+    font-size: 14.5px;
     color: var(--muted);
     max-width: 680px;
     margin: 0;
-    line-height: 1.6;
+    line-height: 1.55;
   }
 
-  /* 4-Card Interaction & Technical Grid */
+  /* 4-Card Interaction Grid with Icons */
   .lp-grid-4 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: 14px;
+    margin-bottom: 20px;
   }
   .lp-card-step {
     background: var(--panel);
     border: 1px solid var(--panel-border);
     border-radius: 10px;
-    padding: 18px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
   }
+  .lp-step-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    background: rgba(0, 240, 255, 0.08);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cyan);
+    margin-bottom: 12px;
+  }
+  body.theme-rock .lp-step-icon {
+    background: rgba(255, 42, 59, 0.08);
+    border-color: rgba(255, 42, 59, 0.25);
+  }
+  body.theme-jazz .lp-step-icon {
+    background: rgba(229, 181, 103, 0.08);
+    border-color: rgba(229, 181, 103, 0.25);
+  }
   .lp-card-num {
-    font-size: 11px;
+    font-size: 10.5px;
     font-family: ui-monospace, monospace;
     font-weight: 700;
     color: var(--cyan);
-    margin-bottom: 10px;
+    margin-bottom: 4px;
     letter-spacing: 0.05em;
   }
   .lp-card-title {
@@ -1301,12 +1349,12 @@
   }
   .lp-card-text {
     font-size: 12px;
-    line-height: 1.55;
-    color: #9ab0c4;
+    line-height: 1.5;
+    color: #94a3b8;
     margin: 0;
   }
 
-  /* Tech & Privacy Strip */
+  /* Tech & Specs Strip */
   .lp-tech-strip {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -1319,10 +1367,13 @@
   .lp-tech-cell {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
   }
-  .lp-tech-label {
-    font-size: 9.5px;
+  .lp-tech-icon-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
     font-family: ui-monospace, monospace;
     font-weight: 700;
     color: var(--cyan);
@@ -1332,47 +1383,34 @@
   .lp-tech-value {
     font-size: 12px;
     color: #cbd5e1;
-    line-height: 1.4;
+    line-height: 1.45;
   }
 
-  /* Designer Section: Keegan McConnell + CleanStep Physical Work */
-  .lp-designer-layout {
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 32px;
-    align-items: start;
+  /* Designer Section */
+  .lp-designer-intro-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
     background: var(--panel);
     border: 1px solid var(--panel-border);
-    border-radius: 14px;
-    padding: 32px;
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
   }
-  .lp-designer-bio {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .lp-designer-quote {
-    font-size: 17px;
-    font-weight: 700;
-    color: #fff;
-    border-left: 2px solid var(--cyan);
-    padding-left: 12px;
-    margin: 4px 0 10px 0;
-    line-height: 1.4;
-  }
-  .lp-designer-bio p {
+  .lp-designer-bio-p {
     font-size: 13.5px;
-    line-height: 1.65;
+    line-height: 1.6;
     color: #b0c0d0;
+    max-width: 640px;
     margin: 0;
   }
-  .lp-designer-bio strong {
+  .lp-designer-bio-p strong {
     color: #fff;
   }
   .lp-portfolio-btn {
-    align-self: flex-start;
-    margin-top: 8px;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--cyan);
     color: var(--cyan);
     padding: 9px 18px;
@@ -1384,6 +1422,7 @@
     align-items: center;
     gap: 6px;
     transition: all 0.18s ease;
+    white-space: nowrap;
   }
   .lp-portfolio-btn:hover {
     background: var(--cyan);
@@ -1392,7 +1431,12 @@
   body.theme-rock .lp-portfolio-btn:hover { color: #fff; }
   body.theme-jazz .lp-portfolio-btn:hover { color: #090a12; }
 
-  /* Work Showcase Card */
+  /* Work Showcase Grid: 2 Cards Side-by-Side */
+  .lp-work-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
   .lp-work-card {
     background: #090b0e;
     border: 1px solid var(--panel-border);
@@ -1400,10 +1444,14 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    transition: border-color 0.2s ease;
+  }
+  .lp-work-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
   }
   .lp-work-img-wrap {
     width: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 16 / 10;
     overflow: hidden;
     background: #11141b;
   }
@@ -1412,7 +1460,7 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.3s ease;
+    transition: transform 0.35s ease;
   }
   .lp-work-card:hover .lp-work-img {
     transform: scale(1.03);
@@ -1423,6 +1471,11 @@
     flex-direction: column;
     gap: 6px;
   }
+  .lp-work-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
   .lp-work-tag {
     font-size: 9.5px;
     font-family: ui-monospace, monospace;
@@ -1431,20 +1484,7 @@
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
-  .lp-work-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: #fff;
-    margin: 0;
-  }
-  .lp-work-desc {
-    font-size: 11.5px;
-    line-height: 1.5;
-    color: var(--muted);
-    margin: 0;
-  }
   .lp-work-link {
-    margin-top: 4px;
     font-size: 11.5px;
     color: var(--cyan);
     text-decoration: none;
@@ -1453,51 +1493,62 @@
   .lp-work-link:hover {
     text-decoration: underline;
   }
+  .lp-work-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+  }
+  .lp-work-specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 4px;
+  }
+  .lp-spec-pill {
+    font-size: 10px;
+    font-family: ui-monospace, monospace;
+    color: var(--muted);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
 
-  /* Minimal Clean Footer */
+  /* Discreet Right-Aligned Footer */
   .lp-footer {
     border-top: 1px solid var(--panel-border);
-    padding: 24px 0 32px 0;
+    padding: 20px 0 28px 0;
     margin-top: auto;
   }
-  .lp-footer-inner {
+  .lp-footer-right {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    flex-wrap: wrap;
-    font-size: 12px;
+    font-size: 11.5px;
     color: var(--muted);
   }
-  .lp-footer-inner a {
+  .lp-footer-right a {
     color: var(--cyan);
     text-decoration: none;
   }
-  .lp-footer-links {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  .lp-footer-link {
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.15s ease;
-  }
-  .lp-footer-link:hover {
-    color: #fff;
+  .lp-footer-right a:hover {
+    text-decoration: underline;
   }
 
   /* Responsive Rules */
   @media (max-width: 900px) {
     .lp-grid-4 { grid-template-columns: repeat(2, 1fr); }
     .lp-tech-strip { grid-template-columns: 1fr; }
-    .lp-designer-layout { grid-template-columns: 1fr; }
     .lp-kits-row { grid-template-columns: 1fr; }
+    .lp-work-grid { grid-template-columns: 1fr; }
+    .lp-designer-intro-bar { flex-direction: column; align-items: flex-start; }
   }
   @media (max-width: 600px) {
-    .lp-hero { padding: 40px 0 32px 0; }
+    .lp-hero { padding: 36px 0 28px 0; }
     .lp-grid-4 { grid-template-columns: 1fr; }
     .lp-theme-pills { display: none; }
+    .lp-footer-right { justify-content: center; text-align: center; }
   }
 
   /* Studio Header Landing Nav Button */
@@ -1553,22 +1604,33 @@
   <!-- Hero Section -->
   <header class="lp-hero">
     <div class="lp-container">
-      <div class="lp-eyebrow">Touchless Air-Percussion • On-Device Vision • Single-File PWA</div>
-      <h1 class="lp-hero-title">Gestrum</h1>
+      <div class="lp-eyebrow">Touchless Spatial Percussion • WebAssembly Vision</div>
+      <h1 class="lp-hero-title">Play drums in mid-air.</h1>
       <p class="lp-hero-lead">
-        Air-percussion in the browser. Powered by real-time computer vision and native Web Audio synthesis.
-      </p>
-      <p class="lp-hero-text">
-        Gestrum translates your physical hand gestures into zero-latency percussion hits in 3D space. Moving your hands in front of your webcam tracks your fingertips as luminous floating orbs. Striking down triggers velocity-sensitive drum hits; holding inside any pad for three seconds locks it into an automated rhythmic loop.
-        No dedicated hardware required, no plugins to install, and zero camera data ever leaves your computer.
+        Zero hardware. Zero latency. Point your webcam and strike pads in 3D space.
       </p>
 
+      <div class="lp-hero-badges">
+        <span class="lp-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          60 FPS On-Device Vision
+        </span>
+        <span class="lp-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Procedural Web Audio
+        </span>
+        <span class="lp-pill">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          100% Client-Side Privacy
+        </span>
+      </div>
+
       <div class="lp-hero-actions">
-        <button id="lp-btn-launch-hero" class="lp-btn-cta" title="Launch Gestrum Stage">
+        <button id="lp-btn-launch-hero" class="lp-btn-cta" title="Launch Gestrum Air-Percussion Studio">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           <span>Launch Instrument</span>
         </button>
-        <span class="lp-cta-note">Webcam optional — full mouse and touchscreen fallback enabled.</span>
+        <span class="lp-cta-note">Webcam or touch fallback • Offline PWA</span>
       </div>
 
       <!-- 3 Curated Kits Strip -->
@@ -1578,15 +1640,29 @@
             <span class="lp-kit-title">🎧 Hip-Hop / 808</span>
             <span class="lp-kit-bpm">120 BPM</span>
           </div>
-          <span class="lp-kit-desc">Deep sub-bass kick, snappy trap snares, cutting hi-hats, and glitch percussion. Cyber neon styling.</span>
+          <div class="lp-kit-tags">
+            <span class="lp-tag">Sub Kick</span>
+            <span class="lp-tag">Trap Snare</span>
+            <span class="lp-tag">808 Hat</span>
+            <span class="lp-tag">Floor Tom</span>
+            <span class="lp-tag">Clap</span>
+            <span class="lp-tag">Glitch</span>
+          </div>
         </div>
 
-        <div class="lp-kit-card" data-theme="rock" title="Select Rock & Roll Kit">
+        <div class="lp-kit-card" data-theme="rock" title="Select Rock &amp; Roll Kit">
           <div class="lp-kit-top">
-            <span class="lp-kit-title">🎸 Rock & Roll</span>
+            <span class="lp-kit-title">🎸 Rock &amp; Roll</span>
             <span class="lp-kit-bpm">132 BPM</span>
           </div>
-          <span class="lp-kit-desc">Heavy acoustic beater kick, punch snare, explosive crash cymbal, and waveshaped overdriven power chords.</span>
+          <div class="lp-kit-tags">
+            <span class="lp-tag">Heavy Kick</span>
+            <span class="lp-tag">Punch Snare</span>
+            <span class="lp-tag">Crash</span>
+            <span class="lp-tag">Hi Tom</span>
+            <span class="lp-tag">Low Tom</span>
+            <span class="lp-tag">Overdrive</span>
+          </div>
         </div>
 
         <div class="lp-kit-card" data-theme="jazz" title="Select Midnight Jazz Kit">
@@ -1594,73 +1670,101 @@
             <span class="lp-kit-title">🎷 Midnight Jazz</span>
             <span class="lp-kit-bpm">100 BPM</span>
           </div>
-          <span class="lp-kit-desc">Warm felt kick, wire-brushed snare, wood cross-stick, dark ride cymbal, upright double bass, and tremolo vibraphone.</span>
+          <div class="lp-kit-tags">
+            <span class="lp-tag">Felt Kick</span>
+            <span class="lp-tag">Brushed Snare</span>
+            <span class="lp-tag">Cross-Stick</span>
+            <span class="lp-tag">Dark Ride</span>
+            <span class="lp-tag">Upright Bass</span>
+            <span class="lp-tag">Vibraphone</span>
+          </div>
         </div>
       </div>
     </div>
   </header>
 
-  <!-- How It Works & Architecture Section -->
+  <!-- How It Works Section -->
   <section class="lp-section">
     <div class="lp-container">
       <div class="lp-section-header">
         <div class="lp-eyebrow">How It Works</div>
-        <h2 class="lp-section-title">The Interaction & Sound Architecture</h2>
-        <p class="lp-section-lead">Designed for immediate tactile response, low cognitive friction, and private client-side performance.</p>
+        <h2 class="lp-section-title">Tactile Air-Percussion</h2>
+        <p class="lp-section-lead">Physical gesture recognition mapped directly to real-time audio synthesis.</p>
       </div>
 
       <div class="lp-grid-4">
         <div class="lp-card-step">
-          <div class="lp-card-num">01 / STRIKE</div>
+          <div class="lp-step-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3" fill="currentColor"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/><circle cx="12" cy="12" r="8" stroke-dasharray="2 3"/></svg>
+          </div>
+          <div class="lp-card-num">01 / TRACK</div>
+          <h3 class="lp-card-title">Fingertip Orbs</h3>
+          <p class="lp-card-text">
+            MediaPipe tracks 21 skeletal landmarks per hand. Fingertips become glowing spatial triggers.
+          </p>
+        </div>
+
+        <div class="lp-card-step">
+          <div class="lp-step-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v14m0 0l-4-4m4 4l4-4"/><circle cx="12" cy="20" r="2" fill="currentColor"/></svg>
+          </div>
+          <div class="lp-card-num">02 / STRIKE</div>
           <h3 class="lp-card-title">Velocity Downstrokes</h3>
           <p class="lp-card-text">
-            MediaPipe tracks 21 skeletal landmarks per hand. Striking downward calculates velocity in real time—gentle taps trigger subtle ghost notes; hard strikes trigger punchy attacks with expansive ripples.
+            Striking downward calculates hit velocity, dynamically modulating acoustic loudness and shockwaves.
           </p>
         </div>
 
         <div class="lp-card-step">
-          <div class="lp-card-num">02 / DWELL</div>
-          <h3 class="lp-card-title">3-Second Loop Latch</h3>
+          <div class="lp-step-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6"/><path d="M21 12A9 9 0 0 0 6 5.3L2.5 8M3 12a9 9 0 0 0 15 6.7l3.5-2.7"/></svg>
+          </div>
+          <div class="lp-card-num">03 / LOOP</div>
+          <h3 class="lp-card-title">3-Second Latch</h3>
           <p class="lp-card-text">
-            Hold your fingertip steady inside any pad for 3 seconds. A circular progress ring sweeps around the perimeter, locking the sound into continuous playback synchronized to a 16-step master bar.
+            Hold fingertip inside any pad for 3s to latch into automated playback synchronized to a 16-step bar.
           </p>
         </div>
 
         <div class="lp-card-step">
-          <div class="lp-card-num">03 / SYNTHESIS</div>
-          <h3 class="lp-card-title">Procedural Web Audio</h3>
-          <p class="lp-card-text">
-            All flagship kits are synthesized procedurally using native Web Audio API oscillators, noise generators, and waveshapers with zero audio file dependencies. Or drag and drop custom WAV/MP3 files.
-          </p>
-        </div>
-
-        <div class="lp-card-step">
+          <div class="lp-step-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>
+          </div>
           <div class="lp-card-num">04 / SCULPT</div>
           <h3 class="lp-card-title">Spatial Customization</h3>
           <p class="lp-card-text">
-            Switch to Layout Mode to drag pads anywhere across your stage. Choose from 5 rounded shapes and scale pad size (which dynamically modulates acoustic shell resonance and pitch).
+            Drag pads anywhere across your stage. Pad diameter dynamically modulates shell resonance and pitch.
           </p>
         </div>
       </div>
 
       <div class="lp-tech-strip">
         <div class="lp-tech-cell">
-          <span class="lp-tech-label">Privacy Architecture</span>
-          <span class="lp-tech-value">100% on-device vision via WebAssembly. Video frames are analyzed in temporary memory and never transmitted or recorded.</span>
+          <div class="lp-tech-icon-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Privacy Architecture</span>
+          </div>
+          <span class="lp-tech-value">100% on-device vision via WebAssembly. Camera video is never recorded or streamed.</span>
         </div>
         <div class="lp-tech-cell">
-          <span class="lp-tech-label">Open Source & Licensing</span>
-          <span class="lp-tech-value">Released under the MIT License. Google MediaPipe Hands under Apache 2.0. Standardized W3C Web Audio API.</span>
+          <div class="lp-tech-icon-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>Open Source Licensing</span>
+          </div>
+          <span class="lp-tech-value">Gestrum is MIT licensed. Google MediaPipe Hands is licensed under Apache 2.0.</span>
         </div>
         <div class="lp-tech-cell">
-          <span class="lp-tech-label">Future Roadmap</span>
-          <span class="lp-tech-value">Per-pad 16-step rhythmic pattern sequencer, Web MIDI API input/output for external DAWs, and cymbal choke gestures.</span>
+          <div class="lp-tech-icon-label">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <span>Coming Next</span>
+          </div>
+          <span class="lp-tech-value">16-step visual drum machine sequencer, Web MIDI DAW sync, and cymbal choke gestures.</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Designer Section: Keegan McConnell + CleanStep Physical Work -->
+  <!-- Designer Section: Keegan McConnell + Physical Industrial Design Work -->
   <section class="lp-section">
     <div class="lp-container">
       <div class="lp-section-header">
@@ -1669,58 +1773,62 @@
         <p class="lp-section-lead">Industrial Design • Human-Centered Physical Interaction • Grand Rapids, MI</p>
       </div>
 
-      <div class="lp-designer-layout">
-        <div class="lp-designer-bio">
-          <div class="lp-designer-quote">
-            “I design products that solve real-world problems and address real user needs.”
-          </div>
-          <p>
-            I am an industrial design student at <strong>Kendall College of Art and Design (KCAD)</strong> with an engineering foundation from <strong>Michigan State University</strong>, currently working as a Technical Illustrator at <strong>Haworth</strong>. My design approach centers on human friction and physical ergonomics: solving real-world problems through hands-on prototyping, user observation, and thoughtful mechanics.
-          </p>
-          <p>
-            Gestrum grew out of that same impulse—translating the universal physical instinct of air-drumming into immediate, tactile sound without the friction of specialized hardware, cables, or expensive studio equipment.
-          </p>
-          <p>
-            Outside of software experiments, my primary work focuses on physical product architecture, ergonomic commercial furniture, and functional hardware.
-          </p>
+      <div class="lp-designer-intro-bar">
+        <p class="lp-designer-bio-p">
+          Industrial design student at <strong>Kendall College of Art and Design (KCAD)</strong> with engineering background from <strong>Michigan State University</strong>, currently Technical Illustrator at <strong>Haworth</strong>. Focused on reducing physical friction and solving mechanical user problems.
+        </p>
+        <a href="https://keeganmcconnell.myportfolio.com/" target="_blank" rel="noopener" class="lp-portfolio-btn" title="View Keegan McConnell's Industrial Design Portfolio">
+          <span>Portfolio (keeganmcconnell.myportfolio.com)</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
 
-          <a href="https://keeganmcconnell.myportfolio.com/" target="_blank" rel="noopener" class="lp-portfolio-btn" title="View Keegan McConnell's Industrial Design Portfolio">
-            <span>Explore Industrial Design Portfolio (keeganmcconnell.myportfolio.com)</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          </a>
+      <!-- 2 Physical Product Design Cards Side-by-Side -->
+      <div class="lp-work-grid">
+        <div class="lp-work-card">
+          <div class="lp-work-img-wrap">
+            <img src="work-cleanstep.png" alt="CleanStep Odor-Free Cat Care Architecture by Keegan McConnell" class="lp-work-img" loading="lazy">
+          </div>
+          <div class="lp-work-body">
+            <div class="lp-work-header">
+              <span class="lp-work-tag">Physical Product Design</span>
+              <a href="https://keeganmcconnell.myportfolio.com/" target="_blank" rel="noopener" class="lp-work-link">Portfolio ↗</a>
+            </div>
+            <h4 class="lp-work-title">CleanStep Cat Care Architecture</h4>
+            <div class="lp-work-specs">
+              <span class="lp-spec-pill">304 Stainless Steel Basin</span>
+              <span class="lp-spec-pill">Non-Porous / Ammonia-Free</span>
+              <span class="lp-spec-pill">Modular Quick-Clean Enclosure</span>
+            </div>
+          </div>
         </div>
 
         <div class="lp-work-card">
           <div class="lp-work-img-wrap">
-            <img src="work-cleanstep.png" alt="CleanStep — Stainless Steel Odor-Free Cat Care Architecture by Keegan McConnell" class="lp-work-img">
+            <img src="work-aline.png" alt="ALINE Ultralight Backcountry Seating Architecture by Keegan McConnell" class="lp-work-img" loading="lazy">
           </div>
           <div class="lp-work-body">
-            <span class="lp-work-tag">Physical Product Design</span>
-            <h4 class="lp-work-title">CleanStep — Odor-Free Cat Care Architecture</h4>
-            <p class="lp-work-desc">
-              A furniture-grade enclosure combining a non-porous 304 stainless steel basin that never absorbs ammonia odors, an integrated paw-cleaning catch ramp, and a modular quick-clean hood.
-            </p>
-            <a href="https://keeganmcconnell.myportfolio.com/" target="_blank" rel="noopener" class="lp-work-link">
-              View Project on Portfolio ↗
-            </a>
+            <div class="lp-work-header">
+              <span class="lp-work-tag">Physical Product Design</span>
+              <a href="https://keeganmcconnell.myportfolio.com/" target="_blank" rel="noopener" class="lp-work-link">Portfolio ↗</a>
+            </div>
+            <h4 class="lp-work-title">ALINE Ultralight Backcountry Seating</h4>
+            <div class="lp-work-specs">
+              <span class="lp-spec-pill">Sub-1lb Carbon Architecture</span>
+              <span class="lp-spec-pill">Ergonomic Tension Sling</span>
+              <span class="lp-spec-pill">Collapsible Pack Profile</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Clean Minimalist Footer -->
+  <!-- Discreet Right-Aligned Footer Only -->
   <footer class="lp-footer">
     <div class="lp-container">
-      <div class="lp-footer-inner">
-        <div>
-          <strong>Gestrum</strong> — Spatial Air-Percussion Instrument • Version v00000-006 • MIT License
-        </div>
-        <div class="lp-footer-links">
-          <a href="https://keeganmcconnell.myportfolio.com/" target="_blank" rel="noopener" class="lp-footer-link">Portfolio</a>
-          <a href="https://github.com/keeganrmc/gestrum" target="_blank" rel="noopener" class="lp-footer-link">GitHub</a>
-          <button class="lp-footer-link" id="lp-btn-launch-footer" style="background:none; border:none; cursor:pointer; font-size:inherit; color:var(--cyan); font-weight:700;">Launch Instrument ➔</button>
-        </div>
+      <div class="lp-footer-right">
+        <span>Gestrum • Designed &amp; built by <a href="https://keeganmcconnell.myportfolio.com/" target="_blank" rel="noopener">Keegan McConnell</a> • <a href="https://github.com/keeganrmc/gestrum" target="_blank" rel="noopener">MIT License</a></span>
       </div>
     </div>
   </footer>
@@ -2007,12 +2115,12 @@
     </div>
     <div>
       <h2 style="margin: 0;">Gestrum</h2>
-      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-006</span>
+      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-007</span>
     </div>
   </div>
   <p><strong>Raison d'Être:</strong> Gestrum exists because drumming in mid-air should make real sound, turning your laptop camera into a zero-latency stage instrument.</p>
-  <p><strong>Made by:</strong> <a href="https://keeganrmc.github.io/" target="_blank" style="color: var(--cyan); text-decoration: none;">Keegan McConnell</a></p>
-  <p><strong>Source:</strong> <a href="https://github.com/keeganrmc/gestrum" target="_blank" style="color: var(--cyan); text-decoration: none;">github.com/keeganrmc/gestrum</a></p>
+  <p><strong>Made by:</strong> <a href="https://keeganmcconnell.myportfolio.com/" target="_blank" rel="noopener" style="color: var(--cyan); text-decoration: none;">Keegan McConnell</a></p>
+  <p><strong>Source:</strong> <a href="https://github.com/keeganrmc/gestrum" target="_blank" rel="noopener" style="color: var(--cyan); text-decoration: none;">github.com/keeganrmc/gestrum</a></p>
   <p><strong>License:</strong> © 2026 Keegan McConnell. Released under the MIT License.</p>
   <p><strong>Privacy:</strong> Your camera stream and audio never leave this browser. Everything runs 100% locally on your machine with zero server communication.</p>
   <div style="text-align: right; margin-top: 18px; display: flex; justify-content: flex-end; gap: 8px;">
@@ -2028,12 +2136,12 @@
 const APP = {
   name: "Gestrum",
   id: "gestrum",
-  version: "v00000-006",
+  version: "v00000-007",
   author: "Keegan McConnell",
-  site: "https://keeganrmc.github.io/",
+  site: "https://keeganmcconnell.myportfolio.com/",
   repo: "https://github.com/keeganrmc/gestrum"
 };
-const FORMAT = { name: APP.id, version: 6 };
+const FORMAT = { name: APP.id, version: 7 };
 document.getElementById("chip").textContent = APP.version + " ↻";
 
 // ── THEME CONFIGURATIONS & SIGNATURE INSTRUMENT KITS ─────────────────────────
@@ -4312,10 +4420,8 @@ function showLandingPage() {
 // Wire Launch Buttons
 const lpBtnNav = document.getElementById("lp-btn-launch-nav");
 const lpBtnHero = document.getElementById("lp-btn-launch-hero");
-const lpBtnFooter = document.getElementById("lp-btn-launch-footer");
 if (lpBtnNav) lpBtnNav.onclick = () => launchGestrumApp();
 if (lpBtnHero) lpBtnHero.onclick = () => launchGestrumApp();
-if (lpBtnFooter) lpBtnFooter.onclick = () => launchGestrumApp();
 
 // Wire Direct Kit Cards in Hero
 document.querySelectorAll(".lp-kit-card").forEach(card => {

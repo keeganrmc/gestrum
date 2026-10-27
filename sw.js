@@ -1,5 +1,5 @@
 const APP_ID = "gestrum";
-const VERSION = "v00000-006";
+const VERSION = "v00000-007";
 const CACHE = APP_ID + "-" + VERSION;
 const FILES = [
   "./",
@@ -7,16 +7,17 @@ const FILES = [
   "./manifest.webmanifest",
   "./icon.svg",
   "./logo.png",
-  "./work-cleanstep.png"
+  "./work-cleanstep.png",
+  "./work-aline.png"
 ];
 
 self.addEventListener("install", e => {
+  self.skipWaiting();
   e.waitUntil(
     caches.open(CACHE).then(c =>
       c.addAll(FILES.map(f => new Request(f, { cache: "reload" })))
     )
   );
-  if (!self.registration.active) self.skipWaiting();
 });
 
 self.addEventListener("activate", e => {

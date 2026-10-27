@@ -2,6 +2,19 @@
 
 All notable changes to **Gestrum** will be documented in this file.
 
+## [v00000-007] - 2026-10-27
+### Changed & Streamlined
+- **Intriguing, Visual & Symbol-Driven Launch Gateway:**
+  - **Zero AI Slop / Word-Count Reduction:** Replaced dense text blocks with punchy headlines, metric badges, and visual flow cards.
+  - **Visual Hero:** Punchy headline (*"Play drums in mid-air."*), feature pills (`60 FPS On-Device Vision`, `Procedural Web Audio`, `100% Client-Side Privacy`), and direct action buttons.
+  - **Kit Tag Strips:** Replaced descriptive paragraphs with compact instrument tag pills (`Sub Kick`, `Trap Snare`, `Heavy Kick`, `Overdrive`, `Brushed Snare`, `Upright Bass`) that live-preview themes on click.
+  - **4-Step Visual Flow Cards:** Embedded custom SVG iconography for `01 / TRACK`, `02 / STRIKE`, `03 / LOOP`, and `04 / SCULPT`.
+  - **Dual Physical Design Showcase:** Side-by-side presentation of creator Keegan McConnell's physical industrial design work (*CleanStep Cat Care Architecture* and *ALINE Ultralight Seating*) with high-res photography, physical specs, and portfolio links.
+  - **Discreet Right-Aligned Footer:** Completely removed bottom CTA banners, redundant launch buttons, and left-side headers. The footer now strictly contains quiet, right-aligned text and portfolio/GitHub links.
+- **Service Worker & Cache:**
+  - Bumped cache to `gestrum-v00000-007` with `work-cleanstep.png` and `work-aline.png` precached for offline PWA operation.
+  - Added unconditional `self.skipWaiting()` on install to purge older service worker caches across devices immediately.
+
 ## [v00000-006] - 2026-10-27
 ### Added
 - **Streamlined & Elevated Launch Page:** Completely revamped the gateway experience with high design hygiene, eliminating generic templates and AI fluff:
