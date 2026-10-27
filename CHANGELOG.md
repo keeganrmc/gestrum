@@ -2,6 +2,21 @@
 
 All notable changes to **Gestrum** will be documented in this file.
 
+## [v00000-006] - 2026-10-27
+### Added
+- **Comprehensive Gateway Landing Page:** Built a robust, responsive, single-file landing page that greets every visitor before they launch into the air-percussion instrument.
+  - **Hero & Identity:** Clear value proposition, animated theme-reactive air-drum logo, status pill badges, and prominent "Launch Gestrum" and direct kit launchers (Hip-Hop 120 BPM, Rock 132 BPM, Midnight Jazz 100 BPM).
+  - **Interactive Visual Blueprint:** Interactive mockup illustrating the 3x2 Beat-Grid, downward velocity strike vectors, dynamic shockwaves, 3-second dwell progress arc, and luminous fingertip tracking orbs.
+  - **The Core Experience (What It Does):** Narrative explaining embodied air-drumming, zero-latency on-device tracking, velocity sensitivity, and dwell-to-loop mechanics, with a side-by-side comparison between traditional MIDI setups and Gestrum.
+  - **Deep Dive Features:** 6 detailed cards covering touchless MediaPipe vision, 16-step quantized dwell looping, 3 curated acoustic/visual themes, 25+ procedural presets and custom WAV/MP3 drag-and-drop, draggable/resizable pads with acoustic pitch scaling, and live session recording with offline PWA support.
+  - **4-Step Quick Start Guide:** Frictionless onboarding instructions covering spatial framing, camera initialization, striking the air, and locking in grooves.
+  - **Story & Creator Philosophy:** Documenting author Keegan McConnell, the *AirDrummer* conceptual origin, single-file HTML5 PWA architecture, native Web Audio DSP synthesis, and privacy by design (video frames processed in volatile memory and discarded; zero server transmission).
+  - **Open Source Attribution & Hygiene:** Clear legal and ethical disclosure for Gestrum (MIT License), Google MediaPipe Hands (Apache 2.0), W3C standards, and transparent AI pair programming assistance.
+  - **Grounded Product Roadmap:** 5 upcoming milestones including a per-pad 16-step pattern sequencer grid, Web MIDI input/output, articulated air gestures (cymbal choke and pitch bend), expanded genre sound packs, and camera calibration guides.
+  - **Interactive Theme Previewing:** Live theme switcher pills right in the landing page navbar that dynamically recolor the entire landing page in real time (Cyber Cyan/Magenta, Crimson/Amber, Champagne/Indigo).
+  - **Seamless Bi-Directional Navigation:** URL hash support (`#studio` / `#landing`), browser Back/Forward integration, and a dedicated "Landing Page" button in the studio header to return to the landing page at any time without losing active sessions.
+- **Service Worker & Project Schema Bump:** Updated PWA offline cache version and project file format schema to `v00000-006`.
+
 ## [v00000-005] - 2026-10-25
 ### Added
 - **Theme-Reactive Air-Drum Logo:** Replaced the generic "G" letter mark with the user's custom air-drum instrument logo. Using CSS vector masking and drop-shadow bloom, the drum, rim, and floating orbs dynamically transform their gradient and neon glow to match the active theme (Cyber Cyan/Magenta in Hip-Hop, Molten Crimson/Amber in Rock, and Champagne Gold/Indigo in Jazz). Clicking the logo triggers an acoustic strike and playful bounce animation.

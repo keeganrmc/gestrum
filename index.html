@@ -955,6 +955,1173 @@
     gap: 6px;
     margin-left: auto;
   }
+
+  /* ── ROBUST LANDING PAGE STYLES ───────────────────────────────────────────── */
+  .landing-view {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    color: var(--fg);
+    z-index: 500;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    scroll-behavior: smooth;
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s ease;
+    -webkit-overflow-scrolling: touch;
+    user-select: text;
+  }
+  .landing-view.hidden {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.99);
+    pointer-events: none;
+    visibility: hidden;
+  }
+  .landing-view::-webkit-scrollbar {
+    width: 8px;
+  }
+  .landing-view::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+  .landing-view::-webkit-scrollbar-thumb {
+    background: var(--panel-border);
+    border-radius: 4px;
+  }
+  .landing-view::-webkit-scrollbar-thumb:hover {
+    background: var(--cyan);
+  }
+
+  /* Sticky Landing Navigation */
+  .lp-nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13, 15, 18, 0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--panel-border);
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  body.theme-rock .lp-nav {
+    background: rgba(12, 8, 9, 0.88);
+  }
+  body.theme-jazz .lp-nav {
+    background: rgba(9, 10, 18, 0.88);
+  }
+  .lp-nav-inner {
+    max-width: 1180px;
+    margin: 0 auto;
+    height: 60px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .lp-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    flex-shrink: 0;
+  }
+  .lp-logo-mark {
+    width: 32px;
+    height: 32px;
+  }
+  .lp-brand-title {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .lp-brand-sub {
+    font-size: 10px;
+    font-family: ui-monospace, monospace;
+    color: var(--cyan);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .lp-nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .lp-nav-link {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: color 0.15s ease;
+    white-space: nowrap;
+  }
+  .lp-nav-link:hover {
+    color: var(--cyan);
+  }
+  .lp-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  .lp-theme-pills {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--panel-border);
+    border-radius: 20px;
+    padding: 2px;
+    gap: 2px;
+  }
+  .lp-theme-pill {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  .lp-theme-pill:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .lp-theme-pill.active {
+    background: var(--panel);
+    border-color: var(--cyan);
+    color: #fff;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+  }
+  body.theme-rock .lp-theme-pill.active {
+    box-shadow: 0 0 10px rgba(255, 42, 59, 0.25);
+  }
+  body.theme-jazz .lp-theme-pill.active {
+    box-shadow: 0 0 10px rgba(229, 181, 103, 0.25);
+  }
+  .lp-btn-launch {
+    background: var(--cyan);
+    color: #0b0d11;
+    border: none;
+    border-radius: 7px;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 7px 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.35);
+  }
+  body.theme-rock .lp-btn-launch {
+    color: #fff;
+    box-shadow: 0 0 14px rgba(255, 42, 59, 0.45);
+  }
+  body.theme-jazz .lp-btn-launch {
+    color: #090a12;
+    box-shadow: 0 0 14px rgba(229, 181, 103, 0.4);
+  }
+  .lp-btn-launch:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.1);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.55);
+  }
+  body.theme-rock .lp-btn-launch:hover {
+    box-shadow: 0 0 20px rgba(255, 42, 59, 0.65);
+  }
+  body.theme-jazz .lp-btn-launch:hover {
+    box-shadow: 0 0 20px rgba(229, 181, 103, 0.6);
+  }
+
+  /* Hero Section */
+  .lp-hero {
+    position: relative;
+    padding: 64px 24px 54px 24px;
+    overflow: hidden;
+  }
+  .lp-hero-bg-glow {
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 480px;
+    background: radial-gradient(circle at 50% 40%, rgba(0, 240, 255, 0.12) 0%, rgba(255, 0, 127, 0.05) 50%, transparent 75%);
+    pointer-events: none;
+    z-index: 0;
+    transition: background 0.4s ease;
+  }
+  body.theme-rock .lp-hero-bg-glow {
+    background: radial-gradient(circle at 50% 40%, rgba(255, 42, 59, 0.15) 0%, rgba(255, 140, 0, 0.06) 50%, transparent 75%);
+  }
+  body.theme-jazz .lp-hero-bg-glow {
+    background: radial-gradient(circle at 50% 40%, rgba(229, 181, 103, 0.14) 0%, rgba(78, 168, 222, 0.06) 50%, transparent 75%);
+  }
+  .lp-hero-content {
+    max-width: 1040px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .lp-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--panel-border);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-family: ui-monospace, monospace;
+    font-weight: 600;
+    color: var(--cyan);
+    letter-spacing: 0.06em;
+    margin-bottom: 22px;
+  }
+  .lp-badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
+    animation: lpPulseDot 2s infinite ease-in-out;
+  }
+  @keyframes lpPulseDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+  }
+  .lp-badge-sep {
+    color: var(--panel-border);
+  }
+  .lp-hero-title {
+    font-size: clamp(34px, 5.2vw, 58px);
+    font-weight: 900;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    margin: 0 0 20px 0;
+    color: #fff;
+  }
+  .lp-hero-gradient {
+    background: var(--logo-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+  }
+  .lp-hero-desc {
+    max-width: 720px;
+    font-size: clamp(15px, 2vw, 18px);
+    line-height: 1.6;
+    color: var(--muted);
+    margin: 0 0 32px 0;
+  }
+  .lp-hero-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .lp-btn-launch-primary {
+    background: var(--logo-gradient);
+    color: #fff;
+    border: none;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 13px 28px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 0 24px var(--logo-shadow);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .lp-btn-launch-primary:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 0 34px var(--logo-shadow);
+    filter: brightness(1.08);
+  }
+  .lp-btn-launch-primary:active {
+    transform: translateY(0) scale(0.98);
+  }
+  .lp-btn-launch-primary.large {
+    font-size: 16px;
+    padding: 15px 36px;
+  }
+  .lp-btn-outline {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--fg);
+    border: 1px solid var(--panel-border);
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 22px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+  }
+  .lp-btn-outline:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--cyan);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+
+  /* Direct Kit Launchers */
+  .lp-direct-kits {
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .lp-kits-label {
+    font-size: 11.5px;
+    font-family: ui-monospace, monospace;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .lp-kits-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .lp-kit-btn {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+    transition: all 0.18s ease;
+  }
+  .lp-kit-btn:hover {
+    border-color: var(--cyan);
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  }
+  .lp-kit-icon {
+    font-size: 18px;
+    line-height: 1;
+  }
+  .lp-kit-info {
+    display: flex;
+    flex-direction: column;
+  }
+  .lp-kit-info strong {
+    font-size: 12px;
+    color: #fff;
+  }
+  .lp-kit-info small {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: ui-monospace, monospace;
+  }
+  .lp-hero-fallback-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 34px;
+    font-style: italic;
+  }
+
+  /* Trust & Architecture Grid */
+  .lp-trust-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    width: 100%;
+    margin-bottom: 48px;
+    text-align: left;
+  }
+  .lp-trust-item {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 9px;
+    padding: 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transition: border-color 0.2s ease;
+  }
+  .lp-trust-item:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  .lp-trust-item svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .lp-trust-item strong {
+    display: block;
+    font-size: 12.5px;
+    color: #fff;
+    margin-bottom: 2px;
+  }
+  .lp-trust-item span {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.4;
+    display: block;
+  }
+
+  /* Stage Blueprint Mockup */
+  .lp-stage-preview {
+    width: 100%;
+    background: #090b0e;
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+  .lp-preview-topbar {
+    height: 36px;
+    background: #11141b;
+    border-bottom: 1px solid var(--panel-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px;
+  }
+  .lp-preview-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .lp-preview-dots span {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+  }
+  .lp-preview-dots span:nth-child(1) { background: #ff5f56; }
+  .lp-preview-dots span:nth-child(2) { background: #ffbd2e; }
+  .lp-preview-dots span:nth-child(3) { background: #27c93f; }
+  .lp-preview-title {
+    font-size: 10.5px;
+    font-family: ui-monospace, monospace;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .lp-preview-badge {
+    font-size: 9.5px;
+    font-family: ui-monospace, monospace;
+    background: rgba(0, 240, 255, 0.15);
+    color: var(--cyan);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 700;
+    border: 1px solid rgba(0, 240, 255, 0.3);
+  }
+  .lp-stage-canvas-mock {
+    position: relative;
+    padding: 44px 20px 48px 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 24px;
+    background: var(--stage-gradient);
+    min-height: 280px;
+  }
+  .lp-mock-pad {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .lp-mock-shape {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    border: 2px solid var(--ring);
+    background: rgba(0, 240, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    box-shadow: 0 0 14px rgba(0, 240, 255, 0.25);
+    position: relative;
+  }
+  .lp-mock-shape.striking {
+    background: var(--cyan);
+    box-shadow: 0 0 28px var(--cyan);
+    border-color: #fff;
+    transform: scale(1.06);
+  }
+  .lp-mock-shape.looping {
+    border-color: var(--gold);
+    box-shadow: 0 0 18px rgba(255, 215, 0, 0.45);
+  }
+  .lp-mock-ring {
+    position: absolute;
+    inset: -6px;
+    width: 84px;
+    height: 84px;
+    transform: rotate(-90deg);
+  }
+  .lp-mock-ring circle {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 2.5;
+    stroke-dasharray: 113;
+    stroke-dashoffset: 28;
+  }
+  .lp-mock-ripple {
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 1.5px solid var(--cyan);
+    opacity: 0.6;
+    animation: lpRipplePulse 2s infinite ease-out;
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -70%);
+  }
+  @keyframes lpRipplePulse {
+    0% { transform: translate(-50%, -70%) scale(0.7); opacity: 0.9; }
+    100% { transform: translate(-50%, -70%) scale(1.4); opacity: 0; }
+  }
+  .lp-mock-label {
+    font-size: 9.5px;
+    font-family: ui-monospace, monospace;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 0.06em;
+  }
+  .lp-mock-name {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .lp-mock-orb-container {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(13, 17, 23, 0.88);
+    border: 1px solid var(--panel-border);
+    padding: 6px 14px;
+    border-radius: 20px;
+    backdrop-filter: blur(8px);
+  }
+  .lp-mock-hand-orb {
+    position: relative;
+    width: 14px;
+    height: 14px;
+  }
+  .lp-mock-orb-core {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fff;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    z-index: 2;
+  }
+  .lp-mock-orb-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan);
+    animation: lpPulseDot 1.4s infinite ease-in-out;
+  }
+  .lp-mock-orb-tag {
+    font-size: 11px;
+    color: var(--fg);
+    font-family: ui-monospace, monospace;
+    white-space: nowrap;
+  }
+
+  /* Shared Section Styles */
+  .lp-section {
+    padding: 80px 24px;
+    border-top: 1px solid var(--panel-border);
+  }
+  .lp-section-alt {
+    background: rgba(255, 255, 255, 0.015);
+  }
+  .lp-section-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .lp-section-kicker {
+    font-size: 11px;
+    font-family: ui-monospace, monospace;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--cyan);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .lp-section-title {
+    font-size: clamp(26px, 3.8vw, 38px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    margin: 0 0 14px 0;
+    color: #fff;
+  }
+  .lp-section-lead {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 760px;
+    margin: 0 0 40px 0;
+  }
+
+  /* Split Text Grid */
+  .lp-split-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 36px;
+  }
+  .lp-text-card {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .lp-card-heading {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+  }
+  .lp-icon-wrap {
+    font-size: 20px;
+  }
+  .lp-text-card p {
+    font-size: 14px;
+    line-height: 1.65;
+    color: #b0c0d0;
+    margin: 0;
+  }
+
+  /* Comparison Box */
+  .lp-comparison-box {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .lp-comp-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #11151e;
+    padding: 12px 20px;
+    font-size: 11px;
+    font-family: ui-monospace, monospace;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    border-bottom: 1px solid var(--panel-border);
+  }
+  .lp-comp-highlight {
+    color: var(--cyan);
+  }
+  .lp-comp-rows {
+    display: flex;
+    flex-direction: column;
+  }
+  .lp-comp-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 14px 20px;
+    font-size: 13px;
+    line-height: 1.5;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    gap: 16px;
+  }
+  .lp-comp-row:last-child {
+    border-bottom: none;
+  }
+  .lp-comp-row div:first-child {
+    color: var(--muted);
+  }
+  .lp-comp-good {
+    color: #e2e8f0;
+    font-weight: 500;
+  }
+
+  /* Features Grid (6 Cards) */
+  .lp-features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .lp-feature-card {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+  }
+  .lp-feature-card:hover {
+    border-color: rgba(255, 255, 255, 0.22);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+  .lp-feat-icon {
+    font-size: 26px;
+    margin-bottom: 14px;
+    line-height: 1;
+  }
+  .lp-feat-title {
+    font-size: 16.5px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 10px 0;
+  }
+  .lp-feat-desc {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #a4b4c6;
+    margin: 0 0 20px 0;
+    flex: 1;
+  }
+  .lp-feat-footer {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .lp-feat-tag {
+    font-size: 10px;
+    font-family: ui-monospace, monospace;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--cyan);
+    padding: 2px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.03em;
+  }
+
+  /* Quick Start Timeline */
+  .lp-steps-timeline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .lp-step-item {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .lp-step-num {
+    font-size: 13px;
+    font-family: ui-monospace, monospace;
+    font-weight: 800;
+    color: var(--cyan);
+    background: rgba(0, 240, 255, 0.12);
+    border: 1px solid rgba(0, 240, 255, 0.25);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .lp-step-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .lp-step-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+  }
+  .lp-step-desc {
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: #a4b4c6;
+    margin: 0;
+  }
+  .lp-center-cta {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  /* Story & Philosophy Layout */
+  .lp-story-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  .lp-story-main {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .lp-story-subheading {
+    font-size: 19px;
+    font-weight: 700;
+    color: #fff;
+    margin: 14px 0 0 0;
+  }
+  .lp-story-main p {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: #b0c0d0;
+    margin: 0;
+  }
+  .lp-story-list {
+    margin: 6px 0 10px 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: #b0c0d0;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .lp-story-list strong {
+    color: #fff;
+  }
+
+  /* Author Card */
+  .lp-author-card {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 14px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  }
+  .lp-author-avatar {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 2px solid var(--cyan);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cyan);
+    margin-bottom: 14px;
+  }
+  .lp-author-name {
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 2px;
+  }
+  .lp-author-role {
+    font-size: 11.5px;
+    font-family: ui-monospace, monospace;
+    color: var(--cyan);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+  .lp-author-bio {
+    font-size: 12.5px;
+    line-height: 1.55;
+    color: var(--muted);
+    margin: 0 0 18px 0;
+  }
+  .lp-author-links {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 18px;
+  }
+  .lp-author-btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--panel-border);
+    border-radius: 7px;
+    padding: 7px 10px;
+    color: var(--fg);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+  }
+  .lp-author-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--cyan);
+    color: #fff;
+  }
+  .lp-author-meta {
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 11px;
+    font-family: ui-monospace, monospace;
+    color: var(--muted);
+    text-align: left;
+  }
+
+  /* License & Attribution Grid */
+  .lp-license-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .lp-license-card {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  .lp-lic-badge {
+    align-self: flex-start;
+    font-size: 10px;
+    font-family: ui-monospace, monospace;
+    font-weight: 700;
+    color: var(--cyan);
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid rgba(0, 240, 255, 0.25);
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+  .lp-lic-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 8px 0;
+  }
+  .lp-lic-desc {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #a4b4c6;
+    margin: 0 0 16px 0;
+    flex: 1;
+  }
+  .lp-lic-legal {
+    background: rgba(0, 0, 0, 0.35);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 11px;
+    font-family: ui-monospace, monospace;
+    color: #8da2b5;
+    border-left: 3px solid var(--cyan);
+  }
+
+  /* Roadmap Grid */
+  .lp-roadmap-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .lp-roadmap-card {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 12px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+  }
+  .lp-rm-phase {
+    font-size: 10.5px;
+    font-family: ui-monospace, monospace;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .lp-rm-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 10px 0;
+    line-height: 1.35;
+  }
+  .lp-rm-desc {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #a4b4c6;
+    margin: 0;
+  }
+
+  /* Footer & Banner */
+  .lp-footer {
+    border-top: 1px solid var(--panel-border);
+    background: #090b0e;
+    padding: 60px 24px 36px 24px;
+  }
+  .lp-footer-banner {
+    max-width: 760px;
+    margin: 0 auto 54px auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .lp-banner-title {
+    font-size: clamp(24px, 3.5vw, 36px);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    color: #fff;
+    margin: 0 0 10px 0;
+  }
+  .lp-banner-desc {
+    font-size: 15px;
+    color: var(--muted);
+    margin: 0 0 24px 0;
+  }
+  .lp-banner-actions {
+    margin-bottom: 20px;
+  }
+  .lp-banner-themes {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .lp-theme-link {
+    background: none;
+    border: none;
+    color: var(--cyan);
+    cursor: pointer;
+    font-weight: 600;
+    padding: 2px 6px;
+    font-size: 12px;
+  }
+  .lp-theme-link:hover {
+    text-decoration: underline;
+  }
+  .lp-bullet {
+    color: var(--panel-border);
+  }
+  .lp-footer-bottom {
+    max-width: 1080px;
+    margin: 0 auto;
+    border-top: 1px solid var(--panel-border);
+    padding-top: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .lp-footer-info {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+  .lp-footer-info a {
+    color: var(--cyan);
+    text-decoration: none;
+  }
+  .lp-footer-links {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .lp-footer-links a, .lp-text-btn {
+    color: var(--muted);
+    font-size: 12.5px;
+    text-decoration: none;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: color 0.15s ease;
+  }
+  .lp-footer-links a:hover, .lp-text-btn:hover {
+    color: var(--cyan);
+  }
+
+  /* Responsive Rules */
+  @media (max-width: 1000px) {
+    .lp-nav-links { display: none; }
+    .lp-trust-grid { grid-template-columns: repeat(2, 1fr); }
+    .lp-features-grid { grid-template-columns: repeat(2, 1fr); }
+    .lp-steps-timeline { grid-template-columns: repeat(2, 1fr); }
+    .lp-roadmap-grid { grid-template-columns: repeat(2, 1fr); }
+    .lp-story-layout { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .lp-hero { padding: 40px 16px 36px 16px; }
+    .lp-section { padding: 50px 16px; }
+    .lp-trust-grid { grid-template-columns: 1fr; }
+    .lp-split-grid { grid-template-columns: 1fr; }
+    .lp-comparison-box { display: none; }
+    .lp-features-grid { grid-template-columns: 1fr; }
+    .lp-steps-timeline { grid-template-columns: 1fr; }
+    .lp-license-grid { grid-template-columns: 1fr; }
+    .lp-roadmap-grid { grid-template-columns: 1fr; }
+    .lp-stage-canvas-mock { grid-template-columns: repeat(2, 1fr); }
+    .lp-mock-orb-container { display: none; }
+    .lp-theme-pills { display: none; }
+  }
+
+  /* Studio Header Landing Nav Button */
+  #btn-landing-nav {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--panel-border);
+    color: var(--fg);
+  }
+  #btn-landing-nav:hover {
+    border-color: var(--cyan);
+    color: #fff;
+    background: rgba(0, 240, 255, 0.1);
+  }
 </style>
 
 <!-- Load MediaPipe Hands via CDN -->
@@ -962,6 +2129,643 @@
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
 </head>
 <body>
+
+<!-- LANDING VIEW (Shown to all visitors before launching app) -->
+<div id="landing-view" class="landing-view" role="main">
+  <!-- Sticky Landing Navigation -->
+  <nav class="lp-nav" aria-label="Landing Navigation">
+    <div class="lp-nav-inner">
+      <div class="lp-brand" id="lp-nav-brand" title="Gestrum — Back to Top">
+        <div class="logo-mark lp-logo-mark">
+          <div class="logo-drum-graphic"></div>
+        </div>
+        <div>
+          <div class="lp-brand-title">Gestrum</div>
+          <div class="lp-brand-sub">Spatial Air-Percussion</div>
+        </div>
+      </div>
+
+      <div class="lp-nav-links">
+        <a href="#lp-about" class="lp-nav-link">What It Does</a>
+        <a href="#lp-features" class="lp-nav-link">Features</a>
+        <a href="#lp-start" class="lp-nav-link">Quick Start</a>
+        <a href="#lp-story" class="lp-nav-link">Story & Creator</a>
+        <a href="#lp-license" class="lp-nav-link">Open Source</a>
+        <a href="#lp-roadmap" class="lp-nav-link">Roadmap</a>
+      </div>
+
+      <div class="lp-nav-actions">
+        <!-- Interactive Theme Preview Pills right in the navbar -->
+        <div class="lp-theme-pills" title="Preview visual theme">
+          <button class="lp-theme-pill active" data-theme="hiphop" title="Switch to Hip-Hop / 808 theme">🎧 Hip-Hop</button>
+          <button class="lp-theme-pill" data-theme="rock" title="Switch to Rock & Roll theme">🎸 Rock</button>
+          <button class="lp-theme-pill" data-theme="jazz" title="Switch to Midnight Jazz theme">🎷 Jazz</button>
+        </div>
+
+        <button id="lp-btn-launch-nav" class="lp-btn-launch" title="Launch Gestrum Air-Percussion Instrument">
+          <span>Launch Gestrum</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="lp-hero" id="lp-hero">
+    <div class="lp-hero-bg-glow"></div>
+    <div class="lp-hero-content">
+      <div class="lp-pill-badge">
+        <span class="lp-badge-dot"></span>
+        <span>GESTRUM v00000-006</span>
+        <span class="lp-badge-sep">•</span>
+        <span>TOUCHLESS AIR-PERCUSSION</span>
+        <span class="lp-badge-sep">•</span>
+        <span>100% PRIVATE CLIENT-SIDE</span>
+      </div>
+
+      <h1 class="lp-hero-title">
+        Play drums in mid-air.<br>
+        <span class="lp-hero-gradient">Zero hardware. Pure browser performance.</span>
+      </h1>
+
+      <p class="lp-hero-desc">
+        Gestrum translates your webcam feed into a zero-latency spatial air-drum kit and live looper. Tap floating sound pads with your fingertips, lock grooves with a 3-second hold, and sculpt your sound—with no plugins, no accounts, and 100% private on-device processing.
+      </p>
+
+      <!-- Primary Launch Actions -->
+      <div class="lp-hero-actions">
+        <button id="lp-btn-launch-hero" class="lp-btn-launch-primary" title="Launch Gestrum Air Instrument">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Launch Gestrum (Live Air Instrument)</span>
+        </button>
+        <a href="#lp-start" class="lp-btn-outline" id="lp-btn-goto-start">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>4-Step Quick Start Guide</span>
+        </a>
+      </div>
+
+      <!-- Direct Kit Launcher Pills -->
+      <div class="lp-direct-kits">
+        <span class="lp-kits-label">Or jump straight into a curated sound kit:</span>
+        <div class="lp-kits-row">
+          <button class="lp-kit-btn" data-theme="hiphop" title="Launch with Hip-Hop / 808 Kit">
+            <span class="lp-kit-icon">🎧</span>
+            <div class="lp-kit-info">
+              <strong>Hip-Hop / 808</strong>
+              <small>Sub 808s, Trap Snares • 120 BPM</small>
+            </div>
+          </button>
+          <button class="lp-kit-btn" data-theme="rock" title="Launch with Rock & Roll Kit">
+            <span class="lp-kit-icon">🎸</span>
+            <div class="lp-kit-info">
+              <strong>Rock & Roll</strong>
+              <small>Heavy Kick, Power Chord • 132 BPM</small>
+            </div>
+          </button>
+          <button class="lp-kit-btn" data-theme="jazz" title="Launch with Midnight Jazz Kit">
+            <span class="lp-kit-icon">🎷</span>
+            <div class="lp-kit-info">
+              <strong>Midnight Jazz</strong>
+              <small>Upright Bass, Brushed Snare • 100 BPM</small>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div class="lp-hero-fallback-note">
+        <span>Webcam optional — full mouse, trackpad, and touchscreen playback enabled out of the box.</span>
+      </div>
+
+      <!-- Trust & Architecture Badges -->
+      <div class="lp-trust-grid">
+        <div class="lp-trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <div>
+            <strong>100% Client-Side Privacy</strong>
+            <span>Video frames never leave your computer</span>
+          </div>
+        </div>
+        <div class="lp-trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          <div>
+            <strong>Zero-Latency Web Audio</strong>
+            <span>Procedural oscillator & noise synthesis</span>
+          </div>
+        </div>
+        <div class="lp-trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>
+          <div>
+            <strong>21-Joint On-Device Vision</strong>
+            <span>MediaPipe fingertip tracking via WebAssembly</span>
+          </div>
+        </div>
+        <div class="lp-trust-item">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 14 14"/></svg>
+          <div>
+            <strong>3-Second Dwell Looper</strong>
+            <span>Hold to lock rhythms on a 16-step grid</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visual Stage Blueprint Preview -->
+      <div class="lp-stage-preview">
+        <div class="lp-preview-topbar">
+          <div class="lp-preview-dots"><span></span><span></span><span></span></div>
+          <div class="lp-preview-title">GESTRUM SPATIAL STAGE ARCHITECTURE</div>
+          <div class="lp-preview-badge">LIVE 3x2 BEAT-GRID</div>
+        </div>
+        <div class="lp-stage-canvas-mock">
+          <!-- 6 Floating Pads Preview -->
+          <div class="lp-mock-pad pad-1">
+            <span class="lp-mock-shape circle"></span>
+            <div class="lp-mock-label">PAD 1</div>
+            <div class="lp-mock-name">808 HI-HAT</div>
+          </div>
+          <div class="lp-mock-pad pad-2">
+            <span class="lp-mock-shape circle"></span>
+            <div class="lp-mock-label">PAD 2</div>
+            <div class="lp-mock-name">GLITCH PERC</div>
+          </div>
+          <div class="lp-mock-pad pad-3">
+            <span class="lp-mock-shape circle"></span>
+            <div class="lp-mock-label">PAD 3</div>
+            <div class="lp-mock-name">808 RIMSHOT</div>
+          </div>
+          <div class="lp-mock-pad pad-4">
+            <span class="lp-mock-shape circle striking"></span>
+            <div class="lp-mock-ripple"></div>
+            <div class="lp-mock-label">PAD 4 • STRIKE</div>
+            <div class="lp-mock-name">808 SUB-KICK</div>
+          </div>
+          <div class="lp-mock-pad pad-5">
+            <span class="lp-mock-shape circle looping">
+              <svg class="lp-mock-ring" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18"/></svg>
+            </span>
+            <div class="lp-mock-label">PAD 5 • LOOPING</div>
+            <div class="lp-mock-name">TRAP SNARE</div>
+          </div>
+          <div class="lp-mock-pad pad-6">
+            <span class="lp-mock-shape circle"></span>
+            <div class="lp-mock-label">PAD 6</div>
+            <div class="lp-mock-name">808 PITCH TOM</div>
+          </div>
+
+          <!-- Luminous Hand Orb Callout -->
+          <div class="lp-mock-orb-container">
+            <div class="lp-mock-hand-orb">
+              <div class="lp-mock-orb-core"></div>
+              <div class="lp-mock-orb-glow"></div>
+            </div>
+            <div class="lp-mock-orb-tag">Fingertip Tracked in 3D Space (Downstroke velocity triggers hit)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Section 1: What Gestrum Does -->
+  <section class="lp-section" id="lp-about">
+    <div class="lp-section-inner">
+      <div class="lp-section-kicker">01 // THE CORE EXPERIENCE</div>
+      <h2 class="lp-section-title">Drumming in mid-air should make real sound.</h2>
+      <p class="lp-section-lead">
+        We have all found ourselves tapping on a steering wheel, drumming our fingers across a desk, or playing invisible air-drums to our favorite record. The physical reflex is universal—yet until now, moving your hands in the air produced nothing but silence.
+      </p>
+
+      <div class="lp-split-grid">
+        <div class="lp-text-card">
+          <h3 class="lp-card-heading">
+            <span class="lp-icon-wrap">⚡</span>
+            Turn Your Camera into a Stage Instrument
+          </h3>
+          <p>
+            Gestrum turns the standard webcam already resting in your laptop or monitor into an expressive, low-latency percussion instrument. There are no gloves to wear, no plastic controllers to charge, no MIDI cables to route, and no DAW software to configure.
+          </p>
+          <p>
+            When you launch Gestrum, six luminous, translucent sound pads hover across a distraction-free dark stage in an intuitive 3x2 grid. Simply raise your hands. The vision engine identifies your index fingertips, rendering them as floating neon orbs with fluid motion trails. Striking downward into any pad triggers an immediate percussive punch and an expansive radial shockwave.
+          </p>
+        </div>
+
+        <div class="lp-text-card">
+          <h3 class="lp-card-heading">
+            <span class="lp-icon-wrap">🎛️</span>
+            Velocity Sensitivity & Dwell Looping
+          </h3>
+          <p>
+            Gestrum doesn't just treat your hands as on/off switches. Real-time velocity algorithms track the downward speed of your strike: a light tap triggers a gentle ghost note with a subtle ripple, while a fast, deliberate strike unleashes high-impact attack power and maximum visual bloom.
+          </p>
+          <p>
+            When you find a groove you want to build on, hold your fingertip stationary inside a pad for three seconds. A gold circular progress gauge fills around the pad rim and locks it into an automated rhythmic loop synchronized to the master 16-step measure bar. Tap the spacebar or click "Pause All" at any time for instant silence.
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Comparison Table -->
+      <div class="lp-comparison-box">
+        <div class="lp-comp-header">
+          <span>TRADITIONAL VIRTUAL INSTRUMENTS</span>
+          <span class="lp-comp-highlight">GESTRUM TOUCHLESS AIR-PERCUSSION</span>
+        </div>
+        <div class="lp-comp-rows">
+          <div class="lp-comp-row">
+            <div>Requires physical MIDI pads, keyboards, or awkward keyboard typing</div>
+            <div class="lp-comp-good">✓ Free mid-air physical movement tracked directly via standard webcam</div>
+          </div>
+          <div class="lp-comp-row">
+            <div>Complex DAW setup, driver installs, and license dongles</div>
+            <div class="lp-comp-good">✓ Zero install, zero dependencies: open URL and play within seconds</div>
+          </div>
+          <div class="lp-comp-row">
+            <div>Cloud servers streaming video with unpredictable network lag</div>
+            <div class="lp-comp-good">✓ 100% on-device WebAssembly vision & Web Audio synthesis for zero network latency</div>
+          </div>
+          <div class="lp-comp-row">
+            <div>Rigid mechanical switches with no spatial body expressiveness</div>
+            <div class="lp-comp-good">✓ Dynamic velocity tracking, 3D fingertip orbs, and customizable spatial pad layouts</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 2: Particular Features -->
+  <section class="lp-section lp-section-alt" id="lp-features">
+    <div class="lp-section-inner">
+      <div class="lp-section-kicker">02 // DEEP DIVE</div>
+      <h2 class="lp-section-title">Built for tactile performance, live looping, and sound design.</h2>
+      <p class="lp-section-lead">
+        Every subsystem in Gestrum is purpose-built to deliver immediate acoustic response, visual clarity, and creative freedom.
+      </p>
+
+      <div class="lp-features-grid">
+        <!-- Feature 1 -->
+        <div class="lp-feature-card">
+          <div class="lp-feat-icon">👐</div>
+          <h3 class="lp-feat-title">Touchless Spatial Tracking</h3>
+          <p class="lp-feat-desc">
+            Powered by Google MediaPipe Hands running locally via WebAssembly and WebGL. Tracks 21 3D skeletal landmarks per hand with fingertip collision detection. Your hands are rendered as floating luminous orbs with subtle particle trails—keeping the stage focused, theatrical, and free of raw webcam clutter.
+          </p>
+          <div class="lp-feat-footer">
+            <span class="lp-feat-tag">MediaPipe Vision</span>
+            <span class="lp-feat-tag">Multi-Hand</span>
+          </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="lp-feature-card">
+          <div class="lp-feat-icon">⏱️</div>
+          <h3 class="lp-feat-title">3-Second Dwell-to-Loop</h3>
+          <p class="lp-feat-desc">
+            Hold any fingertip inside a pad for three seconds to lock it into automated continuous playback. Each pad can loop at independent rhythmic subdivisions (1/4, 1/8, 1/16, or 1/32 notes) locked to a master 16-step visual measure bar. Hit the Spacebar or "Pause All" at any moment to silence the room.
+          </p>
+          <div class="lp-feat-footer">
+            <span class="lp-feat-tag">16-Step Quantized</span>
+            <span class="lp-feat-tag">Dwell Latch</span>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="lp-feature-card">
+          <div class="lp-feat-icon">🎨</div>
+          <h3 class="lp-feat-title">Three Complete Themes & Kits</h3>
+          <p class="lp-feat-desc">
+            Switch between three distinct acoustic and visual worlds: <strong>Hip-Hop / 808</strong> (Cyber Neon, 120 BPM) with sub kicks and trap snares; <strong>Rock & Roll</strong> (Crimson Stage, 132 BPM) with heavy acoustic beater kicks and overdriven power chords; and <strong>Midnight Jazz</strong> (Velvet Lounge, 100 BPM) with brushed snares, cross-sticks, upright bass, and vibraphone with rotating tremolo.
+          </p>
+          <div class="lp-feat-footer">
+            <span class="lp-feat-tag">3 Curated Themes</span>
+            <span class="lp-feat-tag">Procedural DSP</span>
+          </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="lp-feature-card">
+          <div class="lp-feat-icon">🔊</div>
+          <h3 class="lp-feat-title">25+ Procedural Presets & Custom Samples</h3>
+          <p class="lp-feat-desc">
+            Every pad is powered by real-time Web Audio API procedural synthesis—combining custom oscillators, noise generators, biquad filter sweeps, and waveshaper distortion with zero audio file dependencies. Want your own sounds? Simply drag and drop any WAV or MP3 audio file directly onto a pad to make it your own.
+          </p>
+          <div class="lp-feat-footer">
+            <span class="lp-feat-tag">Web Audio API</span>
+            <span class="lp-feat-tag">Sample Import</span>
+          </div>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="lp-feature-card">
+          <div class="lp-feat-icon">📐</div>
+          <h3 class="lp-feat-title">Movable Pads & Acoustic Size Scaling</h3>
+          <p class="lp-feat-desc">
+            Switch to Layout Mode to drag pads anywhere on the screen, matching your chair height, camera lens angle, or arm span. Pick from 5 rounded shapes (Circle, Square, Triangle, Diamond, Heart). Resizing a pad dynamically scales its acoustic shell: larger pads produce deeper sub tones and longer decays, while smaller pads yield crisp, high-frequency snap.
+          </p>
+          <div class="lp-feat-footer">
+            <span class="lp-feat-tag">Layout Toolbar</span>
+            <span class="lp-feat-tag">Acoustic Scaling</span>
+          </div>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="lp-feature-card">
+          <div class="lp-feat-icon">💾</div>
+          <h3 class="lp-feat-title">Session Recording, Project Files & Offline PWA</h3>
+          <p class="lp-feat-desc">
+            Capture your live performances directly to high-quality audio files using the built-in live recorder. Export and import complete setups as portable <code>.gestrum</code> project files. Your active layout, customized sounds, and tempos autosave continuously to browser IndexedDB, and full Service Worker caching ensures Gestrum works 100% offline.
+          </p>
+          <div class="lp-feat-footer">
+            <span class="lp-feat-tag">IndexedDB</span>
+            <span class="lp-feat-tag">Offline PWA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 3: How to Get Started -->
+  <section class="lp-section" id="lp-start">
+    <div class="lp-section-inner">
+      <div class="lp-section-kicker">03 // QUICK START GUIDE</div>
+      <h2 class="lp-section-title">How to start playing in 30 seconds.</h2>
+      <p class="lp-section-lead">
+        No manuals, no accounts, and no hardware calibration required. Follow these four steps to start making beats immediately.
+      </p>
+
+      <div class="lp-steps-timeline">
+        <!-- Step 1 -->
+        <div class="lp-step-item">
+          <div class="lp-step-num">01</div>
+          <div class="lp-step-content">
+            <h3 class="lp-step-title">Position Your Space & Check Lighting</h3>
+            <p class="lp-step-desc">
+              Sit or stand comfortably roughly <strong>2 to 3 feet</strong> in front of your laptop or desktop webcam. Make sure your room has decent ambient light so your hands stand out against your background. Avoid sitting with an overly bright window directly behind you.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="lp-step-item">
+          <div class="lp-step-num">02</div>
+          <div class="lp-step-content">
+            <h3 class="lp-step-title">Launch Gestrum & Enable the Camera</h3>
+            <p class="lp-step-desc">
+              Click <strong>Launch Gestrum</strong> below. In the top navigation bar, click the <strong>Camera</strong> button to grant local webcam permission. Look at the bottom-left status indicator: when it glows green, on-device vision is active. <em>(Camera optional: you can also tap pads with a mouse or touchscreen anytime).</em>
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="lp-step-item">
+          <div class="lp-step-num">03</div>
+          <div class="lp-step-content">
+            <h3 class="lp-step-title">Strike the Air to Trigger Drum Hits</h3>
+            <p class="lp-step-desc">
+              Bring your hands into view. Your index fingertips appear as glowing luminous orbs. Strike downward into any of the six floating pads. Hit firmly for punchy, dynamic strikes, or tap gently for softer ghost hits.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="lp-step-item">
+          <div class="lp-step-num">04</div>
+          <div class="lp-step-content">
+            <h3 class="lp-step-title">Hold for 3 Seconds to Lock in a Loop</h3>
+            <p class="lp-step-desc">
+              Hold your fingertip steady inside any pad. Watch the golden progress ring complete around the pad perimeter. Once full, the pad locks into continuous playback on the beat. Try layering multiple pads, switch themes via the header dropdown, or tap the Spacebar to pause all active loops.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="lp-center-cta">
+        <button class="lp-btn-launch-primary" onclick="launchGestrumApp()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Ready to Play? Launch Gestrum</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 4: Who Made This, How, and Why -->
+  <section class="lp-section lp-section-alt" id="lp-story">
+    <div class="lp-section-inner">
+      <div class="lp-section-kicker">04 // STORY & PHILOSOPHY</div>
+      <h2 class="lp-section-title">Who made this, how it works, and why it exists.</h2>
+      <p class="lp-section-lead">
+        A look into the motivation, craft, and architectural decisions behind an embodied web instrument.
+      </p>
+
+      <div class="lp-story-layout">
+        <div class="lp-story-main">
+          <h3 class="lp-story-subheading">The Origin: Turning Mid-Air Motion into Sound</h3>
+          <p>
+            Gestrum was created by <strong>Keegan McConnell</strong>, a design student and creative technologist exploring embodied physical interaction on the web. It grew directly out of the project proposal <em>AirDrummer</em>.
+          </p>
+          <p>
+            Almost every music fan has found themselves air-drumming along to a song. The impulse is instinctive, joyous, and kinetic. Yet for decades, digital musical instruments have demanded mechanical compromise: tapping rigid plastic keys, clicking computer mice, or strapping on bulky specialized sensors.
+          </p>
+          <p>
+            Gestrum exists to answer a simple creative question: <strong>Why shouldn't air-drumming make real sound?</strong> By utilizing the standard webcam that already exists on millions of everyday laptops, Gestrum transforms open physical space into a zero-friction musical stage.
+          </p>
+
+          <h3 class="lp-story-subheading">How It Was Engineered: Single-File PWA Architecture</h3>
+          <p>
+            Rather than relying on heavy server infrastructure, proprietary frameworks, or complex build toolchains, Gestrum was built adhering to the strict creative coding standard of the <strong>Single-File Progressive Web App</strong>:
+          </p>
+          <ul class="lp-story-list">
+            <li><strong>Zero Backend Infrastructure:</strong> There are no external databases, user accounts, or cloud API endpoints. Everything required to run the instrument—the visual canvas, audio DSP synthesizers, gesture trackers, and project management—is packaged in self-contained client-side code.</li>
+            <li><strong>Native Web Audio DSP:</strong> Sounds are synthesized mathematically in real time using native Web Audio API oscillators, white noise buffers, biquad filter topologies, and custom soft-clipping waveshaping transfer curves. This delivers instant, zero-latency acoustic response without waiting for large audio sample packs to download over the network.</li>
+            <li><strong>Local Machine Learning Vision:</strong> Hand tracking is executed entirely on the user's local CPU/GPU using Google's MediaPipe Hands WebAssembly/WebGL models.</li>
+            <li><strong>Local-First Persistence:</strong> Project files, custom audio sample uploads, and layout preferences are saved directly to browser IndexedDB, persisting indefinitely across browser refreshes and offline sessions.</li>
+          </ul>
+
+          <h3 class="lp-story-subheading">Privacy by Design: Your Camera Never Leaves Your Machine</h3>
+          <p>
+            We take user privacy seriously. In Gestrum, your webcam video stream is analyzed frame-by-frame in volatile local browser memory and immediately discarded. No video frames, images, or audio recordings are ever transmitted over the internet, stored in the cloud, or accessible to anyone else. Gestrum contains zero tracking cookies, zero marketing analytics scripts, and zero third-party telemetry.
+          </p>
+        </div>
+
+        <div class="lp-author-card">
+          <div class="lp-author-avatar">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="lp-author-name">Keegan McConnell</div>
+          <div class="lp-author-role">Creator & Creative Technologist</div>
+          <p class="lp-author-bio">
+            Exploring the intersection of computer vision, browser audio synthesis, and embodied kinetic interfaces.
+          </p>
+          <div class="lp-author-links">
+            <a href="https://keeganrmc.github.io/" target="_blank" rel="noopener" class="lp-author-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              Portfolio
+            </a>
+            <a href="https://github.com/keeganrmc/gestrum" target="_blank" rel="noopener" class="lp-author-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+              GitHub
+            </a>
+          </div>
+          <div class="lp-author-meta">
+            <div><strong>Version:</strong> v00000-006</div>
+            <div><strong>Architecture:</strong> Single-File PWA</div>
+            <div><strong>Deployment:</strong> GitHub Pages</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 5: Open Source Licensing & Credits -->
+  <section class="lp-section" id="lp-license">
+    <div class="lp-section-inner">
+      <div class="lp-section-kicker">05 // OPEN SOURCE & ATTRIBUTION</div>
+      <h2 class="lp-section-title">Open source, transparent credits, and software hygiene.</h2>
+      <p class="lp-section-lead">
+        Gestrum stands proudly on open web standards and permissive open-source libraries. We believe in clear attribution and good engineering hygiene.
+      </p>
+
+      <div class="lp-license-grid">
+        <!-- License Card 1 -->
+        <div class="lp-license-card">
+          <div class="lp-lic-badge">MIT LICENSE</div>
+          <h3 class="lp-lic-title">Gestrum Application Code</h3>
+          <p class="lp-lic-desc">
+            The core Gestrum codebase is open source software created by Keegan McConnell and licensed under the permissive <strong>MIT License</strong>. You are free to inspect, fork, modify, and build upon this project for educational, personal, and commercial purposes.
+          </p>
+          <div class="lp-lic-legal">
+            <code>Copyright © 2026 Keegan McConnell. Released under the terms of the MIT License.</code>
+          </div>
+        </div>
+
+        <!-- License Card 2 -->
+        <div class="lp-license-card">
+          <div class="lp-lic-badge">APACHE 2.0</div>
+          <h3 class="lp-lic-title">Google MediaPipe Hands</h3>
+          <p class="lp-lic-desc">
+            Real-time hand tracking is powered by Google's MediaPipe Hands library (distributed via Google LLC). Licensed under the <strong>Apache License, Version 2.0</strong>. Used for on-device landmark estimation running client-side without cloud transmission.
+          </p>
+          <div class="lp-lic-legal">
+            <code>Copyright 2020-2024 Google LLC. Licensed under the Apache License, Version 2.0.</code>
+          </div>
+        </div>
+
+        <!-- License Card 3 -->
+        <div class="lp-license-card">
+          <div class="lp-lic-badge">W3C / WHATWG</div>
+          <h3 class="lp-lic-title">Open Web Standards</h3>
+          <p class="lp-lic-desc">
+            Gestrum relies on standardized browser APIs: Web Audio API (signal graph routing, biquad filters, waveshaping), Canvas 2D API (60fps rendering), MediaDevices API (<code>getUserMedia</code>), Indexed Database API (IndexedDB local storage), and Service Workers (offline caching).
+          </p>
+          <div class="lp-lic-legal">
+            <code>Standardized by W3C and WHATWG open web working groups.</code>
+          </div>
+        </div>
+
+        <!-- License Card 4 -->
+        <div class="lp-license-card">
+          <div class="lp-lic-badge">ETHICS & DISCLOSURE</div>
+          <h3 class="lp-lic-title">Transparent AI Assistance</h3>
+          <p class="lp-lic-desc">
+            In accordance with academic integrity and modern open development standards, AI assistance (Claude and Gemini via Antigravity) was utilized for pair programming, algorithmic prototyping, and code hygiene. Every component, audio synthesis formula, visual layout, and line of code was directed, vetted, tested, and approved by the human author.
+          </p>
+          <div class="lp-lic-legal">
+            <code>Human-directed software architecture and audio design.</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section 6: Future Roadmap -->
+  <section class="lp-section lp-section-alt" id="lp-roadmap">
+    <div class="lp-section-inner">
+      <div class="lp-section-kicker">06 // WHAT'S NEXT</div>
+      <h2 class="lp-section-title">Future roadmap & planned capabilities.</h2>
+      <p class="lp-section-lead">
+        Gestrum is an evolving creative tool. Here is a grounded look at upcoming features currently planned for future releases.
+      </p>
+
+      <div class="lp-roadmap-grid">
+        <div class="lp-roadmap-card">
+          <div class="lp-rm-phase">PLANNED // V0.7</div>
+          <h3 class="lp-rm-title">16-Step Pattern Sequencer Grid per Pad</h3>
+          <p class="lp-rm-desc">
+            Upgrading the dwell-loop engine to allow per-pad 16-step rhythmic grids. Instead of fixed-interval pulses, players will be able to draw custom syncopated patterns, polyrhythms, and ghost notes directly on each pad.
+          </p>
+        </div>
+
+        <div class="lp-roadmap-card">
+          <div class="lp-rm-phase">PLANNED // V0.8</div>
+          <h3 class="lp-rm-title">Web MIDI Input & Output Integration</h3>
+          <p class="lp-rm-desc">
+            Connecting external physical MIDI drum pads and controllers to trigger Gestrum's synth engines, and routing Gestrum's touchless mid-air gesture hits outward as MIDI messages into DAWs like Ableton Live, Logic Pro, and Reaper.
+          </p>
+        </div>
+
+        <div class="lp-roadmap-card">
+          <div class="lp-rm-phase">PLANNED // V0.9</div>
+          <h3 class="lp-rm-title">Articulated Air Gestures & Cymbal Chokes</h3>
+          <p class="lp-rm-desc">
+            Expanding gesture vocabulary beyond simple strikes: a two-finger pinch gesture in mid-air to instantly choke a ringing crash cymbal, vertical hand distance for continuous filter sweeps, and rapid two-handed drum rolls.
+          </p>
+        </div>
+
+        <div class="lp-roadmap-card">
+          <div class="lp-rm-phase">PLANNED // V1.0</div>
+          <h3 class="lp-rm-title">Curated Sound Pack Library</h3>
+          <p class="lp-rm-desc">
+            Expanding procedural preset banks to include dedicated genre collections: 90s Boom-Bap, Lo-Fi Chillhop, Afrobeat percussion, and Industrial Synthwave, with custom acoustic decay parameters per kit.
+          </p>
+        </div>
+
+        <div class="lp-roadmap-card">
+          <div class="lp-rm-phase">PLANNED // V1.1</div>
+          <h3 class="lp-rm-title">Lighting & Camera Calibration Wizard</h3>
+          <p class="lp-rm-desc">
+            A gentle visual calibration overlay that tests ambient room lighting, recommends optimal distance, and fine-tunes detection thresholds for challenging angles and backlit conditions.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Launch Banner & Footer -->
+  <footer class="lp-footer">
+    <div class="lp-footer-banner">
+      <div class="logo-mark" style="width: 54px; height: 54px; margin: 0 auto 16px auto;">
+        <div class="logo-drum-graphic"></div>
+      </div>
+      <h2 class="lp-banner-title">Ready to play in mid-air?</h2>
+      <p class="lp-banner-desc">No accounts, no downloads, and no plugins. Launch Gestrum right now in your browser.</p>
+
+      <div class="lp-banner-actions">
+        <button class="lp-btn-launch-primary large" id="lp-btn-launch-footer" title="Launch Gestrum Air Instrument">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          <span>Launch Gestrum Air Instrument</span>
+        </button>
+      </div>
+
+      <div class="lp-banner-themes">
+        <span>Launch directly into:</span>
+        <button class="lp-theme-link" data-theme="hiphop">🎧 Hip-Hop / 808</button>
+        <span class="lp-bullet">•</span>
+        <button class="lp-theme-link" data-theme="rock">🎸 Rock & Roll</button>
+        <span class="lp-bullet">•</span>
+        <button class="lp-theme-link" data-theme="jazz">🎷 Midnight Jazz</button>
+      </div>
+    </div>
+
+    <div class="lp-footer-bottom">
+      <div class="lp-footer-info">
+        <strong>Gestrum</strong> — Embodied Spatial Air-Percussion Instrument • Version v00000-006
+        <br>
+        <span>Designed & built by <a href="https://keeganrmc.github.io/" target="_blank" rel="noopener">Keegan McConnell</a>. Released under the MIT License.</span>
+      </div>
+      <div class="lp-footer-links">
+        <a href="https://github.com/keeganrmc/gestrum" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://keeganrmc.github.io/" target="_blank" rel="noopener">Portfolio</a>
+        <button class="lp-text-btn" id="lp-btn-back-to-top">Back to Top ↑</button>
+      </div>
+    </div>
+  </footer>
+</div>
 
 <header>
   <div class="logo-group" title="Gestrum — Spatial Air-Percussion">
@@ -1049,6 +2853,10 @@
     <label class="btn-file" title="Open .gestrum project file">
       Open <input type="file" id="file-open" accept=".json,.gestrum" style="display:none">
     </label>
+    <button id="btn-landing-nav" class="btn-subtle" title="Return to Landing Page & Overview">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Landing Page
+    </button>
     <button id="btn-help" title="Searchable guide with control locator">Help</button>
     <button id="btn-about" title="About Gestrum, author credits, and license">About</button>
   </div>
@@ -1240,7 +3048,7 @@
     </div>
     <div>
       <h2 style="margin: 0;">Gestrum</h2>
-      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-005</span>
+      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-006</span>
     </div>
   </div>
   <p><strong>Raison d'Être:</strong> Gestrum exists because drumming in mid-air should make real sound, turning your laptop camera into a zero-latency stage instrument.</p>
@@ -1248,7 +3056,8 @@
   <p><strong>Source:</strong> <a href="https://github.com/keeganrmc/gestrum" target="_blank" style="color: var(--cyan); text-decoration: none;">github.com/keeganrmc/gestrum</a></p>
   <p><strong>License:</strong> © 2026 Keegan McConnell. Released under the MIT License.</p>
   <p><strong>Privacy:</strong> Your camera stream and audio never leave this browser. Everything runs 100% locally on your machine with zero server communication.</p>
-  <div style="text-align: right; margin-top: 18px;">
+  <div style="text-align: right; margin-top: 18px; display: flex; justify-content: flex-end; gap: 8px;">
+    <button id="btn-about-landing" class="btn-accent" title="Open the full landing page and documentation">View Full Landing Page</button>
     <button onclick="document.getElementById('about-dialog').close()">Close</button>
   </div>
 </dialog>
@@ -1260,12 +3069,12 @@
 const APP = {
   name: "Gestrum",
   id: "gestrum",
-  version: "v00000-005",
+  version: "v00000-006",
   author: "Keegan McConnell",
   site: "https://keeganrmc.github.io/",
   repo: "https://github.com/keeganrmc/gestrum"
 };
-const FORMAT = { name: APP.id, version: 5 };
+const FORMAT = { name: APP.id, version: 6 };
 document.getElementById("chip").textContent = APP.version + " ↻";
 
 // ── THEME CONFIGURATIONS & SIGNATURE INSTRUMENT KITS ─────────────────────────
@@ -3492,8 +5301,147 @@ async function startup() {
       } catch (e) { /* ignore */ }
     }
   }
+
+  // Synchronize Landing Page Theme Pills
+  const curTheme = doc.theme || "hiphop";
+  document.querySelectorAll(".lp-theme-pill").forEach(pill => {
+    pill.classList.toggle("active", pill.dataset.theme === curTheme);
+  });
+
+  // Check URL Hash for direct Studio launch vs Landing Page
+  const initHash = window.location.hash;
+  const landingView = document.getElementById("landing-view");
+  if (initHash === "#studio" || initHash === "#play" || initHash === "#app") {
+    if (landingView) landingView.classList.add("hidden");
+    resize();
+  } else {
+    if (landingView) landingView.classList.remove("hidden");
+  }
 }
 startup();
+
+// ── LANDING PAGE CONTROLLER & NAVIGATION ─────────────────────────────────────
+const landingViewEl = document.getElementById("landing-view");
+
+function launchGestrumApp(themeToApply) {
+  if (themeToApply) {
+    applyTheme(themeToApply, true);
+  }
+  if (landingViewEl) {
+    landingViewEl.classList.add("hidden");
+  }
+  window.location.hash = "#studio";
+  resize();
+  const ctx = getAudioContext();
+  if (ctx && ctx.state === "suspended") {
+    ctx.resume();
+  }
+  toast("Gestrum Stage Active — Ready to play");
+}
+
+function showLandingPage() {
+  if (landingViewEl) {
+    landingViewEl.classList.remove("hidden");
+    landingViewEl.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  window.location.hash = "#landing";
+}
+
+// Wire Launch Buttons
+const lpBtnNav = document.getElementById("lp-btn-launch-nav");
+const lpBtnHero = document.getElementById("lp-btn-launch-hero");
+const lpBtnFooter = document.getElementById("lp-btn-launch-footer");
+if (lpBtnNav) lpBtnNav.onclick = () => launchGestrumApp();
+if (lpBtnHero) lpBtnHero.onclick = () => launchGestrumApp();
+if (lpBtnFooter) lpBtnFooter.onclick = () => launchGestrumApp();
+
+// Wire Direct Kit Launchers
+document.querySelectorAll(".lp-kit-btn, .lp-theme-link").forEach(btn => {
+  btn.onclick = (e) => {
+    e.preventDefault();
+    const theme = btn.dataset.theme || "hiphop";
+    launchGestrumApp(theme);
+  };
+});
+
+// Wire Theme Preview Pills in Landing Navbar
+document.querySelectorAll(".lp-theme-pill").forEach(pill => {
+  pill.onclick = () => {
+    const theme = pill.dataset.theme;
+    if (theme) {
+      applyTheme(theme, true);
+      document.querySelectorAll(".lp-theme-pill").forEach(p => p.classList.remove("active"));
+      pill.classList.add("active");
+      toast(`Theme Preview: ${theme === "rock" ? "Rock & Roll" : (theme === "jazz" ? "Midnight Jazz" : "Hip-Hop / 808")}`);
+    }
+  };
+});
+
+// Studio Header & Dialog Triggers to Reopen Landing Page
+const btnLandingNav = document.getElementById("btn-landing-nav");
+if (btnLandingNav) btnLandingNav.onclick = showLandingPage;
+
+const btnAboutLanding = document.getElementById("btn-about-landing");
+if (btnAboutLanding) {
+  btnAboutLanding.onclick = () => {
+    document.getElementById("about-dialog").close();
+    showLandingPage();
+  };
+}
+
+// Brand sub-text in studio header also navigates to Landing Page
+const brandSubText = document.getElementById("brand-sub-text");
+if (brandSubText) {
+  brandSubText.style.cursor = "pointer";
+  brandSubText.title = "Click to open Landing Page & Guide";
+  brandSubText.onclick = (e) => {
+    e.stopPropagation();
+    showLandingPage();
+  };
+}
+
+// Back to Top and Brand Scroll
+const lpNavBrand = document.getElementById("lp-nav-brand");
+if (lpNavBrand) {
+  lpNavBrand.onclick = () => {
+    if (landingViewEl) landingViewEl.scrollTo({ top: 0, behavior: "smooth" });
+  };
+}
+const lpBtnBackToTop = document.getElementById("lp-btn-back-to-top");
+if (lpBtnBackToTop) {
+  lpBtnBackToTop.onclick = () => {
+    if (landingViewEl) landingViewEl.scrollTo({ top: 0, behavior: "smooth" });
+  };
+}
+
+// Smooth scrolling for Landing Page in-page jump links
+document.querySelectorAll('.lp-nav-link, #lp-btn-goto-start').forEach(link => {
+  link.onclick = (e) => {
+    const targetId = link.getAttribute("href");
+    if (targetId && targetId.startsWith("#lp-")) {
+      e.preventDefault();
+      const targetEl = document.querySelector(targetId);
+      if (targetEl && landingViewEl) {
+        const topPos = targetEl.offsetTop - 70;
+        landingViewEl.scrollTo({ top: Math.max(0, topPos), behavior: "smooth" });
+      }
+    }
+  };
+});
+
+// Browser History & Hash Change Listener
+window.addEventListener("hashchange", () => {
+  const hash = window.location.hash;
+  if (hash === "#studio" || hash === "#play" || hash === "#app") {
+    if (landingViewEl) landingViewEl.classList.add("hidden");
+    resize();
+  } else if (hash === "#landing" || !hash || hash === "#") {
+    if (landingViewEl) {
+      landingViewEl.classList.remove("hidden");
+      landingViewEl.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+});
 </script>
 </body>
 </html>
