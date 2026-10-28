@@ -2,6 +2,12 @@
 
 All notable changes to **Gestrum** will be documented in this file.
 
+## [v00000-010] - 2026-10-28
+### Changed & Updated
+- **Portfolio Destination Updated to GitHub Root:**
+  - Replaced all external Adobe Portfolio links (`keeganmcconnell.myportfolio.com`) across the launch page intro bar, physical work showcase cards (CleanStep & ALINE direct anchors), footer credits, and in-app About modal with the author's primary custom portfolio: [`keeganrmc.github.io`](https://keeganrmc.github.io/).
+  - Bumped Service Worker cache to `gestrum-v00000-010`.
+
 ## [v00000-009] - 2026-10-27
 ### Fixed & Streamlined
 - **Complete Layout Separation & Opaque Hover Cards:**
