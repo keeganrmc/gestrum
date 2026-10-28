@@ -2,6 +2,18 @@
 
 All notable changes to **Gestrum** will be documented in this file.
 
+## [v00000-009] - 2026-10-27
+### Fixed & Streamlined
+- **Complete Layout Separation & Opaque Hover Cards:**
+  - Converted `.landing-view` container to `display: block` to eliminate flexbox shrink/basis quirks.
+  - Set `.lp-kit-card:hover` to a solid, opaque background (`#1a202c`, `#221316`, `#181b28`) eliminating unwanted transparency on hover.
+  - Added 48px margin below the kit cards and 64px padding above `.lp-section`, creating over 180px of clear vertical breathing room between the 3 kit cards and the "Tactile Air-Percussion" header.
+- **Removed "Play drums in mid-air" Title:**
+  - Removed `<h1 class="lp-hero-title">Play drums in mid-air.</h1>` entirely from the landing hero as requested, providing an ultra-clean entrance straight into the value statement and interactive kits.
+- **Network-First Service Worker Strategy:**
+  - Updated `sw.js` fetch listener to a Network-First strategy for HTML navigation and document requests so live GitHub Pages deployments and local edits appear immediately without being blocked by stale service worker caches.
+  - Bumped cache to `gestrum-v00000-009`.
+
 ## [v00000-008] - 2026-10-27
 ### Fixed & Refined
 - **Landing Page Layout Separation:** Fixed section overlap where "Tactile Air-Percussion" was covered by the three genre kit cards due to global `header` height inheritance. Scoped studio header styles to `header#app-header`, converted hero wrapper to `<section class="lp-hero">` with dynamic height (`height: auto !important`), and added generous vertical clearance (`margin-bottom: 32px` on `.lp-kits-row`).

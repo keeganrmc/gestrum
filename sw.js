@@ -1,5 +1,5 @@
 const APP_ID = "gestrum";
-const VERSION = "v00000-008";
+const VERSION = "v00000-009";
 const CACHE = APP_ID + "-" + VERSION;
 const FILES = [
   "./",
@@ -39,8 +39,34 @@ self.addEventListener("message", e => {
 
 self.addEventListener("fetch", e => {
   if (e.request.method !== "GET") return;
+
+  // Network-First for HTML navigation / document requests so updates appear immediately
+  if (e.request.mode === "navigate" || e.request.destination === "document" || e.request.url.endsWith(".html") || e.request.url.endsWith("/")) {
+    e.respondWith(
+      fetch(e.request)
+        .then(res => {
+          if (res.ok) {
+            const clone = res.clone();
+            caches.open(CACHE).then(c => c.put(e.request, clone));
+          }
+          return res;
+        })
+        .catch(() => caches.match(e.request))
+    );
+    return;
+  }
+
+  // Stale-while-revalidate for static assets
   e.respondWith(
-    caches.match(e.request, { ignoreSearch: true })
-      .then(hit => hit || fetch(e.request))
+    caches.match(e.request).then(hit => {
+      const fetchPromise = fetch(e.request).then(res => {
+        if (res.ok) {
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
+        }
+        return res;
+      }).catch(() => hit);
+      return hit || fetchPromise;
+    })
   );
 });

@@ -1,13 +1,14 @@
 # HANDOFF.md: Gestrum
 
 ## Current Status
-- **Current Version:** `v00000-008`
+- **Current Version:** `v00000-009`
 - **Live Deployment:** `https://keeganrmc.github.io/gestrum/`
 - **GitHub Repository:** `https://github.com/keeganrmc/gestrum`
 - **Architecture:** Single-file HTML5 PWA (`index.html`) + Service Worker (`sw.js`) + Manifest (`manifest.webmanifest`).
 
 ## What Works
-- **Fixed Landing Page Layout & Spacing (v00000-008):** Fixed hero container height issue to ensure full visual separation between the 3 genre kit cards and the "Tactile Air-Percussion" section.
+- **Complete Layout Separation & Opaque Hover Cards (v00000-009):** Converted landing view to block display, removed transparency on kit card hover, provided 180px+ vertical clearance between the kit cards and "Tactile Air-Percussion", and removed the redundant "Play drums in mid air" title element.
+- **Network-First PWA Service Worker (v00000-009):** HTML documents always check the network first when online, ensuring instant updates across browsers without stale cache lockups.
 - **Creator Design Statement (v00000-008):** Prominently displays Keegan McConnell's quote: *“I design products that solve real-world problems and address real user needs.”*
 - **Web Bar Logo & Dedicated Favicon (v00000-008):** High-res Gestrum logo loaded in browser tab favicons, PWA window title bars, and top navbar headers.
 - **Visual, Symbol-Driven Gateway Landing Page (v00000-007):** Completely cleaned and streamlined launch page:

@@ -113,7 +113,7 @@
   }
 
   /* Header Bar */
-  header#app-header, body > header:not(.lp-hero) {
+  #app-header {
     height: 54px;
     background: var(--panel);
     backdrop-filter: blur(12px);
@@ -988,8 +988,7 @@
     z-index: 500;
     overflow-y: auto;
     overflow-x: hidden;
-    display: flex;
-    flex-direction: column;
+    display: block;
     scroll-behavior: smooth;
     transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s ease;
     -webkit-overflow-scrolling: touch;
@@ -1236,31 +1235,40 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
-    margin-bottom: 32px;
+    margin-top: 28px;
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 5;
   }
   .lp-kit-card {
-    background: var(--panel);
+    background: #13171f;
     border: 1px solid var(--panel-border);
     border-radius: 10px;
-    padding: 16px;
+    padding: 18px;
     display: flex;
     flex-direction: column;
     gap: 8px;
     cursor: pointer;
     transition: all 0.18s ease;
     text-align: left;
+    position: relative;
+    z-index: 5;
   }
+  body.theme-rock .lp-kit-card { background: #181012; }
+  body.theme-jazz .lp-kit-card { background: #12141d; }
   .lp-kit-card:hover {
     border-color: var(--cyan);
-    background: rgba(255, 255, 255, 0.04);
+    background: #1a202c;
     transform: translateY(-2px);
   }
+  body.theme-rock .lp-kit-card:hover { background: #221316; }
+  body.theme-jazz .lp-kit-card:hover { background: #181b28; }
   .lp-kit-card.active {
     border-color: var(--cyan);
-    box-shadow: 0 0 16px rgba(0, 240, 255, 0.15);
+    box-shadow: 0 0 16px rgba(0, 240, 255, 0.18);
   }
-  body.theme-rock .lp-kit-card.active { box-shadow: 0 0 16px rgba(255, 42, 59, 0.2); }
-  body.theme-jazz .lp-kit-card.active { box-shadow: 0 0 16px rgba(229, 181, 103, 0.2); }
+  body.theme-rock .lp-kit-card.active { box-shadow: 0 0 16px rgba(255, 42, 59, 0.22); }
+  body.theme-jazz .lp-kit-card.active { box-shadow: 0 0 16px rgba(229, 181, 103, 0.22); }
   .lp-kit-top {
     display: flex;
     align-items: center;
@@ -1303,13 +1311,19 @@
 
   /* Section Dividers & General Structure */
   .lp-section {
-    padding: 56px 0;
+    display: block;
+    width: 100%;
+    padding: 64px 0;
     border-top: 1px solid var(--panel-border);
     position: relative;
+    z-index: 1;
     clear: both;
+    margin: 0;
   }
   .lp-section-header {
-    margin-bottom: 24px;
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
   }
   .lp-section-title {
     font-size: clamp(22px, 3.2vw, 32px);
@@ -1648,7 +1662,6 @@
   <section class="lp-hero">
     <div class="lp-container">
       <div class="lp-eyebrow">Touchless Spatial Percussion • WebAssembly Vision</div>
-      <h1 class="lp-hero-title">Play drums in mid-air.</h1>
       <p class="lp-hero-lead">
         Zero hardware. Zero latency. Point your webcam and strike pads in 3D space.
       </p>
@@ -2161,7 +2174,7 @@
     </div>
     <div>
       <h2 style="margin: 0;">Gestrum</h2>
-      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-008</span>
+      <span style="font-size: 12px; color: var(--cyan); font-family: ui-monospace, monospace;">v00000-009</span>
     </div>
   </div>
   <p><strong>Raison d'Être:</strong> Gestrum exists because drumming in mid-air should make real sound, turning your laptop camera into a zero-latency stage instrument.</p>
@@ -2182,12 +2195,12 @@
 const APP = {
   name: "Gestrum",
   id: "gestrum",
-  version: "v00000-008",
+  version: "v00000-009",
   author: "Keegan McConnell",
   site: "https://keeganmcconnell.myportfolio.com/",
   repo: "https://github.com/keeganrmc/gestrum"
 };
-const FORMAT = { name: APP.id, version: 8 };
+const FORMAT = { name: APP.id, version: 9 };
 document.getElementById("chip").textContent = APP.version + " ↻";
 
 // ── THEME CONFIGURATIONS & SIGNATURE INSTRUMENT KITS ─────────────────────────
